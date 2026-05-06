@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { withBase } from '@/data/navigation';
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="Página não encontrada" description="A página solicitada não existe ou foi movida.">
+  <section class="mx-auto max-w-xl px-5 py-24 text-center">
+    <p class="text-sm font-medium text-accent uppercase tracking-wide mb-4">404</p>
+    <h1 class="text-4xl font-medium mb-4">Página não encontrada</h1>
+    <p class="text-text-secondary mb-8">
+      O caminho solicitado não existe ou foi movido. Use a busca no topo ou volte para o início.
+    </p>
+    <a
+      href={withBase('/', base)}
+      class="inline-flex h-11 items-center px-5 rounded-md bg-accent text-white font-medium hover:bg-accent-hover transition-colors"
+    >
+      Voltar ao início
+    </a>
+  </section>
+</BaseLayout>

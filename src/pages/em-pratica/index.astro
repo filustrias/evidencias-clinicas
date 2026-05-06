@@ -1,0 +1,23 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { getSectionNav, withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const items = getSectionNav('em-pratica')?.filter((it) => it.href !== '/em-pratica/') ?? [];
+---
+<PageLayout
+  title="Em prática"
+  description="Aplicação da MBE por tipo de questão clínica: diagnóstica, terapêutica, preventiva e prognóstica."
+  section="em-pratica"
+>
+  <h1 class="text-4xl font-medium mb-3">Em prática</h1>
+  <p class="text-lg text-text-secondary mb-8">
+    Como aplicar evidência conforme o tipo de pergunta clínica — passos, armadilhas e exemplos.
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {items.map((it) => (
+      <ConceptCard href={withBase(it.href, base)} title={it.label} />
+    ))}
+  </div>
+</PageLayout>

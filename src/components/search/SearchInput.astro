@@ -1,0 +1,168 @@
+---
+/**
+ * Busca client-side via Pagefind.
+ * O índice é gerado em build (`astro build && pagefind --site dist`)
+ * e fica em /pagefind/. Em dev o índice não existe — exibimos fallback.
+ */
+const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+const pagefindUrl = `${normalizedBase}pagefind/pagefind.js`;
+---
+<div class="relative">
+  <button
+    id="search-trigger"
+    type="button"
+    aria-label="Abrir busca"
+    aria-expanded="false"
+    aria-controls="search-dialog"
+    class="inline-flex items-center justify-center h-9 w-9 rounded-md text-text-primary border border-border-subtle hover:bg-elevated transition-colors"
+  >
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4" aria-hidden="true">
+      <circle cx="9" cy="9" r="6" />
+      <path d="M14 14l3 3" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <div
+    id="search-dialog"
+    role="dialog"
+    aria-label="Busca"
+    aria-modal="true"
+    hidden
+    class="fixed inset-0 z-50"
+  >
+    <div data-search-overlay class="absolute inset-0 bg-black/40"></div>
+    <div class="relative mx-auto mt-[10vh] w-[92%] max-w-xl rounded-lg border border-border-default bg-canvas shadow-[0_16px_48px_rgba(0,0,0,0.18)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-border-subtle">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="h-4 w-4 text-text-muted" aria-hidden="true">
+          <circle cx="9" cy="9" r="6" />
+          <path d="M14 14l3 3" stroke-linecap="round" />
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Buscar no site…"
+          autocomplete="off"
+          spellcheck="false"
+          class="flex-1 bg-transparent border-0 outline-none text-base text-text-primary placeholder:text-text-muted"
+        />
+        <button
+          id="search-close"
+          type="button"
+          class="text-text-muted hover:text-text-primary text-sm"
+          aria-label="Fechar busca"
+        >Esc</button>
+      </div>
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2 text-sm">
+        <p class="text-text-muted text-center py-8">Digite para buscar…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ pagefindUrl }}>
+  let pagefind = null;
+  let isLoading = false;
+
+  async function loadPagefind() {
+    if (pagefind || isLoading) return pagefind;
+    isLoading = true;
+    try {
+      pagefind = await import(/* @vite-ignore */ pagefindUrl);
+      if (pagefind && typeof pagefind.options === 'function') {
+        await pagefind.options({ baseUrl: pagefindUrl.replace(/pagefind\/pagefind\.js$/, '') });
+      }
+    } catch (e) {
+      console.warn('[Pagefind] index not available (run `npm run build` to generate it)', e);
+      pagefind = null;
+    }
+    isLoading = false;
+    return pagefind;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    })[c]);
+  }
+
+  async function runSearch(query) {
+    const results = document.getElementById('search-results');
+    if (!results) return;
+
+    if (!query || query.trim().length < 2) {
+      results.innerHTML = '<p class="text-text-muted text-center py-8">Digite ao menos 2 caracteres…</p>';
+      return;
+    }
+
+    const pf = await loadPagefind();
+    if (!pf) {
+      results.innerHTML = '<p class="text-text-muted text-center py-8">Busca disponível apenas após build de produção.</p>';
+      return;
+    }
+
+    const search = await pf.search(query);
+    if (!search || search.results.length === 0) {
+      results.innerHTML = '<p class="text-text-muted text-center py-8">Nenhum resultado para “' + escapeHtml(query) + '”.</p>';
+      return;
+    }
+
+    const top = await Promise.all(search.results.slice(0, 10).map((r) => r.data()));
+    results.innerHTML = top.map((d) => `
+      <a href="${escapeHtml(d.url)}" class="block px-3 py-3 rounded-md hover:bg-elevated transition-colors">
+        <div class="font-medium text-text-primary">${escapeHtml(d.meta?.title || d.url)}</div>
+        <div class="text-text-secondary text-xs mt-1 line-clamp-2">${d.excerpt || ''}</div>
+      </a>
+    `).join('');
+  }
+
+  function init() {
+    const trigger = document.getElementById('search-trigger');
+    const dialog = document.getElementById('search-dialog');
+    const input = document.getElementById('search-input');
+    const closeBtn = document.getElementById('search-close');
+    const overlay = dialog?.querySelector('[data-search-overlay]');
+    if (!trigger || !dialog || !input) return;
+
+    let debounceTimer;
+
+    const open = () => {
+      dialog.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => input.focus(), 0);
+      loadPagefind();
+    };
+    const close = () => {
+      dialog.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    trigger.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    overlay?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !dialog.hidden) close();
+      if ((e.key === '/' || (e.key === 'k' && (e.ctrlKey || e.metaKey))) && dialog.hidden) {
+        const tag = document.activeElement?.tagName;
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault();
+          open();
+        }
+      }
+    });
+
+    input.addEventListener('input', (e) => {
+      const value = e.target.value;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => runSearch(value), 200);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

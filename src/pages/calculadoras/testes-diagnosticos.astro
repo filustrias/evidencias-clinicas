@@ -1,0 +1,16 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import DiagnosticTestCalculator from '@components/calculadoras/DiagnosticTestCalculator.astro';
+---
+<PageLayout
+  title="Testes diagnósticos — calculadora"
+  description="Cálculo de sensibilidade, especificidade, VPP, VPN e razões de verossimilhança a partir de uma tabela 2×2."
+  section="calculadoras"
+>
+  <h1 class="text-4xl font-medium mb-3">Testes diagnósticos</h1>
+  <p class="text-lg text-text-secondary mb-6">
+    A partir da tabela 2×2 (resultado do teste vs. doença), obtenha sensibilidade, especificidade,
+    valores preditivos e razões de verossimilhança, com intervalos de confiança.
+  </p>
+  <DiagnosticTestCalculator />
+</PageLayout>

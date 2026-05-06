@@ -1,0 +1,93 @@
+---
+/**
+ * Sumário renderizado client-side a partir dos h2/h3 dentro de <article>.
+ * Hidratação no script para evitar mismatch entre slot e markup gerado.
+ */
+---
+<nav aria-label="Sumário desta página" class="text-sm">
+  <h2 class="text-xs font-medium uppercase tracking-wide text-text-muted mb-3">
+    Nesta página
+  </h2>
+  <ul id="ec-toc-list" class="space-y-1.5"></ul>
+</nav>
+
+<script>
+  function buildToc() {
+    const list = document.getElementById('ec-toc-list');
+    if (!list) return;
+
+    const article = document.querySelector('article');
+    if (!article) return;
+
+    const headings = Array.from(
+      article.querySelectorAll('h2[id], h3[id]')
+    ) as HTMLHeadingElement[];
+
+    if (headings.length === 0) {
+      const aside = list.closest('aside');
+      if (aside) aside.style.display = 'none';
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    headings.forEach((heading) => {
+      const li = document.createElement('li');
+      li.dataset.tocId = heading.id;
+      if (heading.tagName === 'H3') {
+        li.style.paddingLeft = '0.75rem';
+      }
+
+      const a = document.createElement('a');
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent ?? '';
+      a.className =
+        'block py-1 text-text-secondary hover:text-accent transition-colors border-l-2 border-transparent pl-3 -ml-3';
+      a.dataset.tocLink = heading.id;
+      li.appendChild(a);
+      fragment.appendChild(li);
+    });
+
+    list.appendChild(fragment);
+
+    // IntersectionObserver — destacar item ativo conforme rola
+    const linkById = new Map<string, HTMLAnchorElement>();
+    list.querySelectorAll<HTMLAnchorElement>('[data-toc-link]').forEach((link) => {
+      const id = link.dataset.tocLink;
+      if (id) linkById.set(id, link);
+    });
+
+    function setActive(id: string | null) {
+      linkById.forEach((link, linkId) => {
+        if (linkId === id) {
+          link.classList.add('text-accent', 'font-medium', 'border-accent');
+          link.classList.remove('text-text-secondary', 'border-transparent');
+        } else {
+          link.classList.remove('text-accent', 'font-medium', 'border-accent');
+          link.classList.add('text-text-secondary', 'border-transparent');
+        }
+      });
+    }
+
+    const visible = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = (entry.target as HTMLElement).id;
+          if (entry.isIntersecting) visible.add(id);
+          else visible.delete(id);
+        });
+        // Pegar o primeiro heading visível na ordem do documento
+        const firstVisible = headings.find((h) => visible.has(h.id));
+        setActive(firstVisible?.id ?? headings[0]?.id ?? null);
+      },
+      { rootMargin: '-80px 0px -65% 0px', threshold: 0 }
+    );
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildToc);
+  } else {
+    buildToc();
+  }
+</script>

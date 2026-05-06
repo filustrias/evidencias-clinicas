@@ -1,0 +1,10 @@
+site: dist
+exclude_selectors:
+  - "header"
+  - "footer"
+  - "[role='navigation']"
+  - ".sidebar"
+  - "[data-pagefind-ignore]"
+  - "#aa-panel"
+  - "#mobile-nav-panel"
+  - "#search-dialog"

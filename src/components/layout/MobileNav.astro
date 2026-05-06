@@ -1,0 +1,126 @@
+---
+import { primaryNav, withBase, stripBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const currentPath = stripBase(Astro.url.pathname, base);
+---
+<button
+  id="mobile-nav-trigger"
+  type="button"
+  class="lg:hidden inline-flex items-center justify-center h-9 w-9 rounded-md border border-border-subtle text-text-primary hover:bg-elevated"
+  aria-label="Abrir menu"
+  aria-expanded="false"
+  aria-controls="mobile-nav-panel"
+>
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    class="h-5 w-5"
+  >
+    <path d="M3 6h14M3 10h14M3 14h14" stroke-linecap="round" />
+  </svg>
+</button>
+
+<div
+  id="mobile-nav-panel"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu de navegação"
+  hidden
+  class="lg:hidden fixed inset-0 z-50"
+>
+  <div data-mobile-nav-overlay class="absolute inset-0 bg-black/40"></div>
+  <nav
+    class="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-canvas border-l border-border-subtle overflow-y-auto"
+  >
+    <div class="flex items-center justify-between h-16 px-5 border-b border-border-subtle">
+      <span class="font-medium">Menu</span>
+      <button
+        id="mobile-nav-close"
+        type="button"
+        class="inline-flex items-center justify-center h-9 w-9 rounded-md hover:bg-elevated"
+        aria-label="Fechar menu"
+      >
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="h-5 w-5" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <ul class="py-2">
+      {primaryNav.map((item) => (
+        <li>
+          <a
+            href={withBase(item.href, base)}
+            class:list={[
+              'block px-5 py-3 text-base border-b border-border-subtle transition-colors',
+              currentPath.startsWith(item.href) && item.href !== '/'
+                ? 'text-accent font-medium'
+                : currentPath === '/' && item.href === '/'
+                  ? 'text-accent font-medium'
+                  : 'text-text-primary hover:bg-elevated',
+            ]}
+          >
+            {item.label}
+          </a>
+          {item.children && (
+            <ul class="bg-surface">
+              {item.children.map((child) => (
+                <li>
+                  <a
+                    href={withBase(child.href, base)}
+                    class:list={[
+                      'block px-8 py-2.5 text-sm border-b border-border-subtle/50 transition-colors',
+                      currentPath === child.href
+                        ? 'text-accent font-medium'
+                        : 'text-text-secondary hover:text-text-primary',
+                    ]}
+                  >
+                    {child.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  function init() {
+    const trigger = document.getElementById('mobile-nav-trigger');
+    const panel = document.getElementById('mobile-nav-panel');
+    const closeBtn = document.getElementById('mobile-nav-close');
+    const overlay = panel?.querySelector('[data-mobile-nav-overlay]');
+    if (!trigger || !panel) return;
+
+    const open = () => {
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    trigger.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    overlay?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) close();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

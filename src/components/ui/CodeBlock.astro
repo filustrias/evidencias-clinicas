@@ -1,0 +1,26 @@
+---
+/**
+ * Wrapper sobre o syntax highlighting do Astro (Shiki).
+ * Use em conteúdo .astro fora de markdown — para markdown,
+ * Shiki é aplicado automaticamente em ```lang blocks.
+ */
+import { Code } from 'astro:components';
+
+export interface Props {
+  code: string;
+  lang?: string;
+  filename?: string;
+}
+
+const { code, lang = 'plaintext', filename } = Astro.props;
+---
+<figure class="my-6 overflow-hidden rounded-lg border border-border-subtle">
+  {filename && (
+    <figcaption class="bg-elevated border-b border-border-subtle px-4 py-2 text-xs font-mono text-text-secondary">
+      {filename}
+    </figcaption>
+  )}
+  <div class="text-sm">
+    <Code code={code} lang={lang as any} theme="github-dark-default" />
+  </div>
+</figure>

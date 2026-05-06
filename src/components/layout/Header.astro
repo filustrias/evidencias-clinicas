@@ -1,0 +1,86 @@
+---
+import { primaryNav, withBase, stripBase } from '@/data/navigation';
+import ThemePanel from '@components/theme/ThemePanel.astro';
+import SearchInput from '@components/search/SearchInput.astro';
+import MobileNav from '@components/layout/MobileNav.astro';
+
+const base = import.meta.env.BASE_URL;
+const currentPath = stripBase(Astro.url.pathname, base);
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/' || currentPath === '';
+  return currentPath.startsWith(href);
+}
+---
+<header class="sticky top-0 z-40 bg-canvas/95 backdrop-blur supports-[backdrop-filter]:bg-canvas/80 border-b border-border-subtle">
+  <div class="mx-auto max-w-[1280px] px-5 lg:px-12 h-16 flex items-center gap-4 lg:gap-6">
+    <a
+      href={withBase('/', base)}
+      class="font-medium text-lg tracking-tight text-text-primary hover:text-accent transition-colors whitespace-nowrap"
+      aria-label="evidências clínicas — página inicial"
+    >
+      evidências clínicas
+    </a>
+
+    {/* ---------- Nav primária (desktop) ---------- */}
+    <nav class="hidden lg:flex items-center gap-1 ml-4 flex-1" aria-label="Navegação primária">
+      {primaryNav.map((item) => (
+        <div class="relative group">
+          <a
+            href={withBase(item.href, base)}
+            class:list={[
+              'inline-flex items-center px-3 py-2 text-sm rounded-md transition-colors',
+              isActive(item.href)
+                ? 'text-accent font-medium'
+                : 'text-text-secondary hover:text-text-primary hover:bg-elevated',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+            {item.children && (
+              <svg
+                class="ml-1 h-3 w-3 opacity-60"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path d="M3 4.5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            )}
+          </a>
+
+          {item.children && (
+            <div
+              class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-0 top-[calc(100%+4px)] z-50 min-w-[220px] rounded-lg border border-border-default bg-canvas p-1 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)] transition-opacity"
+              role="menu"
+            >
+              {item.children.map((child) => (
+                <a
+                  href={withBase(child.href, base)}
+                  class:list={[
+                    'block px-3 py-2 text-sm rounded-md transition-colors',
+                    currentPath === child.href
+                      ? 'text-accent font-medium bg-accent-soft-bg'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-elevated',
+                  ]}
+                  role="menuitem"
+                >
+                  {child.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </nav>
+
+    {/* ---------- Right cluster ---------- */}
+    <div class="ml-auto flex items-center gap-2">
+      <SearchInput />
+      <ThemePanel />
+      <MobileNav />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,16 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import EffectMeasuresCalculator from '@components/calculadoras/EffectMeasuresCalculator.astro';
+---
+<PageLayout
+  title="Medidas de efeito — calculadora"
+  description="Cálculo de RR, OR, redução absoluta de risco, NNT e NNH com intervalos de confiança."
+  section="calculadoras"
+>
+  <h1 class="text-4xl font-medium mb-3">Medidas de efeito</h1>
+  <p class="text-lg text-text-secondary mb-6">
+    Insira eventos e totais de cada grupo (intervenção/controle) para obter risco relativo,
+    odds ratio, redução absoluta de risco e NNT/NNH com intervalos de confiança.
+  </p>
+  <EffectMeasuresCalculator />
+</PageLayout>

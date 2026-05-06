@@ -1,0 +1,24 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { getSectionNav, withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const items = getSectionNav('calculadoras')?.filter((it) => it.href !== '/calculadoras/') ?? [];
+---
+<PageLayout
+  title="Calculadoras"
+  description="Cálculos interativos para testes diagnósticos e medidas de efeito — direto no navegador."
+  section="calculadoras"
+>
+  <h1 class="text-4xl font-medium mb-3">Calculadoras</h1>
+  <p class="text-lg text-text-secondary mb-8">
+    Ferramentas interativas para inserir tabelas 2×2 e obter sensibilidade, especificidade,
+    razões de verossimilhança, RR, OR, NNT e mais — com intervalos de confiança.
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {items.map((it) => (
+      <ConceptCard href={withBase(it.href, base)} title={it.label} badge="Interativo" />
+    ))}
+  </div>
+</PageLayout>

@@ -1,0 +1,56 @@
+---
+type Variant = 'primary' | 'secondary' | 'ghost';
+type Size = 'sm' | 'md' | 'lg';
+
+export interface Props {
+  variant?: Variant;
+  size?: Size;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  class: className = '',
+  ariaLabel,
+} = Astro.props;
+
+const sizeClasses: Record<Size, string> = {
+  sm: 'h-8 px-3 text-sm',
+  md: 'h-10 px-4 text-sm',
+  lg: 'h-12 px-5 text-base',
+};
+
+const variantClasses: Record<Variant, string> = {
+  primary:
+    'bg-accent text-white hover:bg-accent-hover disabled:bg-text-muted',
+  secondary:
+    'bg-canvas text-text-primary border border-border-default hover:bg-elevated disabled:opacity-50',
+  ghost:
+    'bg-transparent text-text-primary hover:bg-elevated disabled:opacity-50',
+};
+
+const baseClasses =
+  'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:cursor-not-allowed';
+
+const classList = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim();
+
+const Tag = href ? 'a' : 'button';
+---
+{href ? (
+  <a href={href} class={classList} aria-label={ariaLabel}><slot /></a>
+) : (
+  <button
+    type={type}
+    class={classList}
+    disabled={disabled}
+    aria-label={ariaLabel}
+  ><slot /></button>
+)}

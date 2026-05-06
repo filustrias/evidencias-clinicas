@@ -1,0 +1,67 @@
+---
+import { withBase } from '@/data/navigation';
+const base = import.meta.env.BASE_URL;
+const year = new Date().getFullYear();
+---
+<footer class="mt-20 border-t border-border-subtle bg-surface">
+  <div class="mx-auto max-w-[1280px] px-5 lg:px-12 py-8 lg:py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+      <div>
+        <h3 class="text-sm font-medium text-text-primary mb-3">Recursos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href={withBase('/sobre/', base)} class="text-text-secondary hover:text-accent">Sobre o curso</a></li>
+          <li><a href={withBase('/glossario/', base)} class="text-text-secondary hover:text-accent">Glossário</a></li>
+          <li><a href={withBase('/referencias/', base)} class="text-text-secondary hover:text-accent">Referências</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-medium text-text-primary mb-3">Institucional</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a
+              href="https://github.com/filustrias/evidencias-clinicas"
+              class="text-text-secondary hover:text-accent"
+              rel="noopener noreferrer"
+              target="_blank"
+            >Repositório no GitHub ↗</a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/filustrias/evidencias-clinicas/issues"
+              class="text-text-secondary hover:text-accent"
+              rel="noopener noreferrer"
+              target="_blank"
+            >Sugestões e correções ↗</a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-medium text-text-primary mb-3">Licenças</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a
+              href="https://github.com/filustrias/evidencias-clinicas/blob/main/LICENSE"
+              class="text-text-secondary hover:text-accent"
+              rel="noopener noreferrer"
+              target="_blank"
+            >Código sob MIT ↗</a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/filustrias/evidencias-clinicas/blob/main/CONTENT-LICENSE.md"
+              class="text-text-secondary hover:text-accent"
+              rel="noopener noreferrer"
+              target="_blank"
+            >Conteúdo sob CC-BY-SA 4.0 ↗</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-border-subtle text-center text-sm text-text-muted">
+      © {year} evidências clínicas. Conteúdo educacional — não substitui aconselhamento médico individualizado.
+    </div>
+  </div>
+</footer>

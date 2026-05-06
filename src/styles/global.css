@@ -1,0 +1,214 @@
+/* ----------------------------------------------------------------------
+   Fontes auto-hospedadas via Fontsource (sem chamada runtime ao Google)
+---------------------------------------------------------------------- */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/source-serif-4/400.css';
+@import '@fontsource/source-serif-4/500.css';
+@import '@fontsource/jetbrains-mono/400.css';
+
+/* ----------------------------------------------------------------------
+   Tailwind base
+---------------------------------------------------------------------- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----------------------------------------------------------------------
+   Tokens de design — tema claro (default)
+---------------------------------------------------------------------- */
+:root {
+  /* Neutrais (zinc) */
+  --color-bg-canvas: #ffffff;
+  --color-bg-surface: #fafafa;
+  --color-bg-elevated: #f4f4f5;
+  --color-border-subtle: #e4e4e7;
+  --color-border-default: #d4d4d8;
+  --color-text-primary: #09090b;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #71717a;
+
+  /* Acento (teal) */
+  --color-accent: #0d9488;
+  --color-accent-hover: #0f766e;
+  --color-accent-soft-bg: #f0fdfa;
+  --color-accent-soft-text: #115e59;
+
+  /* Semânticas */
+  --color-success: #16a34a;
+  --color-success-bg: #f0fdf4;
+  --color-success-text: #15803d;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+  --color-danger-text: #b91c1c;
+  --color-warning: #ca8a04;
+  --color-warning-bg: #fefce8;
+  --color-warning-text: #a16207;
+  --color-info: #2563eb;
+  --color-info-bg: #eff6ff;
+  --color-info-text: #1d4ed8;
+
+  /* Tipografia */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Raios */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+/* ----------------------------------------------------------------------
+   Tema escuro explícito (override do auto)
+---------------------------------------------------------------------- */
+:root[data-theme='dark'] {
+  --color-bg-canvas: #09090b;
+  --color-bg-surface: #18181b;
+  --color-bg-elevated: #27272a;
+  --color-border-subtle: #27272a;
+  --color-border-default: #3f3f46;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #5eead4;
+  --color-accent-soft-bg: #134e4a;
+  --color-accent-soft-text: #99f6e4;
+
+  --color-success: #4ade80;
+  --color-success-bg: #14532d;
+  --color-success-text: #86efac;
+  --color-danger: #f87171;
+  --color-danger-bg: #7f1d1d;
+  --color-danger-text: #fecaca;
+  --color-warning: #facc15;
+  --color-warning-bg: #713f12;
+  --color-warning-text: #fde68a;
+  --color-info: #60a5fa;
+  --color-info-bg: #1e3a8a;
+  --color-info-text: #bfdbfe;
+}
+
+/* ----------------------------------------------------------------------
+   Auto: segue prefers-color-scheme quando não há override explícito
+---------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg-canvas: #09090b;
+    --color-bg-surface: #18181b;
+    --color-bg-elevated: #27272a;
+    --color-border-subtle: #27272a;
+    --color-border-default: #3f3f46;
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #a1a1aa;
+    --color-text-muted: #71717a;
+    --color-accent: #2dd4bf;
+    --color-accent-hover: #5eead4;
+    --color-accent-soft-bg: #134e4a;
+    --color-accent-soft-text: #99f6e4;
+    --color-success: #4ade80;
+    --color-success-bg: #14532d;
+    --color-success-text: #86efac;
+    --color-danger: #f87171;
+    --color-danger-bg: #7f1d1d;
+    --color-danger-text: #fecaca;
+    --color-warning: #facc15;
+    --color-warning-bg: #713f12;
+    --color-warning-text: #fde68a;
+    --color-info: #60a5fa;
+    --color-info-bg: #1e3a8a;
+    --color-info-text: #bfdbfe;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Tamanho da fonte (controlado via data-size em <html>)
+---------------------------------------------------------------------- */
+html {
+  font-size: 16px;
+}
+html[data-size='small'] {
+  font-size: 14px;
+}
+html[data-size='large'] {
+  font-size: 18px;
+}
+
+/* ----------------------------------------------------------------------
+   Estilo da fonte (controlado via data-font em <body>)
+---------------------------------------------------------------------- */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+}
+body[data-font='serif'] {
+  font-family: var(--font-serif);
+}
+
+/* Manchetes nunca mudam — sempre sans, mesmo no toggle serif */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+}
+
+/* Código e elementos técnicos sempre em mono */
+code, pre, .mono, [data-mono] {
+  font-family: var(--font-mono);
+}
+
+/* ----------------------------------------------------------------------
+   Foco visível — anel teal em todos os elementos focáveis
+---------------------------------------------------------------------- */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ----------------------------------------------------------------------
+   Reduced motion — respeitar preferência do usuário
+---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Utilitários custom
+---------------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1rem;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius-md);
+  z-index: 100;
+}
+
+/* Scroll-margin para que âncoras não fiquem escondidas atrás do header sticky */
+:where(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: 80px;
+}

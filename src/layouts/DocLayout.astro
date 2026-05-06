@@ -1,0 +1,18 @@
+---
+import PageLayout from './PageLayout.astro';
+import '@styles/prose.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  section?: string;
+  showToc?: boolean;
+}
+
+const { title, description, section, showToc = true } = Astro.props;
+---
+<PageLayout title={title} description={description} section={section} showToc={showToc}>
+  <div class="prose">
+    <slot />
+  </div>
+</PageLayout>

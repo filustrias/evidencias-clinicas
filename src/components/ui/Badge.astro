@@ -1,0 +1,26 @@
+---
+type Variant = 'default' | 'accent' | 'info' | 'warning' | 'danger' | 'success';
+
+export interface Props {
+  variant?: Variant;
+}
+
+const { variant = 'default' } = Astro.props;
+
+const styles: Record<Variant, string> = {
+  default: 'bg-elevated text-text-secondary',
+  accent: 'bg-accent-soft-bg text-accent-soft-text',
+  info: 'bg-info-bg text-info-text',
+  warning: 'bg-warning-bg text-warning-text',
+  danger: 'bg-danger-bg text-danger-text',
+  success: 'bg-success-bg text-success-text',
+};
+---
+<span
+  class:list={[
+    'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium',
+    styles[variant],
+  ]}
+>
+  <slot />
+</span>

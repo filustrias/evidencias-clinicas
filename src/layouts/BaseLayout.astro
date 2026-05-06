@@ -1,0 +1,90 @@
+---
+import '@styles/global.css';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+
+export interface Props {
+  title: string;
+  description?: string;
+  /** Optional explicit canonical path; defaults to the current request URL. */
+  canonical?: string;
+  /** Page-level data-section hint, used by Sidebar resolution. */
+  section?: string;
+}
+
+const {
+  title,
+  description = 'Recursos sobre Medicina Baseada em Evidências (MBE) com foco em decisões clínicas, voltado a médicos de Moçambique e Angola.',
+  canonical,
+  section,
+} = Astro.props;
+
+const fullTitle = title === 'Início' || title === '' ? 'evidências clínicas' : `${title} — evidências clínicas`;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* ---------- Anti-FOUC: aplica preferências antes do CSS renderizar ---------- */}
+    <script is:inline>
+      (function () {
+        try {
+          var theme = localStorage.getItem('ec-theme') || 'auto';
+          var size = localStorage.getItem('ec-size') || 'default';
+          var font = localStorage.getItem('ec-font') || 'sans';
+          if (theme === 'light' || theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', theme);
+          }
+          if (size !== 'default') {
+            document.documentElement.setAttribute('data-size', size);
+          }
+          window.__ec_font = font;
+          document.addEventListener('DOMContentLoaded', function () {
+            if (window.__ec_font === 'serif') {
+              document.body.setAttribute('data-font', 'serif');
+            }
+          });
+        } catch (e) { /* localStorage indisponível, segue default */ }
+      })();
+    </script>
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="evidências clínicas" />
+
+    {/* Theme color seguindo o esquema do tema */}
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+
+    {/* Favicon — placeholder; substituir por SVG quando o branding final estiver pronto */}
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+  </head>
+  <body data-section={section}>
+    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+
+    <Header />
+
+    <main id="main-content" class="min-h-[60vh]">
+      <slot />
+    </main>
+
+    <Footer />
+
+    {/* Theme controls script — bundled by Astro */}
+    <script>
+      import '@scripts/theme-controls.ts';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { getSectionNav, withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const items = getSectionNav('cinco-as')?.filter((it) => it.href !== '/cinco-as/') ?? [];
+---
+<PageLayout
+  title="Os 5As"
+  description="Ask, Acquire, Appraise, Apply, Assess — o ciclo da MBE aplicado à decisão clínica."
+  section="cinco-as"
+>
+  <h1 class="text-4xl font-medium mb-3">Os 5As</h1>
+  <p class="text-lg text-text-secondary mb-8">
+    Cinco etapas que transformam uma dúvida clínica em decisão informada e auditável.
+    Da formulação da pergunta à avaliação do impacto, passando por busca, leitura crítica e aplicação.
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {items.map((it) => (
+      <ConceptCard href={withBase(it.href, base)} title={it.label} />
+    ))}
+  </div>
+</PageLayout>

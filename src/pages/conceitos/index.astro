@@ -1,0 +1,28 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { getSectionNav, withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const items = getSectionNav('conceitos')?.filter((it) => it.href !== '/conceitos/') ?? [];
+---
+<PageLayout
+  title="Conceitos"
+  description="Pirâmide de evidências, desenhos de estudo, medidas, vieses e fundamentos de MBE."
+  section="conceitos"
+  wide
+>
+  <h1 class="text-4xl font-medium mb-3">Conceitos</h1>
+  <p class="text-lg text-text-secondary mb-8 max-w-prose">
+    O vocabulário e os blocos conceituais que sustentam a leitura crítica e a aplicação das evidências em decisões clínicas.
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {items.map((it) => (
+      <ConceptCard
+        href={withBase(it.href, base)}
+        title={it.label}
+        badge={it.href === '/conceitos/duvidas-clinicas/' ? 'Em destaque' : undefined}
+      />
+    ))}
+  </div>
+</PageLayout>

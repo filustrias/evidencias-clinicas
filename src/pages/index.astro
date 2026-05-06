@@ -1,0 +1,84 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+
+const sections = [
+  {
+    title: 'Os 5As',
+    description: 'Da pergunta clínica à avaliação do impacto: o ciclo de Ask, Acquire, Appraise, Apply, Assess aplicado à prática.',
+    href: '/cinco-as/',
+    badge: 'Fundamento',
+  },
+  {
+    title: 'Conceitos',
+    description: 'Pirâmide de evidências, desenhos de estudo, medidas de efeito, vieses, decisão compartilhada e mais.',
+    href: '/conceitos/',
+    badge: 'Referência',
+  },
+  {
+    title: 'Ferramentas',
+    description: 'CASP, GRADE, RoB, AMSTAR — instrumentos para leitura crítica de artigos e síntese de evidências.',
+    href: '/ferramentas/',
+    badge: 'Instrumentos',
+  },
+  {
+    title: 'Calculadoras',
+    description: 'Testes diagnósticos (sensibilidade, VPP, LR) e medidas de efeito (RR, OR, NNT) — interativas no navegador.',
+    href: '/calculadoras/',
+    badge: 'Interativo',
+  },
+  {
+    title: 'Em prática',
+    description: 'Aplicações por tipo de questão clínica: diagnóstica, terapêutica, preventiva e prognóstica.',
+    href: '/em-pratica/',
+    badge: 'Casos',
+  },
+];
+---
+<BaseLayout title="Início" description="Recursos de Medicina Baseada em Evidências para decisões clínicas — voltado a médicos de Moçambique e Angola.">
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pt-12 lg:pt-20 pb-12">
+    <div class="max-w-3xl">
+      <p class="text-sm text-accent font-medium mb-4 tracking-wide uppercase">
+        Medicina Baseada em Evidências
+      </p>
+      <h1 class="text-4xl lg:text-6xl font-medium tracking-tight text-text-primary leading-[1.05]">
+        Decisões clínicas com base em evidência, no contexto certo.
+      </h1>
+      <p class="mt-6 text-lg lg:text-xl text-text-secondary leading-relaxed">
+        Recursos práticos para médicos em Moçambique, Angola e além — do raciocínio à pergunta bem formulada,
+        da leitura crítica à decisão compartilhada com o paciente.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={withBase('/cinco-as/', base)}
+          class="inline-flex h-11 items-center px-5 rounded-md bg-accent text-white font-medium hover:bg-accent-hover transition-colors"
+        >
+          Começar pelos 5As
+        </a>
+        <a
+          href={withBase('/conceitos/duvidas-clinicas/', base)}
+          class="inline-flex h-11 items-center px-5 rounded-md border border-border-default text-text-primary font-medium hover:bg-elevated transition-colors"
+        >
+          Dúvidas clínicas →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-20">
+    <h2 class="text-2xl font-medium mb-6">Explorar o conteúdo</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {sections.map((s) => (
+        <ConceptCard
+          href={withBase(s.href, base)}
+          title={s.title}
+          description={s.description}
+          badge={s.badge}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import ConceptCard from '@components/ui/ConceptCard.astro';
+import { getSectionNav, withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const items = getSectionNav('ferramentas')?.filter((it) => it.href !== '/ferramentas/') ?? [];
+---
+<PageLayout
+  title="Ferramentas"
+  description="CASP, GRADE, RoB e AMSTAR — instrumentos para avaliar a qualidade da evidência."
+  section="ferramentas"
+>
+  <h1 class="text-4xl font-medium mb-3">Ferramentas</h1>
+  <p class="text-lg text-text-secondary mb-8">
+    Instrumentos para leitura crítica de artigos e síntese de evidência.
+  </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {items.map((it) => (
+      <ConceptCard href={withBase(it.href, base)} title={it.label} />
+    ))}
+  </div>
+</PageLayout>

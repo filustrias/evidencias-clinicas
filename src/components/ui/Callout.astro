@@ -1,0 +1,61 @@
+---
+type Variant = 'info' | 'warning' | 'danger' | 'success';
+
+export interface Props {
+  variant?: Variant;
+  title?: string;
+}
+
+const { variant = 'info', title } = Astro.props;
+
+const variantStyles: Record<Variant, { border: string; bg: string; text: string; icon: string }> = {
+  info: {
+    border: 'border-l-info',
+    bg: 'bg-info-bg',
+    text: 'text-info-text',
+    icon: 'i-info',
+  },
+  warning: {
+    border: 'border-l-warning',
+    bg: 'bg-warning-bg',
+    text: 'text-warning-text',
+    icon: 'i-warning',
+  },
+  danger: {
+    border: 'border-l-danger',
+    bg: 'bg-danger-bg',
+    text: 'text-danger-text',
+    icon: 'i-danger',
+  },
+  success: {
+    border: 'border-l-success',
+    bg: 'bg-success-bg',
+    text: 'text-success-text',
+    icon: 'i-success',
+  },
+};
+
+const styles = variantStyles[variant];
+---
+<div
+  class:list={[
+    'border-l-[3px] rounded-r-md p-4 my-6',
+    styles.border,
+    styles.bg,
+  ]}
+  role="note"
+>
+  {title && (
+    <p class:list={['font-medium mb-1', styles.text]}>{title}</p>
+  )}
+  <div class:list={['text-sm', styles.text]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .border-l-info { border-left-color: var(--color-info); }
+  .border-l-warning { border-left-color: var(--color-warning); }
+  .border-l-danger { border-left-color: var(--color-danger); }
+  .border-l-success { border-left-color: var(--color-success); }
+</style>
