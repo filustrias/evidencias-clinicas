@@ -1,14 +1,147 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import EvidencePyramid from '@components/ui/EvidencePyramid.astro';
+import SourceHierarchy from '@components/ui/SourceHierarchy.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Buscar (Acquire)"
-  description="Estratégias de busca em bases de dados e fontes pré-filtradas para responder à pergunta clínica."
+<DocLayout
+  title="Acquire (Buscar) — o segundo A"
+  description="Onde encontrar a melhor evidência disponível e como construir uma estratégia de busca eficiente."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Buscar (Acquire)</h1>
-  <p class="text-lg text-text-secondary mb-6">Estratégias de busca em bases de dados e fontes pré-filtradas para responder à pergunta clínica.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Acquire (Buscar) — o segundo A</h1>
+
+  <p>
+    Com a pergunta PICO pronta, é hora de procurar resposta. Mas a busca por evidência clínica é diferente de uma busca no Google: existem hierarquias entre fontes, técnicas para refinar termos, filtros que mudam tudo. Sem isso, a procura traz lixo — e quem volta de mãos vazias termina decidindo por hábito.
+  </p>
+
+  <p>
+    O segundo A — Acquire, buscar — é sobre <strong>encontrar evidência de qualidade no menor tempo possível</strong>. Quanto mais alta na hierarquia a fonte, menos trabalho de avaliação crítica depois. Quanto mais bem construída a estratégia de busca, menos resultados irrelevantes para descartar.
+  </p>
+
+  <CycleDiagram activeStep="acquire" />
+
+  <h2 id="voltando-ao-consultorio">Voltando ao consultório</h2>
+
+  <p>Dra. Amélia tem agora, na frente do Sr. António, sua pergunta PICO formulada:</p>
+
+  <blockquote class="featured-quote">
+    <p>Em idosos sem doença cardiovascular estabelecida, a aspirina em baixa dose previne eventos cardiovasculares maiores em comparação com o não uso, sem aumentar significativamente o risco de sangramento maior?</p>
+  </blockquote>
+
+  <p>
+    Onde ela vai buscar a resposta? PubMed? Cochrane? UpToDate? O Google? A sequência de escolhas determina se ela sai do consultório com base em evidência consolidada — ou com mais incerteza do que entrou.
+  </p>
+
+  <h2 id="duas-hierarquias">Duas hierarquias para entender</h2>
+
+  <p>Buscar bem exige entender duas hierarquias distintas, que muita gente confunde.</p>
+
+  <p>
+    <strong>A primeira hierarquia é entre desenhos de estudo.</strong> Um relato de caso, mesmo brilhantemente escrito, não tem o mesmo poder de informar uma decisão clínica que uma revisão sistemática bem feita. Essa diferença é capturada pela <a href={withBase('/conceitos/piramide-evidencias/', base)}>pirâmide de evidências</a>.
+  </p>
+
+  <EvidencePyramid />
+
+  <p>
+    <strong>A segunda hierarquia é entre fontes.</strong> Um capítulo do UpToDate, atualizado por especialistas, sintetiza para você o que pesquisadores levaram anos para construir. Um artigo isolado no PubMed traz dado bruto que você precisa avaliar. A regra prática: comece sempre pelo nível mais sintetizado disponível, descendo só quando necessário.
+  </p>
+
+  <SourceHierarchy />
+
+  <p>
+    A ordem importa porque o esforço de avaliação crítica cresce na descida. Se um sumário do UpToDate já responde à pergunta com base em evidência sintetizada, a busca acabou. Se não responde, a Cochrane tem revisão sobre o tema? Se sim, ótimo. Se não, descer aos estudos primários — e aí a avaliação crítica precisa ser feita por inteiro pelo próprio profissional.
+  </p>
+
+  <h2 id="estrategia-6s">A estratégia 6S de Haynes</h2>
+
+  <p>
+    Brian Haynes propôs um modelo elegante que sintetiza essa lógica: a <strong>estratégia 6S</strong><sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Seis camadas de organização da evidência, do mais sintetizado (no topo) ao mais primário (na base):
+  </p>
+
+  <ol>
+    <li><strong>Systems</strong> <em>(Sistemas)</em> — softwares de apoio à decisão integrados ao registro eletrônico do paciente</li>
+    <li><strong>Summaries</strong> <em>(Sumários)</em> — capítulos atualizados em sumários clínicos</li>
+    <li><strong>Synopses of syntheses</strong> <em>(Sinopses de sínteses)</em> — resumos comentados de revisões sistemáticas</li>
+    <li><strong>Syntheses</strong> <em>(Sínteses)</em> — revisões sistemáticas em bases dedicadas</li>
+    <li><strong>Synopses of studies</strong> <em>(Sinopses de estudos)</em> — resumos comentados de estudos individuais</li>
+    <li><strong>Studies</strong> <em>(Estudos primários)</em> — artigos originais em bases biomédicas</li>
+  </ol>
+
+  <p>
+    A regra prática: <strong>sempre comece pelo S mais alto disponível</strong>. Cada nível acima sintetiza o trabalho do nível abaixo. Começar pelos estudos primários é o último recurso, não o primeiro.
+  </p>
+
+  <h2 id="acesso">Um detalhe que muda tudo: acesso</h2>
+
+  <p>
+    Toda essa hierarquia pressupõe que você consegue <strong>chegar</strong> às fontes. Na prática, isso é uma barreira real — UpToDate, BMJ Best Practice e muitos periódicos são pagos, e nem toda instituição em Moçambique ou Angola tem assinatura.
+  </p>
+
+  <p>
+    A boa notícia é que existe um conjunto significativo de <strong>fontes genuinamente gratuitas</strong> e o programa <strong>Research4Life</strong>, que dá acesso gratuito a profissionais em países elegíveis (Moçambique e Angola incluídos) — desde que a instituição esteja cadastrada. Como o cadastro e a navegação não são óbvios, dedicamos uma página inteira ao tema.
+  </p>
+
+  <a class="next-step" href={withBase('/conceitos/acesso-a-fontes/', base)}>
+    <span>Como acessar fontes de evidência</span>
+  </a>
+
+  <h2 id="como-construir-a-busca">Como construir a busca</h2>
+
+  <p>
+    Encontrar a fonte certa é metade do caminho. A outra metade é saber falar a língua dela: operadores booleanos, descritores controlados (MeSH/DeCS), filtros metodológicos. São técnicas elementares que poupam horas e melhoram drasticamente a precisão da busca.
+  </p>
+
+  <a class="next-step" href={withBase('/conceitos/como-buscar/', base)}>
+    <span>Como buscar — booleanos, descritores e filtros</span>
+  </a>
+
+  <h2 id="erros-comuns">Erros comuns no segundo A</h2>
+
+  <ul>
+    <li><strong>Pular para o PubMed direto.</strong> Maioria das perguntas clínicas tem resposta em UpToDate ou Cochrane — economiza horas começar pelo sumário.</li>
+    <li><strong>Confiar em fonte primária sem checar se há síntese.</strong> Um único ensaio clínico positivo pode ser estatisticamente fraco, contradito por outros ou de baixa qualidade. Revisão sistemática combina e contextualiza.</li>
+    <li><strong>Ignorar literatura cinzenta relevante.</strong> Diretrizes da OMS, da USPSTF, do NICE, do Ministério da Saúde local não estão sempre em PubMed, mas são evidência sintetizada de alta qualidade.</li>
+    <li><strong>Desistir cedo.</strong> Se a primeira busca não traz nada, a estratégia geralmente está estreita demais. Ampliar com <code>OR</code>, remover um filtro, trocar o termo por um sinônimo MeSH costuma destravar.</li>
+    <li><strong>Não verificar a data.</strong> Especialmente em sumários, capítulos podem ter sido atualizados pela última vez há anos. Olhe a data antes de confiar.</li>
+  </ul>
+
+  <h2 id="proximo-a-appraise">Próximo A: Appraise (Avaliar)</h2>
+
+  <p>
+    Encontrar a evidência é metade do trabalho. A outra metade é avaliá-la criticamente: o estudo é metodologicamente sólido? O efeito encontrado é clinicamente relevante? Aplica-se ao paciente que está na minha frente? É o que veremos no próximo A — onde aparecem ferramentas como CASP, GRADE, RoB e medidas de efeito (RR, RAR, NNT).
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/avaliar/', base)}>
+    <span>Continue para Appraise (Avaliar)</span>
+  </a>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — os seis níveis de desenho de estudo em detalhe</li>
+    <li><a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a> — booleanos, MeSH/DeCS, filtros, exemplo prático</li>
+    <li><a href={withBase('/conceitos/acesso-a-fontes/', base)}>Acesso a fontes</a> — Research4Life e fontes genuinamente gratuitas</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — caso-controle, coorte, ECR, revisão sistemática</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — Cochrane, OMS, USPSTF, NICE como fontes sintetizadas</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        DiCenso A, Bayley L, Haynes RB. Accessing pre-appraised evidence: fine-tuning the 5S model into a 6S model. <em>Evid Based Nurs</em> 2009;12(4):99–101. Disponível em: <a href="https://ebn.bmj.com/content/12/4/99" rel="noopener noreferrer" target="_blank">ebn.bmj.com/content/12/4/99</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Murad MH, Asi N, Alsawas M, Alahdab F. New evidence pyramid. <em>BMJ Evid Based Med</em> 2016;21(4):125–7. Disponível em: <a href="https://ebm.bmj.com/content/21/4/125" rel="noopener noreferrer" target="_blank">ebm.bmj.com/content/21/4/125</a>.
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 3: Acquiring the evidence.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,23 +1,161 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
 import ConceptCard from '@components/ui/ConceptCard.astro';
-import { getSectionNav, withBase } from '@/data/navigation';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const items = getSectionNav('ferramentas')?.filter((it) => it.href !== '/ferramentas/') ?? [];
+
+const tools = [
+  {
+    href: '/ferramentas/casp/',
+    title: 'CASP',
+    description: 'Checklists curtos para diferentes desenhos de estudo, em linguagem acessível. A porta de entrada mais usada em ensino.',
+  },
+  {
+    href: '/ferramentas/rob/',
+    title: 'RoB 2.0',
+    description: 'Risco de viés em ensaios clínicos randomizados, em cinco domínios. Padrão da Cochrane para revisões sistemáticas.',
+  },
+  {
+    href: '/ferramentas/amstar/',
+    title: 'AMSTAR-2',
+    description: 'Qualidade metodológica de revisões sistemáticas. 16 itens, 7 críticos. Distingue revisão sistemática de narrativa disfarçada.',
+  },
+  {
+    href: '/ferramentas/grade/',
+    title: 'GRADE',
+    description: 'Qualidade da evidência e força da recomendação. Adotado pela OMS, Cochrane, NICE e USPSTF.',
+  },
+];
 ---
-<PageLayout
-  title="Ferramentas"
-  description="CASP, GRADE, RoB e AMSTAR — instrumentos para avaliar a qualidade da evidência."
+<DocLayout
+  title="Ferramentas de avaliação crítica"
+  description="CASP, GRADE, RoB 2.0 e AMSTAR-2 — quando usar cada uma e o que esperar de cada uma."
   section="ferramentas"
 >
-  <h1 class="text-4xl font-medium mb-3">Ferramentas</h1>
-  <p class="text-lg text-text-secondary mb-8">
-    Instrumentos para leitura crítica de artigos e síntese de evidência.
+  <h1>Ferramentas de avaliação crítica</h1>
+
+  <p>
+    Avaliar criticamente um estudo é, em essência, <strong>fazer perguntas certas em ordem certa</strong>. Décadas de prática produziram ferramentas que estruturam essas perguntas — checklists, escalas, rubricas — para que ninguém precise reinventar o caminho. Quatro delas dominam a prática contemporânea e estão em uso em diretrizes, revisões sistemáticas e formação de profissionais de saúde no mundo inteiro.
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {items.map((it) => (
-      <ConceptCard href={withBase(it.href, base)} title={it.label} />
+
+  <p>
+    Esta página é uma comparação rápida. Use-a para escolher a ferramenta certa antes de mergulhar em qualquer uma. Cada ferramenta tem página dedicada, com exemplo de aplicação e onde encontrá-la em português.
+  </p>
+
+  <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+    {tools.map((t) => (
+      <ConceptCard
+        href={withBase(t.href, base)}
+        title={t.title}
+        description={t.description}
+      />
     ))}
   </div>
-</PageLayout>
+
+  <h2 id="comparacao-rapida">Comparação rápida</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Ferramenta</th>
+          <th scope="col">Para que serve</th>
+          <th scope="col">Quem mantém</th>
+          <th scope="col">Quando usar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href={withBase('/ferramentas/casp/', base)}><strong>CASP</strong></a></td>
+          <td>Checklists para avaliar diferentes desenhos de estudo</td>
+          <td>CASP UK</td>
+          <td>Avaliação geral, especialmente em ensino</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/rob/', base)}><strong>RoB 2.0</strong></a></td>
+          <td>Risco de viés em ensaios clínicos randomizados</td>
+          <td>Cochrane</td>
+          <td>Quando você lê ou produz revisão sistemática de ECRs</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/amstar/', base)}><strong>AMSTAR-2</strong></a></td>
+          <td>Qualidade metodológica de revisões sistemáticas</td>
+          <td>AMSTAR Group</td>
+          <td>Antes de confiar numa revisão sistemática</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/grade/', base)}><strong>GRADE</strong></a></td>
+          <td>Qualidade da evidência <strong>e</strong> força da recomendação</td>
+          <td>GRADE Working Group</td>
+          <td>Em diretrizes, para entender o quão forte é uma recomendação</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="qual-usar">Qual ferramenta usar para o quê</h2>
+
+  <p>A escolha depende do que você tem em mãos:</p>
+
+  <ul>
+    <li><strong>Tenho um ensaio clínico individual</strong> → CASP (visão geral) ou RoB 2.0 (mais técnico)</li>
+    <li><strong>Tenho uma revisão sistemática</strong> → AMSTAR-2 (qualidade da revisão) + checagem do GRADE da evidência (qualidade dos achados)</li>
+    <li><strong>Tenho uma diretriz clínica</strong> → leitura crítica via GRADE (qualidade + força)</li>
+    <li><strong>Tenho um estudo de coorte ou caso-controle</strong> → CASP (tem checklist específico para cada)</li>
+    <li><strong>Tenho um estudo qualitativo</strong> → CASP qualitativa</li>
+    <li><strong>Tenho um estudo de teste diagnóstico</strong> → CASP teste diagnóstico, ou QUADAS-2 para versão mais técnica</li>
+  </ul>
+
+  <h2 id="principios-comuns">Princípios comuns às quatro</h2>
+
+  <p>Apesar das diferenças, as quatro ferramentas convergem em alguns princípios:</p>
+
+  <p>
+    <strong>1. Foco em domínios, não em pontuações.</strong> As versões modernas (RoB 2.0, AMSTAR-2, GRADE) abandonaram pontuações somatórias por <strong>avaliação domínio a domínio</strong>. A razão: um estudo com risco baixo de viés em quatro domínios e alto em um domínio crítico não é "moderado" — é <strong>alto risco</strong>.
+  </p>
+
+  <p>
+    <strong>2. Distinção entre qualidade da evidência e qualidade do estudo.</strong> Não é a mesma coisa. Um estudo individual pode ser metodologicamente impecável mas, sozinho, não constituir evidência forte para uma recomendação. GRADE deixa essa distinção explícita.
+  </p>
+
+  <p>
+    <strong>3. Transparência em vez de oráculo.</strong> As ferramentas servem para você <strong>expor seu raciocínio</strong>, não para entregar um veredito automatizado. Dois avaliadores treinados podem chegar a julgamentos ligeiramente diferentes para o mesmo estudo — e isso é normal, contanto que cada um justifique seu juízo.
+  </p>
+
+  <p>
+    <strong>4. Adaptação ao contexto.</strong> Nenhuma ferramenta substitui o julgamento clínico sobre aplicabilidade. Validade interna é universal; aplicabilidade é local.
+  </p>
+
+  <h2 id="quando-usar-mais-de-uma">Quando usar mais de uma</h2>
+
+  <p>Em muitos casos, as ferramentas se complementam:</p>
+
+  <ul>
+    <li><strong>Lendo uma revisão Cochrane sobre o tratamento de uma doença:</strong> AMSTAR-2 para a qualidade da revisão; depois examinar o GRADE da evidência conforme apresentado pelos próprios autores.</li>
+    <li><strong>Lendo um artigo isolado de ECR:</strong> CASP para visão geral; RoB 2.0 para análise técnica do risco de viés.</li>
+    <li><strong>Avaliando uma diretriz internacional:</strong> examinar o GRADE de cada recomendação; rastrear até as revisões sistemáticas que sustentam as recomendações e aplicar AMSTAR-2 a elas.</li>
+  </ul>
+
+  <p>A combinação aumenta a confiança no julgamento e expõe lacunas que uma ferramenta isolada esconderia.</p>
+
+  <h2 id="onde-estudar">Onde estudar</h2>
+
+  <ul>
+    <li><strong>CASP</strong> — checklists em português disponíveis em: <a href="https://casp-uk.net/casp-tools-checklists" rel="noopener noreferrer" target="_blank">casp-uk.net/casp-tools-checklists</a></li>
+    <li><strong>RoB 2.0</strong> — manual oficial em: <a href="https://methods.cochrane.org/bias/resources/rob-2-revised-cochrane-risk-bias-tool-randomized-trials" rel="noopener noreferrer" target="_blank">methods.cochrane.org/bias</a></li>
+    <li><strong>AMSTAR-2</strong> — instrumento e instruções em: <a href="https://amstar.ca" rel="noopener noreferrer" target="_blank">amstar.ca</a></li>
+    <li><strong>GRADE</strong> — handbook online completo em: <a href="https://gdt.gradepro.org/app/handbook/handbook.html" rel="noopener noreferrer" target="_blank">gdt.gradepro.org/app/handbook</a></li>
+  </ul>
+
+  <p>Os textos canônicos de aprofundamento estão nas referências de cada página dedicada.</p>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde estas ferramentas se encaixam no ciclo dos 5As</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses e fontes de erro</a> — fundamentação conceitual do risco de viés</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — para entender o tipo de estudo que cada ferramenta avalia</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — quem produz e como ler</li>
+  </ul>
+</DocLayout>

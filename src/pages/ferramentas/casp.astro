@@ -1,14 +1,185 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="CASP"
-  description="Critical Appraisal Skills Programme: checklists para leitura crítica por desenho de estudo."
+<DocLayout
+  title="CASP — Critical Appraisal Skills Programme"
+  description="Checklists desenhados para diferentes tipos de estudo, em linguagem acessível."
   section="ferramentas"
 >
-  <h1 class="text-4xl font-medium mb-3">CASP</h1>
-  <p class="text-lg text-text-secondary mb-6">Critical Appraisal Skills Programme: checklists para leitura crítica por desenho de estudo.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>CASP — Critical Appraisal Skills Programme</h1>
+
+  <p>
+    CASP — <em>Critical Appraisal Skills Programme</em> — é o nome de um conjunto de <strong>checklists curtos</strong>, cada um desenhado para um tipo específico de estudo. Cada checklist tem entre 10 e 12 perguntas, em linguagem acessível, organizadas em três blocos: o estudo é válido? quais são os resultados? os resultados ajudam-me localmente?
+  </p>
+
+  <p>
+    É a porta de entrada mais usada no mundo para avaliação crítica em formação médica e de enfermagem. Não substitui ferramentas mais técnicas como RoB 2.0 ou AMSTAR-2 — mas, para começar e para ensinar, é a melhor pedagogicamente.
+  </p>
+
+  <h2 id="quando-usar">Quando usar</h2>
+
+  <p>CASP funciona com praticamente qualquer desenho de estudo. Existem checklists separados para:</p>
+
+  <ul>
+    <li>Ensaio clínico randomizado (RCT)</li>
+    <li>Revisão sistemática</li>
+    <li>Coorte</li>
+    <li>Caso-controle</li>
+    <li>Estudo de teste diagnóstico</li>
+    <li>Estudo qualitativo</li>
+    <li>Avaliação econômica</li>
+    <li>Estudo de prognóstico</li>
+  </ul>
+
+  <p>
+    Use CASP quando precisar de uma avaliação <strong>estruturada mas pragmática</strong> — em sessão de revista, discussão de caso, ensino, ou avaliação inicial de qualquer artigo antes de aprofundar com ferramentas mais especializadas.
+  </p>
+
+  <h2 id="de-onde-veio">De onde veio</h2>
+
+  <p>
+    Foi desenvolvido nos anos 1990 pelo programa CASP UK, sediado em Oxford, como parte da expansão pedagógica da MBE<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Inspirou-se nas <em>Users' Guides to the Medical Literature</em> publicadas por Guyatt e colaboradores no JAMA na mesma época<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>.
+  </p>
+
+  <p>
+    A filosofia: bons estudos respondem a perguntas claras. Ferramentas de avaliação devem fazer o mesmo. Cada item dos checklists é uma pergunta direta com três respostas possíveis: <strong>sim</strong>, <strong>não posso dizer</strong>, <strong>não</strong>.
+  </p>
+
+  <h2 id="estrutura-geral">Como funciona — estrutura geral</h2>
+
+  <p>Todos os checklists CASP seguem a mesma arquitetura, com três blocos:</p>
+
+  <p><strong>Bloco A — Os resultados do estudo são válidos?</strong></p>
+
+  <p>
+    Aqui o avaliador examina o desenho e a execução: a pergunta da pesquisa estava clara? a metodologia foi adequada para responder à pergunta? o estudo foi bem conduzido? Tipicamente 4 a 6 perguntas, dependendo do desenho.
+  </p>
+
+  <p><strong>Bloco B — Quais são os resultados?</strong></p>
+
+  <p>
+    Aqui se examina o que o estudo encontrou: qual o tamanho e a precisão do efeito? os resultados são relatados de forma transparente? O tratamento numérico depende do desenho — para um ECR, são RR/RAR/NNT; para um teste diagnóstico, sensibilidade/especificidade/VPP/VPN; para uma revisão sistemática, o resumo da meta-análise.
+  </p>
+
+  <p><strong>Bloco C — Os resultados ajudam localmente?</strong></p>
+
+  <p>
+    Este bloco fecha o ciclo: os achados são aplicáveis ao paciente que tenho na frente? os benefícios superam danos e custos? o desfecho importa para este paciente? É a parte mais subjetiva — exige julgamento clínico, não cálculo.
+  </p>
+
+  <h2 id="exemplo-aplicado">Exemplo aplicado</h2>
+
+  <p>
+    Vamos aplicar o CASP-RCT a um exemplo concreto: o ensaio <strong>Study 31/A5349</strong>, publicado em 2021 no <em>NEJM</em>, que comparou regime de <strong>4 meses de rifapentina + moxifloxacina</strong> vs. regime padrão de <strong>6 meses</strong> para tratamento da tuberculose pulmonar sensível em adultos<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>.
+  </p>
+
+  <p><strong>Bloco A — validade</strong></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Pergunta CASP</th>
+          <th scope="col">Resposta para Study 31</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>O ensaio investigou uma pergunta claramente focada?</td>
+          <td>Sim — PICO bem delimitado: adultos com TB pulmonar sensível, regime 4M vs 6M, desfecho de cura sustentada</td>
+        </tr>
+        <tr>
+          <td>A alocação foi randomizada?</td>
+          <td>Sim — aleatorização central, com estratificação por país e por carga bacteriana inicial</td>
+        </tr>
+        <tr>
+          <td>Houve cegamento?</td>
+          <td>Não cegado para pacientes (regimes diferentes em duração); avaliadores de desfecho cegados</td>
+        </tr>
+        <tr>
+          <td>Grupos comparáveis na linha de base?</td>
+          <td>Sim — tabela 1 mostra balanço adequado</td>
+        </tr>
+        <tr>
+          <td>Acompanhamento completo?</td>
+          <td>91% completaram o seguimento; perdas balanceadas entre grupos</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p><strong>Bloco B — resultados</strong></p>
+
+  <p>
+    Cura sustentada aos 12 meses: 84,6% no regime 4M vs. 85,4% no regime 6M. Diferença −0,8 ponto percentual, IC 95% −3,8 a +2,1. Os autores definiram a margem de não inferioridade em 6,6 pontos — o limite superior do IC (2,1) está bem abaixo, então a não-inferioridade é demonstrada.
+  </p>
+
+  <p><strong>Bloco C — aplicação local</strong></p>
+
+  <p>
+    Os participantes foram recrutados em 13 países, incluindo do continente africano. A população é representativa de pacientes ambulatoriais com TB sensível. Em contextos onde rifapentina está disponível, o regime curto pode reduzir tempo de tratamento, melhorar adesão e reduzir custos. Em contextos onde rifapentina <strong>ainda não está disponível</strong> — situação comum em Moçambique e Angola até 2026 —, a aplicação direta exige primeiro garantir o acesso ao medicamento.
+  </p>
+
+  <p>
+    Este exemplo ilustra exatamente como o Bloco C dialoga com a realidade local. Validade e resultados são universais; aplicabilidade não.
+  </p>
+
+  <h2 id="limitacoes">Limitações conhecidas</h2>
+
+  <p>CASP tem três limitações que você deve conhecer:</p>
+
+  <ol>
+    <li>
+      <strong>Não produz pontuação somatória</strong> — o que é virtude pedagógica mas pode ser frustrante para quem quer "uma nota" do estudo. A escolha foi deliberada: somar respostas a perguntas de pesos diferentes produz números enganosos.
+    </li>
+    <li>
+      <strong>É menos rigoroso tecnicamente</strong> que RoB 2.0 para ECRs ou AMSTAR-2 para revisões. Para revisões sistemáticas formais (Cochrane, etc.), as ferramentas dedicadas são mais apropriadas. CASP é o ponto de entrada, não o ponto final.
+    </li>
+    <li>
+      <strong>O domínio "não posso dizer"</strong> é frequentemente usado em excesso — quando o avaliador, na dúvida, marca essa opção como saída neutra. Use-o apenas quando a informação realmente está ausente do artigo, não quando você tem dúvida técnica.
+    </li>
+  </ol>
+
+  <h2 id="onde-encontrar">Onde encontrar</h2>
+
+  <p>Os checklists CASP estão <strong>disponíveis gratuitamente em PDF</strong>, com tradução em português:</p>
+
+  <ul>
+    <li><strong>Site oficial:</strong> <a href="https://casp-uk.net/casp-tools-checklists" rel="noopener noreferrer" target="_blank">casp-uk.net/casp-tools-checklists</a></li>
+    <li><strong>Versões em português:</strong> procure pela aba "Translations" ou "International"</li>
+    <li><strong>Tutoriais e workshops:</strong> o site oferece também materiais de treinamento gratuitos</li>
+  </ul>
+
+  <p>Os checklists podem ser livremente impressos, distribuídos e usados em ensino, com atribuição.</p>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde CASP se encaixa no ciclo dos 5As</li>
+    <li><a href={withBase('/ferramentas/', base)}>Outras ferramentas de avaliação crítica</a> — visão geral comparativa</li>
+    <li><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> — alternativa mais técnica para ECRs</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses e fontes de erro</a> — fundamentação dos itens dos checklists</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — para escolher o checklist CASP correto</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Critical Appraisal Skills Programme. <em>CASP Checklists</em>. Oxford: CASP UK. Disponível em: <a href="https://casp-uk.net/casp-tools-checklists" rel="noopener noreferrer" target="_blank">casp-uk.net/casp-tools-checklists</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Guyatt G, Rennie D, Meade MO, Cook DJ. <em>Users' Guides to the Medical Literature: A Manual for Evidence-Based Clinical Practice</em>. 3ª ed. New York: McGraw-Hill; 2014.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Dorman SE, Nahid P, Kurbatova EV, et al. Four-Month Rifapentine Regimens with or without Moxifloxacin for Tuberculosis. <em>N Engl J Med</em> 2021;384(18):1705–1718. Disponível em: <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2033400" rel="noopener noreferrer" target="_blank">nejm.org</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+    </ol>
+  </section>
+</DocLayout>

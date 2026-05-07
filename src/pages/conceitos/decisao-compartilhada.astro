@@ -1,14 +1,263 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Decisão compartilhada"
-  description="Integrar valores e preferências do paciente à melhor evidência disponível."
+<DocLayout
+  title="Tomada de decisão compartilhada"
+  description="Como construir, junto com o paciente, decisões clínicas que integram evidência e valores. Modelo SHARE da AHRQ."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Decisão compartilhada</h1>
-  <p class="text-lg text-text-secondary mb-6">Integrar valores e preferências do paciente à melhor evidência disponível.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Tomada de decisão compartilhada</h1>
+
+  <p>
+    Tomada de decisão compartilhada (TDC) é o processo pelo qual profissional e paciente <strong>constroem juntos</strong> uma decisão clínica — combinando o que a evidência mostra, a experiência clínica do profissional, e os valores e preferências da pessoa. Não é abdicação de autoridade clínica. Não é entrega da decisão ao paciente. É um exercício de <strong>corresponsabilidade</strong>, que reconhece que muitas decisões em saúde não têm uma resposta universalmente correta, mas sim <strong>escolhas fundamentadas e contextualizadas</strong>.
+  </p>
+
+  <p>
+    É ferramenta central do quarto A da MBE. Sem ela, o Apply vira imposição (paternalismo) ou abandono (decisão desinformada).
+  </p>
+
+  <h2 id="quando-faz-sentido">Quando faz sentido — e quando não faz</h2>
+
+  <p>
+    A TDC nem sempre é apropriada. Em algumas situações é o coração do cuidado; em outras, atrapalha.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Faz sentido quando…</th>
+          <th scope="col">Não faz sentido quando…</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Há <strong>mais de uma opção razoável</strong> com benefícios e danos diferentes</td>
+          <td>Há uma única conduta clinicamente correta (sepse, parada, etc.)</td>
+        </tr>
+        <tr>
+          <td>O <strong>balanço benefício-dano</strong> é sensível a valores pessoais</td>
+          <td>Urgência impede deliberação</td>
+        </tr>
+        <tr>
+          <td>A <strong>incerteza</strong> sobre a melhor opção é genuína</td>
+          <td>O paciente está sem capacidade temporária de decidir (alteração de consciência)</td>
+        </tr>
+        <tr>
+          <td>O paciente <strong>deseja</strong> participar da decisão</td>
+          <td>Recusa explícita do paciente em participar (que deve ser respeitada)</td>
+        </tr>
+        <tr>
+          <td>Há <strong>tempo suficiente</strong> para diálogo</td>
+          <td>A decisão não é reversível ou não admite espera</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    Exemplos clássicos onde TDC é essencial: rastreamento de câncer de próstata (PSA), terapia hormonal pós-menopausa, anticoagulação em fibrilação atrial, intensidade de tratamento para hipertensão no idoso, vacinação opcional, escolha de método contraceptivo.
+  </p>
+
+  <h2 id="tres-niveis">Três níveis na relação profissional-paciente</h2>
+
+  <p>Para entender o lugar da TDC, vale comparar três modelos:</p>
+
+  <p>
+    <strong>Paternalismo (modelo tradicional).</strong> O profissional decide. O paciente assente. A informação é mínima. "Eu acho que o senhor deve tomar isto." Funciona em emergências, mas falha em decisões sensíveis a valores.
+  </p>
+
+  <p>
+    <strong>Decisão informada (modelo de cardápio).</strong> O profissional informa. O paciente decide sozinho. A relação fica reduzida a apresentar opções e aguardar escolha. Pode ser confortável para o profissional ("não é minha decisão"), mas frequentemente abandona o paciente sem o suporte clínico que ele precisa.
+  </p>
+
+  <p>
+    <strong>Tomada de decisão compartilhada.</strong> Profissional e paciente deliberam juntos. O profissional apresenta opções, traduz evidência, expõe sua recomendação técnica e seu raciocínio. O paciente expõe valores, preocupações, prioridades. <strong>Ambos chegam a uma decisão que nenhum dos dois teria construído sozinho.</strong>
+  </p>
+
+  <h2 id="modelo-share">O modelo SHARE da AHRQ</h2>
+
+  <p>
+    Em 2014, a Agency for Healthcare Research and Quality (AHRQ) — agência federal dos Estados Unidos para qualidade em saúde — publicou o <strong>SHARE Approach</strong>, um modelo prático de cinco passos para conduzir TDC no consultório<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. É hoje um dos modelos mais usados internacionalmente, com material gratuito disponível para download.
+  </p>
+
+  <p>O acrônimo:</p>
+
+  <h3 id="share-s">S — Seek your patient's participation (Convide o paciente a participar)</h3>
+
+  <p>
+    Comunicar que existe uma escolha. Convidar o paciente a participar da decisão. Pacientes têm o direito de entender as opções; podem optar por não participar, mas o convite tem que existir.
+  </p>
+
+  <blockquote class="featured-quote">
+    <p>"Sr. António, há diferentes possibilidades sobre o uso da aspirina no seu caso. Cada uma tem prós e contras. Eu gostaria de discutir essas possibilidades com o senhor para decidirmos juntos qual faz mais sentido."</p>
+  </blockquote>
+
+  <h3 id="share-h">H — Help your patient explore and compare treatment options (Ajude a explorar e comparar as opções)</h3>
+
+  <p>
+    Apresentar as opções, com seus benefícios e danos, em linguagem acessível. Incluir a opção de <strong>não fazer nada</strong> quando aplicável (frequentemente é a opção esquecida). Usar números absolutos sempre que possível.
+  </p>
+
+  <blockquote class="featured-quote">
+    <p>"Há três caminhos possíveis. Primeiro: começar a aspirina. Em 1000 pessoas como o senhor, isso evitaria 4 infartos ou AVCs em 5 anos, mas causaria 5 sangramentos sérios. Segundo: não começar e manter os outros cuidados. Terceiro: focar em controlar bem a pressão e a glicemia, que têm efeito muito maior na prevenção do que a aspirina nesse cenário."</p>
+  </blockquote>
+
+  <h3 id="share-a">A — Assess your patient's values and preferences (Avalie valores e preferências)</h3>
+
+  <p>
+    Entender o que importa mais para o paciente. Cada pessoa pesa diferentemente os mesmos riscos. Para alguns, evitar AVC é prioridade absoluta — perderam parente para isso. Para outros, evitar sangramento e hospitalização pesa mais — têm medo de hospital.
+  </p>
+
+  <blockquote class="featured-quote">
+    <p>"O que mais preocupa o senhor quando pensa nisto? Algum dos efeitos que mencionei lhe assusta mais que os outros? O senhor já teve experiência próxima com infarto, AVC ou sangramento?"</p>
+  </blockquote>
+
+  <h3 id="share-r">R — Reach a decision with your patient (Chegue à decisão junto)</h3>
+
+  <p>
+    Decidir junto, com base nos passos anteriores. O profissional pode (e em geral deve) <strong>dar sua recomendação técnica</strong> com base na evidência — TDC não significa neutralidade falsa. O paciente pode aceitar a recomendação, propor alternativa, pedir mais tempo, ou solicitar segunda opinião.
+  </p>
+
+  <blockquote class="featured-quote">
+    <p>"Considerando o que o senhor me disse — o medo do sangramento, a distância até o pronto-socorro, e a importância de proteger a saúde — e considerando que a evidência mostra mais risco de dano do que de benefício no seu caso específico, minha recomendação é não iniciar a aspirina agora. Mas isso é uma decisão sua. O que o senhor pensa?"</p>
+  </blockquote>
+
+  <h3 id="share-e">E — Evaluate your patient's decision (Avalie a decisão e o desfecho)</h3>
+
+  <p>
+    Apoiar o paciente para que a decisão tenha impacto positivo. Em decisões de longo prazo (especialmente em condições crônicas), reavaliar periodicamente — preferências mudam, evidência muda, vida muda.
+  </p>
+
+  <p>
+    Esse passo é frequentemente esquecido. <strong>Decisão não é evento único; é processo continuado.</strong> Também é onde o quarto A se conecta ao quinto A (Assess) — o monitoramento da decisão é parte do ciclo.
+  </p>
+
+  <h2 id="nove-elementos">Os nove elementos de Makoul e Clayman</h2>
+
+  <p>
+    O AHRQ desenhou o SHARE incorporando <strong>nove elementos essenciais</strong> identificados em revisão sistemática conduzida por Makoul e Clayman<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. Vale conhecê-los — eles funcionam como checklist do que não pode faltar numa conversa de TDC:
+  </p>
+
+  <ol>
+    <li>Definir/explicar o problema</li>
+    <li>Apresentar opções</li>
+    <li>Discutir benefícios, riscos e custos</li>
+    <li>Esclarecer valores e preferências do paciente</li>
+    <li>Discutir capacidade do paciente / autoeficácia</li>
+    <li>Apresentar o que o profissional sabe e recomenda</li>
+    <li>Verificar a compreensão do paciente</li>
+    <li>Tomar ou adiar a decisão</li>
+    <li>Acompanhar (follow-up)</li>
+  </ol>
+
+  <p>Os nove elementos cabem dentro dos cinco passos do SHARE. Se algum deles foi pulado, vale revisitar.</p>
+
+  <h2 id="comunicacao-clinica">Comunicação clínica é habilidade que se treina</h2>
+
+  <p>
+    Todo o processo da TDC depende de <strong>comunicação clínica eficaz</strong>. Não há SHARE sem escuta ativa, perguntas abertas, devolução em linguagem acessível, e capacidade de lidar com emoções do paciente — medo, frustração, desconfiança, esperança.
+  </p>
+
+  <p>
+    A boa notícia: <strong>comunicação clínica não é dom natural; é habilidade que se treina</strong>. A literatura é clara nisso há mais de duas décadas<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>. Modelos estruturados como o <strong>Calgary-Cambridge</strong><sup><a id="fnref-4" href="#fn-4" class="footnote-ref">4</a></sup> organizam a entrevista clínica em fases (iniciar, coletar informação, examinar, explicar, planejar, encerrar) e detalham as habilidades específicas em cada fase — desde "estabelecer rapport" até "explorar as ideias, preocupações e expectativas do paciente".
+  </p>
+
+  <p>
+    A má notícia: a maioria dos profissionais nunca recebeu treinamento estruturado nessas habilidades. Aprenderam por imitação dos preceptores, com qualidade variável. Resultado típico: profissional informa números corretos de forma que o paciente não consegue usar para decidir, e ambos saem da consulta com a impressão equivocada de que houve "decisão compartilhada".
+  </p>
+
+  <p><strong>Cinco habilidades de comunicação especialmente relevantes para a TDC:</strong></p>
+
+  <ul>
+    <li><strong>Perguntas abertas</strong> — "O que o senhor pensa sobre isso?" produz informação muito mais rica que "Está tudo bem?"</li>
+    <li><strong>Escuta ativa</strong> — pausas, parafraseamento, sumarização. O paciente precisa sentir que está sendo ouvido para se abrir.</li>
+    <li><strong>Tradução de números</strong> — frequências naturais ("4 em 1000"), gráficos visuais, evitar jargão estatístico.</li>
+    <li><strong>Lidar com emoções</strong> — quando o paciente fica ansioso, frustrado ou triste, parar e nomear a emoção é mais útil que apressar a decisão.</li>
+    <li><strong>Verificar compreensão (teach-back)</strong> — pedir ao paciente para repetir, com suas palavras, o que entendeu. Surpreendentemente eficaz e raramente usado.</li>
+  </ul>
+
+  <p>
+    A AHRQ disponibiliza, junto com o SHARE, <strong>ferramentas específicas para cada uma dessas habilidades</strong><sup><a id="fnref-5" href="#fn-5" class="footnote-ref">5</a></sup>: guias para comunicação de números, técnica do teach-back, competência cultural, alfabetização em saúde. Todas em PDF gratuito.
+  </p>
+
+  <h2 id="paciente-nao-quer-decidir">Quando o paciente não quer decidir</h2>
+
+  <p>
+    Algumas pessoas, especialmente em culturas com forte tradição de autoridade médica, recusam o convite à participação. "O senhor que sabe, doutor." Como agir?
+  </p>
+
+  <ul>
+    <li><strong>Respeitar a recusa, mas explicar o convite.</strong> Insistir é violentar o paciente; mas vale explicar por que o convite existe.</li>
+    <li><strong>Oferecer participação parcial.</strong> "Tudo bem se eu decidir junto com sua filha então?" — às vezes a família é o sujeito da decisão, não o paciente isolado.</li>
+    <li><strong>Reduzir a participação a aspectos menos técnicos.</strong> "O senhor prefere o comprimido todo dia ou a injeção mensal?" pode ser uma porta de entrada onde "qual medicamento começar" não cabe.</li>
+    <li><strong>Reavaliar mais tarde.</strong> Pacientes que não quiseram participar inicialmente podem mudar à medida que a relação se aprofunda.</li>
+  </ul>
+
+  <h2 id="limitacoes">Limitações conhecidas</h2>
+
+  <ol>
+    <li>
+      <strong>Tempo é o principal obstáculo.</strong> Consultas de 5–10 minutos não comportam TDC séria. É um problema de organização do serviço, não falha individual.
+    </li>
+    <li>
+      <strong>Capacidade do paciente varia.</strong> Paciente em sofrimento agudo, com déficit cognitivo, em crise emocional, ou com baixa alfabetização em saúde precisa de adaptações. TDC pode envolver familiares, mediadores culturais, materiais visuais.
+    </li>
+    <li>
+      <strong>Assimetria de poder é real.</strong> O profissional sempre detém mais informação técnica. Reconhecer e mitigar essa assimetria é parte do trabalho — não fingir que ela não existe.
+    </li>
+    <li>
+      <strong>Incerteza diagnóstica complica.</strong> Quando ainda não se sabe exatamente o que o paciente tem, propor TDC sobre tratamentos é prematuro. Primeiro definir o problema, depois decidir.
+    </li>
+  </ol>
+
+  <h2 id="onde-estudar">Onde estudar</h2>
+
+  <ul>
+    <li><strong>SHARE Approach (AHRQ):</strong> <a href="https://www.ahrq.gov/health-literacy/professional-training/shared-decision/index.html" rel="noopener noreferrer" target="_blank">ahrq.gov/health-literacy/professional-training/shared-decision</a></li>
+    <li><strong>Curriculum gratuito de 1 dia:</strong> <a href="https://www.ahrq.gov/health-literacy/professional-training/shared-decision/index.html" rel="noopener noreferrer" target="_blank">ahrq.gov/sdm/share-approach</a></li>
+    <li><strong>Calgary-Cambridge (referência):</strong> Silverman, Kurtz, Draper. <em>Skills for Communicating with Patients</em>. 3ª ed. CRC Press; 2013.</li>
+    <li><strong>Materiais em português:</strong> poucas traduções formais; busca em <a href="https://bvsalud.org" rel="noopener noreferrer" target="_blank">bvsalud.org</a> por "tomada de decisão compartilhada" retorna materiais brasileiros e portugueses</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde a TDC é o instrumento central</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — base da comunicação clínica</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — números que precisam ser traduzidos para a TDC</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — recomendações com força "condicional" exigem TDC</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Agency for Healthcare Research and Quality. <em>The SHARE Approach: Essential Steps of Shared Decisionmaking</em>. AHRQ Publication No. 21-0015-1-EF. Disponível em: <a href="https://www.ahrq.gov/health-literacy/professional-training/shared-decision/index.html" rel="noopener noreferrer" target="_blank">ahrq.gov/shared-decision</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Makoul G, Clayman ML. An integrative model of shared decision making in medical encounters. <em>Patient Educ Couns</em> 2006;60(3):301–12.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Maguire P, Pitceathly C. Key communication skills and how to acquire them. <em>BMJ</em> 2002;325(7366):697–700. Disponível em: <a href="https://www.bmj.com/content/325/7366/697" rel="noopener noreferrer" target="_blank">bmj.com/content/325/7366/697</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li id="fn-4">
+        Kurtz S, Silverman J, Benson J, Draper J. Marrying content and process in clinical method teaching: enhancing the Calgary-Cambridge guides. <em>Acad Med</em> 2003;78(8):802–9.
+        <a href="#fnref-4" class="footnote-back" aria-label="Voltar ao texto da nota 4">↩</a>
+      </li>
+      <li id="fn-5">
+        Agency for Healthcare Research and Quality. <em>SHARE Approach Tools and Resources</em>. Disponível em: <a href="https://www.ahrq.gov/health-literacy/professional-training/shared-decision/tools/index.html" rel="noopener noreferrer" target="_blank">ahrq.gov/shared-decision/tools</a>.
+        <a href="#fnref-5" class="footnote-back" aria-label="Voltar ao texto da nota 5">↩</a>
+      </li>
+      <li>
+        Elwyn G, Frosch D, Thomson R, et al. Shared decision making: a model for clinical practice. <em>J Gen Intern Med</em> 2012;27(10):1361–7.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

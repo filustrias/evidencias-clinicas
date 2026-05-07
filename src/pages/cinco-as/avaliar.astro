@@ -1,14 +1,238 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Avaliar (Appraise)"
-  description="Leitura crítica: validade, magnitude e aplicabilidade da evidência encontrada."
+<DocLayout
+  title="Appraise (Avaliar) — o terceiro A"
+  description="Os três crivos da avaliação crítica — validade, importância e aplicabilidade — e as ferramentas que a tornam sistemática."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Avaliar (Appraise)</h1>
-  <p class="text-lg text-text-secondary mb-6">Leitura crítica: validade, magnitude e aplicabilidade da evidência encontrada.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Appraise (Avaliar) — o terceiro A</h1>
+
+  <p>
+    Encontrar a evidência é metade do trabalho. A outra metade é decidir se ela merece a confiança que parece pedir. Nem todo estudo bem publicado é metodologicamente sólido. Nem todo achado estatisticamente significativo é clinicamente importante. Nem toda evidência de qualidade se aplica ao paciente que está na sua frente.
+  </p>
+
+  <p>
+    O terceiro A — Appraise, avaliar — é onde o profissional de saúde <strong>deixa de ser leitor da ciência e passa a ser julgador ativo</strong> dela. Exige conhecimento técnico, mas exige também o velho juízo clínico, agora a serviço da literatura.
+  </p>
+
+  <CycleDiagram activeStep="appraise" />
+
+  <h2 id="voltando-ao-consultorio">Voltando ao consultório</h2>
+
+  <p>
+    Dra. Amélia, depois de uma busca rápida no UpToDate seguida de consulta ao PubMed, encontrou uma meta-análise de 2019 sobre aspirina em prevenção primária em idosos, publicada no <em>JAMA</em>. Relata redução estatisticamente significativa de eventos cardiovasculares maiores. Antes de conversar com o Sr. António, ela precisa responder três perguntas:
+  </p>
+
+  <ol>
+    <li><strong>O estudo é metodologicamente sólido?</strong> — porque má metodologia produz resultados enganosos</li>
+    <li><strong>O efeito encontrado tem importância clínica?</strong> — porque "estatisticamente significativo" não é sinônimo de "clinicamente útil"</li>
+    <li><strong>Os achados se aplicam ao Sr. António?</strong> — porque um estudo feito em uma população pode não dizer o que acontece em outra</li>
+  </ol>
+
+  <p>
+    Esses são os três crivos da avaliação crítica. Ferramenta nenhuma substitui essas três perguntas. As ferramentas formais — CASP, GRADE, RoB, AMSTAR — apenas as estruturam.
+  </p>
+
+  <h2 id="tres-crivos">Os três crivos da avaliação crítica</h2>
+
+  <h3 id="validade-interna">1. Validade interna — o estudo foi bem feito?</h3>
+
+  <p>
+    Refere-se à qualidade do desenho e da execução. Um estudo válido <strong>minimiza riscos de viés</strong> — erros sistemáticos que distorcem os resultados — e <strong>controla confundimentos</strong> que poderiam atribuir falsamente ao tratamento aquilo que se deve a outras causas.
+  </p>
+
+  <p>Perguntas que estruturam o crivo:</p>
+
+  <ul>
+    <li>A alocação dos participantes foi aleatória? Em ECR, foi oculta?</li>
+    <li>Os grupos eram comparáveis na linha de base?</li>
+    <li>Houve cegamento de pacientes, profissionais e avaliadores?</li>
+    <li>O seguimento foi completo? As perdas foram balanceadas?</li>
+    <li>A análise foi por intenção de tratar?</li>
+    <li>O desfecho foi medido de forma objetiva e padronizada?</li>
+  </ul>
+
+  <p>
+    Um estudo com baixa validade interna pode produzir números bonitos mas não confiáveis. Avaliar isso é o trabalho técnico mais difícil da MBE — e onde as ferramentas formais mais ajudam.
+  </p>
+
+  <p>→ Aprofunde-se em <a href={withBase('/conceitos/vieses/', base)}>vieses e fontes de erro</a></p>
+
+  <h3 id="importancia-clinica">2. Importância clínica — o efeito faz diferença na vida real?</h3>
+
+  <p>
+    Aqui mora um dos maiores ruídos da literatura: confundir significância estatística com relevância clínica.
+  </p>
+
+  <p>
+    Um ensaio com 50 mil participantes pode encontrar uma redução <strong>estatisticamente significativa</strong> (p &lt; 0,001) de 0,2% na mortalidade. Estatisticamente, é real. Clinicamente, é desprezível — significa tratar 500 pacientes para evitar 1 morte. Pode não compensar o custo, o efeito adverso, a complexidade.
+  </p>
+
+  <p>Para julgar importância clínica, foque nas medidas de efeito que importam:</p>
+
+  <ul>
+    <li><strong>Risco absoluto</strong> vs. <strong>risco relativo</strong></li>
+    <li><strong>Redução absoluta do risco (RAR)</strong> vs. <strong>redução relativa do risco (RRR)</strong></li>
+    <li><strong>NNT</strong> <em>(número necessário tratar)</em> — quantos pacientes precisam receber a intervenção para evitar um evento</li>
+    <li><strong>NNH</strong> <em>(número necessário causar dano)</em> — quantos pacientes precisam receber para causar um evento adverso</li>
+    <li><strong>Intervalo de confiança 95%</strong> — magnitude de incerteza em torno do efeito estimado</li>
+  </ul>
+
+  <p>E pergunte:</p>
+
+  <ul>
+    <li>O desfecho avaliado é clinicamente relevante ou apenas substituto (LDL em vez de infarto, glicemia em vez de mortalidade)?</li>
+    <li>A magnitude do benefício é clinicamente significativa?</li>
+    <li>O perfil benefício-dano é favorável?</li>
+  </ul>
+
+  <p>
+    → Aprofunde-se em <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a> ou <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>calcule diretamente</a>
+  </p>
+
+  <h3 id="aplicabilidade">3. Aplicabilidade — vale para o meu paciente?</h3>
+
+  <p>
+    Mesmo um estudo de alta qualidade, com magnitude de efeito clinicamente importante, pode não ter relevância para o paciente que está na sua frente. Aplicabilidade é a validade externa.
+  </p>
+
+  <p>Perguntas que estruturam o crivo:</p>
+
+  <ul>
+    <li>A população do estudo é semelhante ao meu paciente em idade, comorbidades, contexto?</li>
+    <li>Os desfechos avaliados são importantes para esta pessoa?</li>
+    <li>Os recursos necessários (medicamento, exame, equipe, infraestrutura) estão disponíveis no meu serviço?</li>
+    <li>A duração do seguimento do estudo é compatível com a expectativa de vida ou horizonte de cuidado deste paciente?</li>
+    <li>O benefício supera os riscos para este paciente em particular?</li>
+  </ul>
+
+  <p>
+    Aplicabilidade é onde a MBE mais conversa com o raciocínio clínico. Não há fórmula, nem ferramenta — há julgamento. E é também onde a realidade do contexto local entra: um estudo conduzido em centros terciários da Europa pode ter resultados que dependem de condições inexistentes num posto provincial em Cabinda.
+  </p>
+
+  <h2 id="ferramentas-formais">As ferramentas formais</h2>
+
+  <p>Cada um dos três crivos tem ferramentas que estruturam a avaliação. Quatro são essenciais:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Ferramenta</th>
+          <th scope="col">Para que serve</th>
+          <th scope="col">Quando usar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CASP</strong></td>
+          <td>Checklists para avaliar diferentes desenhos de estudo</td>
+          <td>Avaliação geral inicial, ensino</td>
+        </tr>
+        <tr>
+          <td><strong>RoB 2.0</strong></td>
+          <td>Avaliação de risco de viés em ECRs (da Cochrane)</td>
+          <td>Quando você está lendo ou produzindo revisão sistemática</td>
+        </tr>
+        <tr>
+          <td><strong>AMSTAR-2</strong></td>
+          <td>Qualidade de revisões sistemáticas</td>
+          <td>Antes de confiar numa revisão sistemática</td>
+        </tr>
+        <tr>
+          <td><strong>GRADE</strong></td>
+          <td>Qualidade da evidência <strong>e</strong> força da recomendação</td>
+          <td>Em diretrizes, para entender o quão forte é uma recomendação</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    → Visão completa em <a href={withBase('/ferramentas/', base)}>Ferramentas de avaliação crítica</a>
+  </p>
+
+  <p>
+    Importante: as ferramentas <strong>não substituem o julgamento clínico</strong>. Elas estruturam-no, garantindo que questões cruciais não sejam esquecidas. Um RoB com semáforo todo verde não significa que o estudo seja a verdade absoluta — apenas que os domínios formais foram bem cumpridos.
+  </p>
+
+  <h2 id="meta-analise-amelia">A meta-análise da Dra. Amélia, sob os três crivos</h2>
+
+  <p>
+    De volta ao caso. Aplicando os três crivos à meta-análise sobre aspirina em prevenção primária:
+  </p>
+
+  <p>
+    <strong>Validade interna</strong> — A revisão segue protocolo PRISMA, busca em múltiplas bases, tem avaliação RoB dos ensaios incluídos, análise de heterogeneidade adequada. Os ensaios maiores incluídos (ASPREE, ARRIVE, ASCEND) são metodologicamente robustos. <span aria-label="aprovado" role="img">✅</span>
+  </p>
+
+  <p>
+    <strong>Importância clínica</strong> — RR de 0,90 (IC 95% 0,84–0,97) para eventos cardiovasculares, RAR de 0,38% em 5 anos, NNT ≈ 265. <em>Mas:</em> RR de 1,43 (IC 95% 1,30–1,56) para sangramento maior, RAR de 0,47%, NNH ≈ 210. <strong>O dano absoluto é maior do que o benefício absoluto.</strong> <span aria-label="atenção" role="img">⚠️</span>
+  </p>
+
+  <p>
+    <strong>Aplicabilidade</strong> — A população dos ensaios são adultos sem doença cardiovascular prévia, idade média ~65–75 anos. Coincide com o Sr. António. <span aria-label="aprovado" role="img">✅</span>
+  </p>
+
+  <p>
+    A conclusão emerge dos três crivos juntos: a evidência é boa, mas o <strong>balanço benefício-risco em prevenção primária no idoso é desfavorável ou neutro</strong>. A recomendação atual, baseada nessa meta-análise e nos ensaios maiores, é <strong>não iniciar aspirina em prevenção primária na maioria dos idosos sem alto risco cardiovascular específico</strong>.
+  </p>
+
+  <p>
+    Sem os três crivos, a leitura superficial do título da meta-análise ("aspirina reduz eventos cardiovasculares") teria sugerido o oposto. É exatamente esse tipo de armadilha que o Appraise existe para evitar.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns no terceiro A</h2>
+
+  <ul>
+    <li><strong>Confiar no abstract.</strong> O abstract simplifica conclusões e raramente menciona limitações ou a magnitude absoluta do efeito.</li>
+    <li><strong>Confundir significância estatística com relevância clínica.</strong> P &lt; 0,05 só diz que o efeito provavelmente não é zero — não diz que é importante.</li>
+    <li><strong>Ignorar o intervalo de confiança.</strong> Um RR de 0,80 com IC95% de 0,40 a 1,60 quer dizer pouco — a verdade pode estar em qualquer lugar entre redução de 60% e aumento de 60%.</li>
+    <li><strong>Aceitar desfechos substitutos como se fossem clínicos.</strong> Estudo que mostra redução de LDL não prova redução de infarto. Um pode existir sem o outro.</li>
+    <li><strong>Aplicar evidência de uma população em outra muito diferente sem reflexão.</strong> Um ensaio em homens brancos europeus de 50 anos com hipertensão moderada não diz necessariamente o que acontece em mulheres negras de 80 anos com hipertensão grave.</li>
+    <li><strong>Usar ferramentas formais como muleta para deixar de pensar.</strong> O risco de viés baixo no RoB 2.0 não dispensa o profissional de avaliar magnitude do efeito e aplicabilidade.</li>
+  </ul>
+
+  <h2 id="proximo-a">Próximo A: Apply (Aplicar)</h2>
+
+  <p>
+    Avaliar a evidência produz uma posição: aquele tratamento, naquele paciente, aparenta ter mais ou menos benefício do que se imaginava. Mas a decisão clínica não é a evidência sozinha — é a integração da evidência com a experiência clínica do profissional, com os valores do paciente, e com os recursos disponíveis no contexto. O quarto A é sobre como fazer essa integração.
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/aplicar/', base)}>
+    <span>Continue para Apply (Aplicar)</span>
+  </a>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — RR, RAR, NNT, NNH, IC95% em profundidade</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses e fontes de erro</a> — seleção, aferição, perda, publicação, confundimento</li>
+    <li><a href={withBase('/ferramentas/', base)}>Ferramentas de avaliação crítica</a> — visão geral comparativa</li>
+    <li><a href={withBase('/ferramentas/casp/', base)}>CASP</a>, <a href={withBase('/ferramentas/grade/', base)}>GRADE</a>, <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a>, <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> — páginas dedicadas a cada ferramenta</li>
+    <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — para calcular RAR, RRR, NNT e NNH a partir de uma tabela 2×2</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li>
+        Guyatt G, Rennie D, Meade MO, Cook DJ. <em>Users' Guides to the Medical Literature: A Manual for Evidence-Based Clinical Practice</em>. 3ª ed. New York: McGraw-Hill; 2014.
+      </li>
+      <li>
+        Greenhalgh T. <em>How to Read a Paper: The Basics of Evidence-Based Medicine and Healthcare</em>. 6ª ed. Hoboken: Wiley-Blackwell; 2019.
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulos 4 a 6: Critical appraisal.
+      </li>
+      <li>
+        U.S. Preventive Services Task Force. Aspirin Use to Prevent Cardiovascular Disease: Preventive Medication. 2022. Disponível em: <a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/aspirin-to-prevent-cardiovascular-disease-preventive-medication" rel="noopener noreferrer" target="_blank">uspreventiveservicestaskforce.org</a>.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

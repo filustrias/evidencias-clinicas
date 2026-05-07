@@ -1,14 +1,269 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Preventiva"
-  description="Rastreamento, vacinação e medidas preventivas: quando e em quem."
+<DocLayout
+  title="Em prática — pergunta preventiva"
+  description="Prevenção em pessoas assintomáticas. Caso de profilaxia da malária em gestantes (IPTp com sulfadoxina-pirimetamina) em Moçambique."
   section="em-pratica"
 >
-  <h1 class="text-4xl font-medium mb-3">Preventiva</h1>
-  <p class="text-lg text-text-secondary mb-6">Rastreamento, vacinação e medidas preventivas: quando e em quem.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Em prática — pergunta preventiva</h1>
+
+  <p>
+    Perguntas preventivas têm peculiaridades. Estamos tratando <strong>pessoas assintomáticas</strong> — e portanto qualquer dano da intervenção pesa mais do que pesaria em pessoa doente. Recomendações dependem fortemente de <a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>forças-tarefa e diretrizes</a> que avaliam balanço benefício-dano em escala populacional. Esta página percorre um exemplo de altíssima relevância para Moçambique.
+  </p>
+
+  <h2 id="cenario">O cenário</h2>
+
+  <p>
+    Dra. Isabel é médica em centro de saúde no distrito de Chókwè, província de Gaza, Moçambique. Atende cerca de 40 gestantes por mês na consulta pré-natal. A região tem <strong>transmissão moderada-alta de malária</strong> (<em>Plasmodium falciparum</em>), com pico na estação chuvosa (dezembro a abril).
+  </p>
+
+  <p>
+    Pergunta-se: como prevenir malária nas gestantes? A diretriz nacional, alinhada à OMS, prevê <strong>IPTp-SP</strong> (intermittent preventive treatment in pregnancy with sulfadoxine-pyrimethamine) — dose única observada de sulfadoxina-pirimetamina a cada visita pré-natal a partir do segundo trimestre.
+  </p>
+
+  <p>
+    Mas Dra. Isabel sabe que a cobertura está muito abaixo do esperado. Em sua unidade, <strong>menos de 40% das gestantes recebem 3 ou mais doses</strong> (a meta da OMS). Pergunta-se: a recomendação está bem fundamentada? que evidência sustenta? como aumentar adesão?
+  </p>
+
+  <h2 id="ask">Ask — formular a pergunta</h2>
+
+  <p>Aplicando <a href={withBase('/conceitos/pico/', base)}>PICO</a>:</p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Gestantes em área de transmissão moderada a alta de <em>P. falciparum</em>, na África subsaariana</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>I</strong></th>
+          <td>IPTp com sulfadoxina-pirimetamina, ≥3 doses, a partir do 2º trimestre</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>C</strong></th>
+          <td>Não receber IPTp (ou esquema inferior)</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Anemia materna grave; baixo peso ao nascer; mortalidade perinatal; parasitemia placentária</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>Pergunta investigável, com forte componente de saúde pública.</p>
+
+  <h2 id="acquire">Acquire — buscar evidência</h2>
+
+  <p>Para questão preventiva consolidada, melhor começar pela <strong>diretriz</strong> e voltar aos estudos primários.</p>
+
+  <ol>
+    <li><strong>Site da OMS</strong> — <em>WHO Guidelines for Malaria</em>, atualização de junho de 2022. Recomendação consolidada com nível "forte"</li>
+    <li><strong>Cochrane Library</strong> — Radeva-Petrova et al, "Drugs for preventing malaria in pregnant women in endemic areas" — revisão sistemática</li>
+    <li><strong>Estudos locais em Moçambique</strong> — Sicuri et al (custo-efetividade), Nhampossa et al (cobertura), Boene et al (barreiras de acesso)</li>
+  </ol>
+
+  <h2 id="appraise">Appraise — avaliar a evidência</h2>
+
+  <p>A revisão Cochrane sintetiza dezenas de ECRs em populações similares. Resumo:</p>
+
+  <p><strong>Benefícios da IPTp-SP (≥2 doses) em primigestas e secundigestas em áreas de transmissão moderada/alta:</strong></p>
+
+  <ul>
+    <li>Reduz <strong>parasitemia materna</strong> (RR ~0,4)</li>
+    <li>Reduz <strong>anemia materna grave</strong> (RR ~0,8)</li>
+    <li>Reduz <strong>baixo peso ao nascer</strong> (RR ~0,8) — desfecho clinicamente relevante para mortalidade infantil</li>
+    <li>Aumenta <strong>peso médio ao nascer</strong> em ~50-100g</li>
+    <li>Reduz <strong>mortalidade neonatal</strong> (associação consistente, mas com IC mais largos)</li>
+  </ul>
+
+  <p><strong>Sobre 3+ doses vs. 2 doses:</strong></p>
+
+  <p>
+    Evidência mais recente (Kayentao et al, 2013, em meta-análise) mostra que <strong>3+ doses são superiores a 2 doses</strong> para reduzir baixo peso ao nascer e malária placentária. Isso é o que justifica a atualização da OMS, em 2012, de "2 doses no mínimo" para "≥3 doses, uma a cada visita do segundo trimestre em diante".
+  </p>
+
+  <p>
+    <strong>Pela <a href={withBase('/ferramentas/grade/', base)}>GRADE</a></strong>, a OMS classifica a recomendação como <strong>forte</strong>, com <strong>alta certeza de evidência</strong> para os principais desfechos.
+  </p>
+
+  <p><strong>Limitações importantes:</strong></p>
+
+  <ul>
+    <li><strong>Resistência crescente de <em>P. falciparum</em> à SP</strong> em várias regiões da África Oriental — particularmente no Quênia, Tanzânia e norte de Moçambique. Pode reduzir efetividade ao longo do tempo</li>
+    <li>A evidência foi gerada principalmente em primigestas e secundigestas — multigestas têm imunidade adquirida que reduz benefício marginal</li>
+    <li>Muitos estudos não cegavam adequadamente — risco de viés residual</li>
+  </ul>
+
+  <h2 id="aplicacao">Aplicando ao contexto de Chókwè</h2>
+
+  <p>Os números em meta-análise são médios. Para Dra. Isabel decidir:</p>
+
+  <p><strong>1. A recomendação se aplica?</strong></p>
+
+  <p>
+    Sim. Chókwè tem transmissão moderada-alta de <em>P. falciparum</em>. Resistência local à SP, embora exista, ainda permite efetividade. Não há alternativa farmacológica disponível e operacionalizável em larga escala.
+  </p>
+
+  <p><strong>2. O problema não é a evidência — é a implementação.</strong></p>
+
+  <p>
+    Cobertura de 40% de 3+ doses indica falha de implementação, não falha de evidência. As barreiras locais documentadas em estudos qualitativos:
+  </p>
+
+  <ul>
+    <li>Mulheres não conhecem os riscos da malária na gestação</li>
+    <li>Atrasam primeira consulta pré-natal (3º trimestre — muito tarde para 3 doses)</li>
+    <li>Faltam consultas subsequentes (transporte, custos, autorização do marido)</li>
+    <li>Falta de SP em estoque em algumas unidades</li>
+    <li>Equipe nem sempre administra o SP em DOT (directly observed therapy) por sobrecarga</li>
+  </ul>
+
+  <p><strong>3. A estratégia da unidade precisa atacar barreiras, não substituir a evidência.</strong></p>
+
+  <p>Decisões da Dra. Isabel:</p>
+
+  <ul>
+    <li><strong>Captação precoce</strong> — ações comunitárias para aumentar primeira consulta no 1º trimestre</li>
+    <li><strong>Educação em saúde</strong> — vídeos curtos em sala de espera, em changana e português, sobre risco da malária na gestação</li>
+    <li><strong>Estoque</strong> — auditoria mensal; comunicação direta com farmácia distrital quando estoque cai</li>
+    <li><strong>DOT consistente</strong> — protocolo claro: SP é dado e ingerido na presença da enfermeira ou agente de saúde, sempre</li>
+    <li><strong>Considera estratégia comunitária (c-IPTp)</strong> — entrega da IPTp por agentes de saúde comunitária (recomendação OMS de 2022) para mulheres que não chegam à unidade. Requer aprovação distrital.</li>
+  </ul>
+
+  <h2 id="decisao-compartilhada">Decisão compartilhada com a gestante</h2>
+
+  <p>Cada gestante atendida deve receber, de forma compreensível:</p>
+
+  <ul>
+    <li><strong>O que é a malária na gestação</strong> e por que ela é mais grave (anemia, baixo peso ao nascer, mortalidade)</li>
+    <li><strong>O que o SP faz</strong> (reduz risco de complicações; não previne 100%)</li>
+    <li><strong>O que esperar do tratamento</strong> (dose única, observada; pode causar náuseas leves)</li>
+    <li><strong>Importância das insetícida-treated nets (ITNs)</strong> — IPTp é parte do pacote, não a totalidade</li>
+    <li><strong>Buscar atendimento se febre</strong> — IPTp não substitui diagnóstico e tratamento de malária aguda</li>
+  </ul>
+
+  <p>
+    → <a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a>: princípios aplicáveis também em saúde pública, adaptados ao contexto.
+  </p>
+
+  <h2 id="framework-brasileiro">Magnitude, transcendência, vulnerabilidade — o framework brasileiro aplicado</h2>
+
+  <p>
+    Vale lembrar o framework brasileiro de <a href={withBase('/conceitos/rastreamento/', base)}>rastreamento</a>, aqui aplicado à prevenção:
+  </p>
+
+  <ul>
+    <li><strong>Magnitude</strong> — alta (10+ milhões de gestantes expostas anualmente em África)</li>
+    <li><strong>Transcendência</strong> — alta (anemia, baixo peso ao nascer, mortalidade perinatal e materna)</li>
+    <li><strong>Vulnerabilidade</strong> — alta (intervenção barata, eficaz, operacionalizável)</li>
+  </ul>
+
+  <p>
+    Os três fatores se alinham. <strong>IPTp-SP é, sem ambiguidade, intervenção de saúde pública custo-efetiva</strong>, mesmo com resistência crescente, mesmo com cobertura imperfeita.
+  </p>
+
+  <h2 id="nnt-populacional">NNT em escala populacional</h2>
+
+  <p>
+    Em prevenção, o <strong>NNT pode ser alto</strong> — frequentemente na ordem de centenas para evitar um desfecho adverso. Mas isso não invalida o programa. Pelo contrário:
+  </p>
+
+  <p>
+    Suponha NNT = 30 para prevenir um caso de baixo peso ao nascer. Em 10.000 gestantes tratadas, 333 casos evitados. Em escala nacional (Moçambique tem ~1 milhão de partos/ano), <strong>30.000+ casos de baixo peso evitados anualmente</strong> — com impacto direto em mortalidade infantil.
+  </p>
+
+  <p>
+    A mesma intervenção que parece "modesta" em escala individual é <strong>transformadora em escala populacional</strong>. Esta é uma das diferenças entre <a href={withBase('/em-pratica/diagnostica/', base)}>perspectivas individuais e populacionais</a> na avaliação de evidência.
+  </p>
+
+  <h2 id="assess">Assess — após um ano de implementação</h2>
+
+  <p>Dra. Isabel revisa indicadores ao final do ano:</p>
+
+  <ul>
+    <li>Cobertura de 3+ doses de SP: subiu de 38% para 62%</li>
+    <li>Captação no 1º trimestre: subiu de 22% para 41%</li>
+    <li>Casos diagnosticados de malária na gestação: caíram 30%</li>
+    <li>Estoque de SP: zero rupturas no segundo semestre</li>
+  </ul>
+
+  <p>Aprendizados:</p>
+
+  <ul>
+    <li>Educação em saúde em changana fez diferença significativa — palestras em português alcançavam menos</li>
+    <li>DOT é o ponto crítico — quando ela não está, o programa falha em silêncio</li>
+    <li>A equipe agora "entende" o programa, não apenas "executa" — autonomia para decidir manejo de casos atípicos</li>
+    <li>Próxima fronteira: c-IPTp (entrega comunitária) para os 38% restantes — em discussão com distrito de saúde</li>
+  </ul>
+
+  <p>
+    → <a href={withBase('/cinco-as/monitorar/', base)}>Assess</a>: a avaliação contínua é essencial em saúde pública.
+  </p>
+
+  <h2 id="o-que-integra">O que esta página integra</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Conceito</th>
+          <th scope="col">Como aparece</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href={withBase('/conceitos/pico/', base)}>PICO</a></td>
+          <td>Estrutura da pergunta preventiva</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a></td>
+          <td>OMS como fonte primária</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/grade/', base)}>GRADE</a></td>
+          <td>Avaliação da força da recomendação</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a></td>
+          <td>Framework magnitude/transcendência/vulnerabilidade</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a></td>
+          <td>Interpretação de RR e implicações populacionais</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/cinco-as/aplicar/', base)}>Apply</a></td>
+          <td>Adaptação ao contexto local</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — quem produz recomendações como esta</li>
+    <li><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a> — princípios complementares à prevenção farmacológica</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — comunicação com a paciente</li>
+    <li><a href={withBase('/em-pratica/diagnostica/', base)}>Em prática — diagnóstica</a> — outra dimensão da prevenção (rastreamento de colo do útero)</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply</a> — onde diretriz internacional encontra realidade local</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>World Health Organization. <em>Guidelines for malaria</em>. 3 June 2022. Disponível em: <a href="https://www.who.int/publications/i/item/guidelines-for-malaria" rel="noopener noreferrer" target="_blank">who.int/publications/i/item/guidelines-for-malaria</a>.</li>
+      <li>Radeva-Petrova D, Kayentao K, ter Kuile FO, Sinclair D, Garner P. Drugs for preventing malaria in pregnant women in endemic areas: any drug regimen versus placebo or no treatment. <em>Cochrane Database Syst Rev</em> 2014;(10):CD000169.</li>
+      <li>Kayentao K, Garner P, van Eijk AM, et al. Intermittent preventive therapy for malaria during pregnancy using 2 vs 3 or more doses of sulfadoxine-pyrimethamine and risk of low birth weight in Africa: systematic review and meta-analysis. <em>JAMA</em> 2013;309(6):594–604.</li>
+      <li>WHO. <em>Community deployment of intermittent preventive treatment of malaria in pregnancy with sulfadoxine-pyrimethamine: a field guide</em>. 2024. Disponível em: <a href="https://www.who.int/publications/i/item/9789240086272" rel="noopener noreferrer" target="_blank">who.int/publications/i/item/9789240086272</a>.</li>
+      <li>Boene H, González R, Valá A, et al. Perceptions of malaria in pregnancy and acceptability of preventive interventions among Mozambican pregnant women: implications for effectiveness of malaria control in pregnancy. <em>PLoS One</em> 2014;9(2):e86038.</li>
+      <li>Sundararaman SA, Odom John AR. Prevention of malaria in pregnancy: The threat of sulfadoxine-pyrimethamine resistance. <em>Front Pediatr</em> 2022;10:966402.</li>
+    </ol>
+  </section>
+</DocLayout>

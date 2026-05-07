@@ -1,14 +1,266 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Terapêutica"
-  description="Aplicar evidência à decisão terapêutica: benefício, dano, NNT/NNH e contexto."
+<DocLayout
+  title="Em prática — pergunta terapêutica"
+  description="Eficácia e efetividade de intervenções na prática clínica. Caso de escolha de sedativo para intubação em paciente crítico — cetamina vs. etomidato."
   section="em-pratica"
 >
-  <h1 class="text-4xl font-medium mb-3">Terapêutica</h1>
-  <p class="text-lg text-text-secondary mb-6">Aplicar evidência à decisão terapêutica: benefício, dano, NNT/NNH e contexto.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Em prática — pergunta terapêutica</h1>
+
+  <p>
+    Perguntas terapêuticas são as mais frequentes na MBE — <em>funciona? em quem? quanto? a que custo?</em>. Demandam compreensão fina de <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a> e atenção a <strong>diferenças sutis entre interpretação bayesiana e frequencialista</strong> dos resultados. Esta página percorre um caso de medicina intensiva onde essa diferença muda a conclusão.
+  </p>
+
+  <h2 id="cenario">O cenário</h2>
+
+  <p>
+    Dr. Ricardo é médico intensivista no único hospital terciário da província. Está prestes a intubar um paciente de 56 anos em choque séptico — pressão arterial 80/40 mmHg, lactato elevado, em uso de noradrenalina. Precisa escolher o sedativo de indução.
+  </p>
+
+  <p>
+    Há duas opções na sua bandeja: <strong>etomidato</strong> (que ele usa há anos por estabilidade hemodinâmica) e <strong>cetamina</strong> (cuja literatura recente sugere benefício em mortalidade). Decisão precisa ser tomada agora — mas, depois deste paciente, ele quer rever sua prática-padrão para os próximos.
+  </p>
+
+  <h2 id="ask">Ask — formular a pergunta</h2>
+
+  <p>Aplicando <a href={withBase('/conceitos/pico/', base)}>PICO</a>:</p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Adultos críticos em UTI necessitando intubação orotraqueal de emergência</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>I</strong></th>
+          <td>Cetamina como agente de indução</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>C</strong></th>
+          <td>Etomidato como agente de indução</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Mortalidade hospitalar; estabilidade hemodinâmica pós-intubação; insuficiência adrenal</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>Pergunta SMART, focada, perfeitamente investigável.</p>
+
+  <h2 id="acquire">Acquire — buscar evidência</h2>
+
+  <p>Para questão terapêutica, prioridade é <strong>revisão sistemática de ECRs</strong>. Estratégia de busca:</p>
+
+  <ol>
+    <li><strong>Cochrane Library</strong> — <em>"ketamine etomidate intubation"</em></li>
+    <li><strong>PubMed Clinical Queries</strong> — filtro "therapy", <em>"ketamine etomidate critically ill RCT"</em></li>
+    <li><strong>TheNNT</strong> — site que sintetiza evidência clínica em formato NNT/NNH (recurso útil)</li>
+  </ol>
+
+  <p>A busca encontra:</p>
+
+  <ul>
+    <li><strong>Koroki et al, 2024</strong> — meta-análise bayesiana publicada em <em>Critical Care</em>. 7 ECRs + 1 estudo pareado, totalizando <strong>2.978 pacientes</strong>. Comparação direta cetamina vs. etomidato</li>
+    <li><strong>Greer et al, 2025</strong> — meta-análise frequencialista publicada em <em>Critical Care Medicine</em></li>
+    <li><strong>Long &amp; Gottlieb, 2024</strong> — comentário crítico em <em>Academic Emergency Medicine</em> discutindo a interpretação dos achados de Koroki</li>
+  </ul>
+
+  <p>→ <a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a> para a estratégia geral.</p>
+
+  <h2 id="appraise">Appraise — avaliar criticamente</h2>
+
+  <p>
+    Para meta-análises, ferramenta é <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a>. Para os ECRs incluídos, <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a>.
+  </p>
+
+  <p><strong>Resumo da meta-análise de Koroki (2024):</strong></p>
+
+  <ul>
+    <li>Mortalidade ao maior tempo de seguimento: cetamina 25% (376/1.475) vs. etomidato 27% (411/1.503)</li>
+    <li><strong>RR 0,93 (IC 95% credível: 0,79 a 1,08)</strong> — interpretação bayesiana</li>
+    <li>Probabilidade de cetamina reduzir mortalidade: <strong>83,2%</strong> (qualquer redução); <strong>41,6%</strong> (redução ≥1%)</li>
+  </ul>
+
+  <p>
+    Aqui está o ponto delicado da interpretação. <strong>Pelos critérios frequencialistas tradicionais (IC 95% que cruza 1)</strong>, o resultado seria descrito como "<strong>sem diferença estatisticamente significativa</strong>" — e o NNT como <strong>não calculável</strong>. → Veja a <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>calculadora de medidas de efeito</a> com esses números: o IC do RAR cruza zero.
+  </p>
+
+  <p>
+    <strong>Pela interpretação bayesiana</strong>, há <strong>moderada probabilidade</strong> de que cetamina reduza mortalidade. As duas interpretações não são contraditórias — descrevem a mesma evidência sob critérios diferentes.
+  </p>
+
+  <p><strong>Limitações da evidência identificadas pela própria revisão:</strong></p>
+
+  <ul>
+    <li>Maioria dos ensaios maiores eram <strong>abertos (não cegados)</strong> — risco de viés de aferição</li>
+    <li><strong>Tempos de avaliação de mortalidade variáveis</strong> entre estudos (28 dias, 30 dias, alta hospitalar)</li>
+    <li><strong>Sem padronização</strong> de intervenções peri-intubação (paralíticos, opioides, vasopressores)</li>
+    <li>Um estudo combinou cetamina com propofol — comparação não pura</li>
+  </ul>
+
+  <p>
+    Pela <a href={withBase('/ferramentas/grade/', base)}>GRADE</a>, a certeza geral da evidência é <strong>baixa a moderada</strong> — não pela inconsistência dos resultados, mas pelo risco de viés residual.
+  </p>
+
+  <h2 id="aplicacao">Aplicando ao paciente real</h2>
+
+  <p>Para o paciente em choque séptico, três considerações:</p>
+
+  <p>
+    <strong>1. Magnitude do efeito é incerta — mas perfil de segurança parece favorecer cetamina.</strong><br />
+    Etomidato causa <strong>supressão adrenal transitória</strong> após dose única — efeito mais marcado em sepse<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Cetamina não tem esse efeito. Estabilidade hemodinâmica das duas é comparável; cetamina pode ter ligeira vantagem por suporte simpaticomimético.
+  </p>
+
+  <p>
+    <strong>2. Direção da estimativa pontual favorece cetamina, mas IC inclui ausência de efeito.</strong><br />
+    Não posso afirmar com confiança "cetamina salva vidas". Posso afirmar "evidência atual sugere benefício possível, sem dano identificado adicional".
+  </p>
+
+  <p>
+    <strong>3. Custos e disponibilidade são similares no contexto.</strong><br />
+    Ambas drogas estão disponíveis, custos comparáveis, equipe familiar com as duas.
+  </p>
+
+  <p>
+    Decisão para este paciente: <strong>cetamina</strong>. Para a prática-padrão dos próximos: também migrar para cetamina como primeira escolha em pacientes críticos, <strong>especialmente em sepse</strong>, mantendo etomidato como alternativa quando cetamina é contraindicada (HIC mais antiga, certas situações cardiovasculares específicas).
+  </p>
+
+  <p>
+    A decisão não é "cetamina porque o estudo é positivo". É "cetamina porque a melhor evidência disponível sugere benefício possível, com dano teórico do etomidato em sepse, sem dano adicional identificado da cetamina".
+  </p>
+
+  <h2 id="leitura-nnt">A leitura cuidadosa do NNT</h2>
+
+  <p>
+    Vale parar neste caso para uma reflexão: como descrever este resultado para um residente que pergunta "qual o NNT?".
+  </p>
+
+  <p>
+    Se eu disser "NNT 50, com IC de 25 a infinito", estou incorretamente sugerindo um número quando o IC do RAR cruza zero. Se eu disser "sem diferença significativa", subestimo a probabilidade bayesiana de benefício. A descrição correta é mais nuançada:
+  </p>
+
+  <blockquote class="featured-quote">
+    <p>"A estimativa pontual sugere ~2 pontos percentuais de redução absoluta de mortalidade, mas o IC frequencialista cruza zero. Em termos bayesianos, há ~83% de probabilidade de algum benefício e ~42% de probabilidade de benefício clinicamente relevante. Não é evidência forte o suficiente para 'NNT estabelecido', mas é suficiente — junto ao perfil de segurança — para preferir cetamina sobre etomidato no paciente crítico."</p>
+  </blockquote>
+
+  <p>Esta é descrição honesta. A simplificação para NNT pontual seria tecnicamente incorreta.</p>
+
+  <p>
+    → Mais sobre a interpretação correta de NNT em contextos de IC amplo: <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>calculadora de medidas de efeito</a>.
+  </p>
+
+  <h2 id="decisao-compartilhada">Decisão compartilhada — neste caso, com a equipe</h2>
+
+  <p>
+    Em medicina intensiva, frequentemente o paciente está incapacitado de participar da decisão imediata. A "decisão compartilhada" aqui muda de natureza — passa a ser <strong>com a equipe e, eventualmente, com a família</strong> (em decisões de manejo continuado, não na intubação de urgência em si).
+  </p>
+
+  <p>Para mudança de prática-padrão na unidade, Dr. Ricardo:</p>
+
+  <ul>
+    <li>Apresenta a evidência em sessão clínica da UTI</li>
+    <li>Discute com colegas as nuances da interpretação bayesiana</li>
+    <li>Decide colegiadamente migrar protocolo</li>
+    <li>Treina equipe na escolha (incluindo dose, diluição, manejo de efeitos adversos potenciais)</li>
+  </ul>
+
+  <p>→ <a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — princípios aplicáveis também a equipes.</p>
+
+  <h2 id="assess">Assess — meses depois</h2>
+
+  <p>Após 6 meses de protocolo modificado:</p>
+
+  <ul>
+    <li>85 intubações com cetamina; 12 com etomidato (manteve uso seletivo)</li>
+    <li>Mortalidade hospitalar: ligeira queda numérica, mas amostra muito pequena para conclusão</li>
+    <li>Sem aumento de eventos adversos atribuíveis à cetamina</li>
+    <li>Equipe relata maior conforto com a droga após meses de uso</li>
+    <li>Discussão regular em sessões clínicas mantém a equipe atenta a literatura nova</li>
+  </ul>
+
+  <p>
+    A auditoria não "prova" benefício — n=97 é insuficiente. Mas confirma que a mudança foi segura e bem aceita. Próximos passos: monitorar literatura para nova evidência (há estudos em andamento, incluindo o RSI Trial), ajustar conforme necessário.
+  </p>
+
+  <h2 id="o-que-integra">O que esta página integra</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Conceito</th>
+          <th scope="col">Como aparece</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href={withBase('/conceitos/pico/', base)}>PICO</a></td>
+          <td>Estrutura da pergunta terapêutica</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a></td>
+          <td>RR com IC que cruza 1; reflexão sobre NNT</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a></td>
+          <td>Verificação do "NNT não calculável"</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/grade/', base)}>GRADE</a></td>
+          <td>Avaliação de certeza da evidência</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a></td>
+          <td>Avaliação de cada ECR incluído</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a></td>
+          <td>Avaliação da meta-análise</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/cinco-as/aplicar/', base)}>Apply</a></td>
+          <td>Decisão considerando contexto e segurança</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — interpretação de RR, RAR, NNT, IC95%</li>
+    <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — para experimentar com números do estudo</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — particularmente cegamento e heterogeneidade</li>
+    <li><a href={withBase('/ferramentas/grade/', base)}>GRADE</a> — qualidade da evidência além do desenho</li>
+    <li><a href={withBase('/em-pratica/diagnostica/', base)}>Em prática — diagnóstica</a> — outro tipo de decisão clínica</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Koroki T, Kotani Y, Yaguchi T, et al. Ketamine versus etomidate as an induction agent for tracheal intubation in critically ill adults: a Bayesian meta-analysis. <em>Crit Care</em> 2024;28(1):48. Disponível em: <a href="https://ccforum.biomedcentral.com/articles/10.1186/s13054-024-04831-4" rel="noopener noreferrer" target="_blank">ccforum.biomedcentral.com</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Long B, Gottlieb M. Ketamine versus etomidate for induction of intubation in critically ill patients. <em>Acad Emerg Med</em> 2024;31(9):937–8.
+      </li>
+      <li>
+        Greer A, Hewitt M, Khazaneh PT, et al. Ketamine versus etomidate for rapid sequence intubation: a systematic review and meta-analysis of randomized trials. <em>Crit Care Med</em> 2025;53(2):e374–e383.
+      </li>
+      <li>
+        Jabre P, Combes X, Lapostolle F, et al. Etomidate versus ketamine for rapid sequence intubation in acutely ill patients: a multicentre randomised controlled trial. <em>Lancet</em> 2009;374(9686):293–300.
+      </li>
+      <li>
+        TheNNT.com. <em>Ketamine versus Etomidate for Induction of Intubation in Critically Ill Patients</em>. Disponível em: <a href="https://thennt.com/nnt/ketamine-versus-etomidate-for-induction-of-intubation-in-critically-ill-patients/" rel="noopener noreferrer" target="_blank">thennt.com</a>.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,0 +1,399 @@
+---
+/**
+ * NNTVisualization.astro
+ *
+ * Visualização do NNT em três barras empilhadas:
+ *  1. População total em risco (100%)
+ *  2. Frequência do desfecho sem tratamento
+ *  3. Frequência do desfecho com tratamento (mostra residual + evitados)
+ *
+ * Decompõe o impacto do tratamento em três grupos pedagogicamente importantes:
+ *  - Quem não teria o desfecho de qualquer maneira (cor neutra)
+ *  - Quem é poupado pelo tratamento (cor de destaque — o "benefício")
+ *  - Quem tem o desfecho mesmo tratado (cor de alerta)
+ *
+ * Caso pré-configurado: TARV em prevenção de transmissão vertical do HIV.
+ * - Sem tratamento: 25% transmissão
+ * - Com tratamento: 5% transmissão
+ * - NNT = 1 / (0,25 - 0,05) = 5
+ *
+ * Props permitem reutilizar para outros casos.
+ *
+ * Localização sugerida: src/components/conceitos/NNTVisualization.astro
+ *
+ * Uso:
+ *   import NNTVisualization from '@/components/conceitos/NNTVisualization.astro';
+ *   ...
+ *   <NNTVisualization />
+ *   <!-- ou customizado: -->
+ *   <NNTVisualization
+ *     populacaoTotal={100}
+ *     riscoControle={0.25}
+ *     riscoIntervencao={0.05}
+ *     legendaPopulacao="100 mulheres com HIV amamentando"
+ *     legendaSemTratamento="25 transmissões verticais sem tratamento"
+ *     legendaComTratamento="5 transmissões com tratamento"
+ *     desfechoLabel="Transmissão"
+ *     intervencaoLabel="TARV"
+ *   />
+ */
+
+interface Props {
+  populacaoTotal?: number;
+  riscoControle?: number;
+  riscoIntervencao?: number;
+  legendaPopulacao?: string;
+  legendaSemTratamento?: string;
+  legendaComTratamento?: string;
+  desfechoLabel?: string;
+  intervencaoLabel?: string;
+}
+
+const {
+  populacaoTotal = 100,
+  riscoControle = 0.25,
+  riscoIntervencao = 0.05,
+  legendaPopulacao = '100 mulheres com HIV amamentando',
+  legendaSemTratamento = '25 transmissões verticais sem tratamento',
+  legendaComTratamento = '5 transmissões com tratamento',
+  desfechoLabel = 'transmissão',
+  intervencaoLabel = 'TARV',
+} = Astro.props;
+
+const pctSemTrat = Math.round(riscoControle * 100);
+const pctComTrat = Math.round(riscoIntervencao * 100);
+const pctEvitados = pctSemTrat - pctComTrat;
+const pctSemRisco = 100 - pctSemTrat;
+const nnt = Math.round(1 / (riscoControle - riscoIntervencao));
+---
+
+<figure class="nnt-viz" aria-labelledby="nnt-viz-title">
+  <figcaption id="nnt-viz-title" class="nnt-viz__title">
+    Quem se beneficia, quem teria evitado mesmo sem tratamento, e quem tem o desfecho apesar de tratado.
+  </figcaption>
+
+  <div class="nnt-viz__chart">
+    <!-- Barra 1: população total (100%) -->
+    <div class="nnt-viz__column">
+      <div class="nnt-viz__legend">{legendaPopulacao}</div>
+      <div class="nnt-viz__bar nnt-viz__bar--single" role="img" aria-label={`${populacaoTotal} pessoas em risco, total da população`}>
+        <div class="nnt-viz__segment nnt-viz__segment--neutral" style="height: 100%;">
+          <span class="nnt-viz__segment-label">100%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra 2: sem tratamento -->
+    <div class="nnt-viz__column">
+      <div class="nnt-viz__legend">{legendaSemTratamento}</div>
+      <div class="nnt-viz__bar" role="img" aria-label={`Sem tratamento: ${pctSemRisco}% sem desfecho, ${pctSemTrat}% com desfecho`}>
+        <div class="nnt-viz__segment nnt-viz__segment--neutral" style={`height: ${pctSemRisco}%;`}>
+          <span class="nnt-viz__segment-label">{pctSemRisco}%</span>
+        </div>
+        <div class="nnt-viz__segment nnt-viz__segment--harm" style={`height: ${pctSemTrat}%;`}>
+          <span class="nnt-viz__segment-label">{pctSemTrat}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra 3: com tratamento -->
+    <div class="nnt-viz__column">
+      <div class="nnt-viz__legend">{legendaComTratamento}</div>
+      <div class="nnt-viz__bar" role="img" aria-label={`Com tratamento: ${pctSemRisco}% sem desfecho, ${pctEvitados}% poupados pelo tratamento, ${pctComTrat}% com desfecho mesmo tratados`}>
+        <div class="nnt-viz__segment nnt-viz__segment--neutral" style={`height: ${pctSemRisco}%;`}>
+          <span class="nnt-viz__segment-label">{pctSemRisco}%</span>
+        </div>
+        <div class="nnt-viz__segment nnt-viz__segment--benefit" style={`height: ${pctEvitados}%;`}>
+          <span class="nnt-viz__segment-label">{pctEvitados}%</span>
+        </div>
+        <div class="nnt-viz__segment nnt-viz__segment--harm" style={`height: ${pctComTrat}%;`}>
+          <span class="nnt-viz__segment-label">{pctComTrat}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nnt-viz__legend-key" role="list">
+    <div class="nnt-viz__key-item" role="listitem">
+      <span class="nnt-viz__swatch nnt-viz__swatch--neutral" aria-hidden="true"></span>
+      <span>Não teria o desfecho de qualquer maneira</span>
+    </div>
+    <div class="nnt-viz__key-item" role="listitem">
+      <span class="nnt-viz__swatch nnt-viz__swatch--benefit" aria-hidden="true"></span>
+      <span>Poupado pelo tratamento (benefício real)</span>
+    </div>
+    <div class="nnt-viz__key-item" role="listitem">
+      <span class="nnt-viz__swatch nnt-viz__swatch--harm" aria-hidden="true"></span>
+      <span>Tem o desfecho — com ou sem tratamento</span>
+    </div>
+  </div>
+
+  <div class="nnt-viz__interpretation">
+    <p>
+      <strong>NNT = {nnt}.</strong> Para cada {nnt} {populacaoTotal === 100 ? 'pessoas' : 'pessoas'} tratadas com {intervencaoLabel}, 1 deixa de ter {desfechoLabel}. As outras {nnt - 1} são tratadas sem que isso mude o desfecho — porque não teriam o evento de qualquer forma, ou porque tiveram apesar do tratamento.
+    </p>
+    <p class="nnt-viz__questions">
+      Reflexões que esta visualização força:
+    </p>
+    <ul>
+      <li>Quantas pessoas em risco?</li>
+      <li>Quantas foram tratadas?</li>
+      <li>Quantas tiveram o desfecho?</li>
+      <li>Quantas tomaram tratamento sem necessidade real?</li>
+    </ul>
+  </div>
+</figure>
+
+<style>
+  .nnt-viz {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-sans);
+  }
+
+  .nnt-viz__title {
+    margin: 0 0 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .nnt-viz__chart {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 540px) {
+    .nnt-viz__chart {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  .nnt-viz__column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nnt-viz__legend {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    /* Ajustado para acomodar legendas de até 3 linhas (caso default tem
+       "25 transmissões verticais sem tratamento") sem desalinhar as barras
+       entre as colunas. */
+    min-height: 4em;
+  }
+
+  @media (max-width: 540px) {
+    .nnt-viz__legend {
+      min-height: auto;
+      font-size: 0.875rem;
+    }
+  }
+
+  .nnt-viz__bar {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    height: 320px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    /* O background do bar fica visível como linha de 2px entre cada segmento,
+       criando separação visual leve sem precisar de bordas. */
+    background: var(--color-bg-canvas);
+    gap: 2px;
+  }
+
+  @media (max-width: 540px) {
+    .nnt-viz__bar {
+      height: 240px;
+    }
+  }
+
+  .nnt-viz__segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-on-segment, var(--color-text-primary));
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: filter 200ms ease-out;
+  }
+
+  .nnt-viz__segment-label {
+    padding: 0 0.5rem;
+  }
+
+  /* Cores adaptáveis a tema claro e escuro */
+  .nnt-viz__segment--neutral {
+    background: #fde68a; /* amber-200 — neutro/sem evento */
+    color: #78350f;
+  }
+
+  .nnt-viz__segment--benefit {
+    background: #6ee7b7; /* emerald-300 — benefício do tratamento */
+    color: #064e3b;
+  }
+
+  .nnt-viz__segment--harm {
+    background: #b91c1c; /* red-700 — desfecho ocorreu */
+    color: #ffffff;
+  }
+
+  /* Versão escura — fontes e contraste ajustados */
+  :root.dark .nnt-viz__segment--neutral,
+  [data-theme="dark"] .nnt-viz__segment--neutral {
+    background: #b45309; /* amber-700 */
+    color: #fef3c7;
+  }
+
+  :root.dark .nnt-viz__segment--benefit,
+  [data-theme="dark"] .nnt-viz__segment--benefit {
+    background: #047857; /* emerald-700 */
+    color: #d1fae5;
+  }
+
+  :root.dark .nnt-viz__segment--harm,
+  [data-theme="dark"] .nnt-viz__segment--harm {
+    background: #991b1b; /* red-800 */
+    color: #fee2e2;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .nnt-viz__segment--neutral {
+      background: #b45309;
+      color: #fef3c7;
+    }
+    .nnt-viz__segment--benefit {
+      background: #047857;
+      color: #d1fae5;
+    }
+    .nnt-viz__segment--harm {
+      background: #991b1b;
+      color: #fee2e2;
+    }
+  }
+
+  /* Esconder rótulo se segmento for muito pequeno (< 8% da altura) */
+  .nnt-viz__segment[style*="height: 5%"] .nnt-viz__segment-label,
+  .nnt-viz__segment[style*="height: 4%"] .nnt-viz__segment-label,
+  .nnt-viz__segment[style*="height: 3%"] .nnt-viz__segment-label,
+  .nnt-viz__segment[style*="height: 2%"] .nnt-viz__segment-label,
+  .nnt-viz__segment[style*="height: 1%"] .nnt-viz__segment-label {
+    font-size: 0.75rem;
+  }
+
+  .nnt-viz__legend-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-subtle);
+    margin-bottom: 1.25rem;
+  }
+
+  .nnt-viz__key-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+  }
+
+  .nnt-viz__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .nnt-viz__swatch--neutral {
+    background: #fde68a;
+  }
+
+  .nnt-viz__swatch--benefit {
+    background: #6ee7b7;
+  }
+
+  .nnt-viz__swatch--harm {
+    background: #b91c1c;
+  }
+
+  :root.dark .nnt-viz__swatch--neutral,
+  [data-theme="dark"] .nnt-viz__swatch--neutral {
+    background: #b45309;
+  }
+
+  :root.dark .nnt-viz__swatch--benefit,
+  [data-theme="dark"] .nnt-viz__swatch--benefit {
+    background: #047857;
+  }
+
+  :root.dark .nnt-viz__swatch--harm,
+  [data-theme="dark"] .nnt-viz__swatch--harm {
+    background: #991b1b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .nnt-viz__swatch--neutral {
+      background: #b45309;
+    }
+    .nnt-viz__swatch--benefit {
+      background: #047857;
+    }
+    .nnt-viz__swatch--harm {
+      background: #991b1b;
+    }
+  }
+
+  .nnt-viz__interpretation {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+  }
+
+  .nnt-viz__interpretation p {
+    margin: 0 0 0.75rem;
+  }
+
+  .nnt-viz__interpretation p:last-of-type {
+    margin-top: 1rem;
+  }
+
+  .nnt-viz__interpretation strong {
+    color: var(--color-text-primary);
+  }
+
+  .nnt-viz__questions {
+    color: var(--color-text-secondary) !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .nnt-viz__interpretation ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  .nnt-viz__interpretation ul li {
+    margin-bottom: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nnt-viz__segment {
+      transition: none;
+    }
+  }
+</style>

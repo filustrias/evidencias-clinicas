@@ -1,14 +1,356 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
+<DocLayout
   title="Desenhos de estudo"
-  description="Coortes, caso-controle, ECRs, transversais — quando cada um se aplica."
+  description="Os principais desenhos de pesquisa clínica e quando cada um se aplica. Coorte, caso-controle, ECR, revisão sistemática, estudos diagnósticos."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Desenhos de estudo</h1>
-  <p class="text-lg text-text-secondary mb-6">Coortes, caso-controle, ECRs, transversais — quando cada um se aplica.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Desenhos de estudo</h1>
+
+  <p>
+    Cada desenho de estudo responde a um tipo de pergunta. Conhecer os principais — e saber quando cada um se aplica — é o que separa leitura crítica de leitura passiva. ECR não é sempre o melhor desenho; coorte não é sempre inferior; relato de caso tem função específica que não cabe a nenhum dos outros.
+  </p>
+
+  <p>Esta página descreve os desenhos mais frequentes na literatura clínica.</p>
+
+  <h2 id="visao-geral">Visão geral</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Desenho</th>
+          <th scope="col">Direção temporal</th>
+          <th scope="col">Pergunta que responde melhor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Relato de caso / série de casos</strong></td>
+          <td>Descritivo</td>
+          <td>"Existe?" — observação que gera hipótese</td>
+        </tr>
+        <tr>
+          <td><strong>Estudo transversal</strong></td>
+          <td>Ponto único no tempo</td>
+          <td>"Quanto?" — prevalência</td>
+        </tr>
+        <tr>
+          <td><strong>Estudo caso-controle</strong></td>
+          <td>Retrospectivo</td>
+          <td>"Por que aconteceu?" — etiologia, especialmente para doenças raras</td>
+        </tr>
+        <tr>
+          <td><strong>Estudo de coorte</strong></td>
+          <td>Prospectivo (geralmente)</td>
+          <td>"O que vai acontecer?" — prognóstico, incidência, fatores de risco</td>
+        </tr>
+        <tr>
+          <td><strong>Ensaio clínico randomizado (ECR)</strong></td>
+          <td>Prospectivo, intervencional</td>
+          <td>"Funciona?" — eficácia/efetividade de intervenção</td>
+        </tr>
+        <tr>
+          <td><strong>Revisão sistemática / meta-análise</strong></td>
+          <td>Síntese</td>
+          <td>"O que a literatura como um todo mostra?"</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A direção temporal importa: estudos retrospectivos olham para trás; prospectivos para frente; transversais capturam um momento. O tipo de pergunta determina o desenho apropriado.
+  </p>
+
+  <h2 id="relato-de-caso">Relato de caso e série de casos</h2>
+
+  <p>
+    <strong>O que é:</strong> descrição detalhada de um paciente único (relato de caso) ou de um pequeno conjunto de pacientes (série de casos). Sem grupo de comparação, sem cálculo de risco.
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Identificar condição nova ou rara</li>
+    <li>Documentar apresentação atípica</li>
+    <li>Gerar hipóteses para estudos futuros</li>
+    <li>Ensinar — casos didáticos preservam complexidade clínica que números agregados perdem</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Sem comparador, não estabelece causalidade</li>
+    <li>Susceptível a viés de seleção (publicam-se os casos interessantes)</li>
+    <li>Não permite cálculo de incidência ou prevalência</li>
+  </ul>
+
+  <p>
+    <strong>Posição na pirâmide:</strong> base. Mas vale notar que <strong>descobertas históricas importantes começaram em relatos de caso</strong> — incluindo SIDA, talidomida e doença de Lyme.
+  </p>
+
+  <h2 id="transversal">Estudo transversal</h2>
+
+  <p>
+    <strong>O que é:</strong> investigação que coleta informações sobre exposição e desfecho <strong>simultaneamente, num ponto único no tempo</strong>.
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Estimar <strong>prevalência</strong> de condições</li>
+    <li>Identificar associações que merecem investigação posterior</li>
+    <li>Pesquisas de saúde pública, censos sanitários</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Não estabelece direção causal (a exposição precedeu o desfecho?)</li>
+    <li>Sujeito a viés de duração-prevalência (condições crônicas com longa duração ficam super-representadas)</li>
+  </ul>
+
+  <p>
+    <strong>Exemplo:</strong> pesquisa nacional de saúde mede simultaneamente, em 30.000 adultos, presença de hipertensão, IMC, atividade física e renda. Estima a prevalência e identifica associações.
+  </p>
+
+  <p>
+    → Mais sobre prevalência em <a href={withBase('/conceitos/medidas-de-frequencia/', base)}>medidas de frequência</a>.
+  </p>
+
+  <h2 id="caso-controle">Estudo caso-controle</h2>
+
+  <p>
+    <strong>O que é:</strong> seleciona-se um grupo com a doença (<strong>casos</strong>) e outro sem a doença (<strong>controles</strong>); investiga-se <strong>retrospectivamente</strong> se houve diferença de exposição.
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Doenças <strong>raras</strong> — se a doença é rara, esperar uma coorte teria seguimento longo demais</li>
+    <li>Investigação inicial de fatores de risco</li>
+    <li>Estudos de surto</li>
+  </ul>
+
+  <p><strong>Vantagens:</strong></p>
+
+  <ul>
+    <li>Eficiente para doenças raras</li>
+    <li>Tempo de execução curto</li>
+    <li>Custo relativamente baixo</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Susceptível a <strong>viés de recordação</strong> (casos lembram melhor da exposição que controles)</li>
+    <li>Difícil escolher controles realmente comparáveis</li>
+    <li>Não calcula risco absoluto nem incidência — só odds ratio</li>
+    <li>Ordem temporal nem sempre clara</li>
+  </ul>
+
+  <p>
+    <strong>Exemplo clássico:</strong> Doll e Hill (1950) compararam pacientes com câncer de pulmão (casos) com pacientes hospitalizados sem câncer (controles), descobrindo associação forte com tabagismo. Estudo seminal — mas a confirmação definitiva veio depois com coortes.
+  </p>
+
+  <h2 id="coorte">Estudo de coorte</h2>
+
+  <p>
+    <strong>O que é:</strong> acompanha-se um grupo de pessoas (a "coorte") ao longo do tempo, registrando exposições e desfechos. Pode ser <strong>prospectivo</strong> (acompanhamento começa no presente, segue para o futuro) ou <strong>retrospectivo</strong> (usa registros já existentes para reconstruir o passado).
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Prognóstico — qual a evolução natural de uma condição?</li>
+    <li>Incidência — qual a taxa de novos casos?</li>
+    <li>Fatores de risco quando a exposição é comum</li>
+    <li>Quando ECR não é factível (exposições nocivas, contextos não-randomizáveis)</li>
+  </ul>
+
+  <p><strong>Vantagens:</strong></p>
+
+  <ul>
+    <li>Calcula incidência e risco absoluto</li>
+    <li>Direção temporal clara (exposição precede desfecho)</li>
+    <li>Permite múltiplos desfechos para mesma exposição</li>
+    <li>Menos sujeito a viés de recordação que caso-controle</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Tempo de seguimento longo (anos a décadas)</li>
+    <li>Custo alto</li>
+    <li>Perdas de seguimento podem distorcer resultados (viés de perda)</li>
+    <li>Confundimento residual mesmo com bom controle estatístico</li>
+  </ul>
+
+  <p>
+    <strong>Exemplos clássicos:</strong> Framingham Heart Study (acompanha residentes de Framingham, Massachusetts, desde 1948) gerou a maior parte do que sabemos hoje sobre fatores de risco cardiovascular.
+  </p>
+
+  <h2 id="ecr">Ensaio clínico randomizado (ECR)</h2>
+
+  <p>
+    <strong>O que é:</strong> participantes são alocados <strong>aleatoriamente</strong> para receber a intervenção ou um comparador. Acompanhamento prospectivo. <strong>A randomização é o que distingue ECR de coorte intervencional</strong> — ela distribui fatores de confundimento (conhecidos e desconhecidos) igualmente entre os grupos.
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Avaliar <strong>eficácia</strong> ou <strong>efetividade</strong> de uma intervenção</li>
+    <li>Quando a alocação aleatória é eticamente possível</li>
+    <li>Quando o tamanho do efeito esperado é detectável com amostra factível</li>
+  </ul>
+
+  <p><strong>Vantagens:</strong></p>
+
+  <ul>
+    <li><strong>Único desenho que controla confundimento desconhecido</strong> (via randomização)</li>
+    <li>Direção causal clara</li>
+    <li>Estimativas de efeito mais confiáveis que observacionais</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Pode ser inviável (eticamente, logisticamente)</li>
+    <li>Custo alto</li>
+    <li>Validade externa frequentemente limitada (populações selecionadas, contextos especiais)</li>
+    <li>Não captura efeitos raros ou tardios em prazo razoável</li>
+  </ul>
+
+  <p><strong>Detalhes que importam para qualidade:</strong></p>
+
+  <ul>
+    <li><strong>Ocultação da alocação</strong> — quem recruta o paciente não sabe para qual grupo ele será alocado, evitando manipulação consciente ou inconsciente</li>
+    <li><strong>Cegamento</strong> — pacientes, profissionais e avaliadores não sabem quem recebeu a intervenção</li>
+    <li><strong>Análise por intenção de tratar</strong> — todos os randomizados são analisados no grupo original, mesmo se não completaram</li>
+  </ul>
+
+  <p>→ Avaliação formal de qualidade de ECR: <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a>.</p>
+
+  <h3 id="variacoes-ecr">Variações do ECR</h3>
+
+  <ul>
+    <li><strong>Ensaio cruzado (<em>crossover</em>)</strong> — cada participante recebe ambas as intervenções em períodos consecutivos. Útil para condições crônicas estáveis.</li>
+    <li><strong>Ensaio fatorial</strong> — testa duas intervenções simultaneamente, em arranjo 2×2.</li>
+    <li><strong>Cluster-randomizado</strong> — randomiza grupos (escolas, hospitais, comunidades) em vez de indivíduos. Útil quando intervenções afetam o coletivo.</li>
+    <li><strong>Ensaio pragmático</strong> — desenhado para refletir a prática real, com critérios de inclusão amplos e desfechos clinicamente relevantes.</li>
+    <li><strong>Ensaio explanatório</strong> — desenhado para máximo controle, em condições ideais. Resposta à pergunta "pode funcionar?", não "funciona na prática?".</li>
+    <li><strong>Ensaio de não-inferioridade</strong> — testa se nova intervenção não é pior que a padrão por margem clinicamente irrelevante.</li>
+    <li><strong>Ensaio adaptativo</strong> — modificações pré-especificadas no decorrer do estudo (ex.: análise interina que pode parar o estudo cedo).</li>
+  </ul>
+
+  <h2 id="revisao-sistematica">Revisão sistemática e meta-análise</h2>
+
+  <p>
+    <strong>O que é:</strong> <strong>revisão sistemática</strong> sintetiza estudos primários sobre uma pergunta específica, com método explícito de busca, seleção e avaliação. <strong>Meta-análise</strong> é a combinação estatística dos resultados (quando apropriada).
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Síntese de evidência sobre tema com múltiplos estudos primários</li>
+    <li>Quando estudos individuais têm conclusões aparentemente conflitantes</li>
+    <li>Suporte a diretrizes clínicas</li>
+  </ul>
+
+  <p><strong>Vantagens:</strong></p>
+
+  <ul>
+    <li>Aumenta poder estatístico ao combinar amostras</li>
+    <li>Examina consistência entre estudos</li>
+    <li>Reduz viés de seleção (se a busca for completa)</li>
+    <li>Pode detectar viés de publicação (com funnel plot e testes formais)</li>
+  </ul>
+
+  <p><strong>Limitações:</strong></p>
+
+  <ul>
+    <li>Qualidade da síntese depende da qualidade dos estudos primários</li>
+    <li>Heterogeneidade clínica entre estudos pode tornar combinação inadequada</li>
+    <li>Sujeita a viés de publicação se literatura cinzenta não for buscada</li>
+  </ul>
+
+  <p>→ Avaliação formal de qualidade: <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a>.</p>
+
+  <h2 id="estudo-diagnostico">Estudo de teste diagnóstico</h2>
+
+  <p>
+    <strong>O que é:</strong> desenho específico para avaliar a <strong>acurácia</strong> de um teste. Aplica-se o teste em um grupo de pessoas e compara-se com um <strong>padrão-ouro</strong> (gold standard) — o teste de referência.
+  </p>
+
+  <p><strong>Quando é útil:</strong></p>
+
+  <ul>
+    <li>Validar novo teste diagnóstico</li>
+    <li>Comparar acurácia entre testes</li>
+    <li>Estudar performance em diferentes prevalências</li>
+  </ul>
+
+  <p><strong>Métricas produzidas:</strong></p>
+
+  <ul>
+    <li><strong>Sensibilidade</strong> — proporção de doentes que o teste identifica</li>
+    <li><strong>Especificidade</strong> — proporção de não-doentes que o teste exclui</li>
+    <li><strong>Valor preditivo positivo (VPP)</strong> — probabilidade de doença dado teste positivo (depende da prevalência)</li>
+    <li><strong>Valor preditivo negativo (VPN)</strong> — probabilidade de não-doença dado teste negativo</li>
+    <li><strong>Razão de verossimilhança positiva e negativa (RV+ e RV−)</strong> — quanto o teste muda a probabilidade pré-teste</li>
+  </ul>
+
+  <p>→ Calcule esses valores em <a href={withBase('/calculadoras/testes-diagnosticos/', base)}>calculadora de testes diagnósticos</a>.</p>
+
+  <p>
+    <strong>Avaliação formal:</strong> ferramenta <strong>QUADAS-2</strong> é o padrão para avaliar risco de viés em estudos diagnósticos.
+  </p>
+
+  <h2 id="como-escolher">Como escolher o desenho ao ler um artigo</h2>
+
+  <p>Ao receber um artigo para avaliar criticamente, três passos rápidos:</p>
+
+  <ol>
+    <li><strong>Identifique o desenho</strong> — geralmente declarado nos métodos, mas vale verificar (ECRs precisam de randomização documentada; coortes precisam de seguimento; etc.)</li>
+    <li><strong>Avalie se o desenho é apropriado para a pergunta</strong> — pergunta de prognóstico em ECR? Suspeito. Pergunta de eficácia em série de casos? Insuficiente.</li>
+    <li><strong>Aplique a ferramenta apropriada</strong> — RoB para ECR, AMSTAR-2 para revisão sistemática, QUADAS-2 para teste diagnóstico, escala apropriada para coorte ou caso-controle (Newcastle-Ottawa, por exemplo).</li>
+  </ol>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Confundir desenho com qualidade.</strong> ECR ruim pode ser pior que coorte excelente.</li>
+    <li><strong>Descartar caso-controle por princípio.</strong> Para doenças raras, é o melhor que existe.</li>
+    <li><strong>Achar que retrospectivo = ruim.</strong> Coorte retrospectiva bem feita pode ser excelente.</li>
+    <li><strong>Confundir cegamento com mascaramento da randomização.</strong> São coisas diferentes — randomização oculta antes da alocação; cegamento mantido durante o estudo.</li>
+    <li><strong>Aplicar ECR a perguntas inadequadas.</strong> Pergunta sobre prognóstico, etiologia ambiental ou experiência subjetiva pede outros desenhos.</li>
+    <li><strong>Tratar série de casos como evidência fraca por princípio.</strong> Para condições novas ou raras, gera hipóteses que viram pesquisa formal depois.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — onde os desenhos se posicionam</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — como cada desenho lida com diferentes tipos de viés</li>
+    <li><a href={withBase('/conceitos/medidas-de-frequencia/', base)}>Medidas de frequência</a> — incidência (coorte) vs. prevalência (transversal)</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — RR (coorte/ECR) vs. OR (caso-controle)</li>
+    <li><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Testes diagnósticos</a> — métricas de acurácia em detalhe</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — onde a pergunta determina o desenho ótimo</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Grimes DA, Schulz KF. An overview of clinical research: the lay of the land. <em>Lancet</em> 2002;359(9300):57–61.</li>
+      <li>Rothman KJ, Greenland S, Lash TL. <em>Modern Epidemiology</em>. 4ª ed. Philadelphia: Lippincott Williams & Wilkins; 2021.</li>
+      <li>Higgins JPT, Thomas J, Chandler J, et al, eds. <em>Cochrane Handbook for Systematic Reviews of Interventions</em> version 6.4. Cochrane; 2023. Disponível em: <a href="https://training.cochrane.org/handbook" rel="noopener noreferrer" target="_blank">training.cochrane.org/handbook</a>.</li>
+      <li>Whiting PF, Rutjes AW, Westwood ME, et al. QUADAS-2: a revised tool for the quality assessment of diagnostic accuracy studies. <em>Ann Intern Med</em> 2011;155(8):529–36.</li>
+      <li>Sterne JA, Hernán MA, Reeves BC, et al. ROBINS-I: a tool for assessing risk of bias in non-randomised studies of interventions. <em>BMJ</em> 2016;355:i4919.</li>
+    </ol>
+  </section>
+</DocLayout>

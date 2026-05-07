@@ -1,14 +1,248 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="SMART"
-  description="Critérios SMART aplicados à formulação de objetivos clínicos."
+<DocLayout
+  title="SMART — refinando a qualidade da pergunta clínica"
+  description="Os cinco critérios que transformam dúvidas vagas em perguntas investigáveis. Específica, mensurável, respondível, relevante, oportuna."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">SMART</h1>
-  <p class="text-lg text-text-secondary mb-6">Critérios SMART aplicados à formulação de objetivos clínicos.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>SMART — refinando a qualidade da pergunta clínica</h1>
+
+  <p>
+    SMART é um filtro mental para verificar se uma pergunta clínica vale a pena ser perseguida. Cinco critérios — específica, mensurável, respondível, relevante, oportuna — separam a dúvida que pode ser respondida por evidência da inquietação vaga que volta para a próxima consulta sem solução.
+  </p>
+
+  <p>
+    Originalmente proposto fora da clínica, foi adaptado para refinar perguntas que entram no <a href={withBase('/conceitos/pico/', base)}>PICO</a> e iniciam o ciclo dos 5As. Sem SMART, o PICO bem montado pode ainda assim levar a busca para lugar nenhum.
+  </p>
+
+  <h2 id="de-onde-veio">De onde veio</h2>
+
+  <p>
+    O termo foi apresentado em 1981 por <strong>George T. Doran</strong>, em artigo publicado na <em>Management Review</em>, intitulado <em>"There's a S.M.A.R.T. way to write management goals and objectives"</em><sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Doran trabalhava com planejamento estratégico em empresas e buscava método simples para definir metas claras, realistas e mensuráveis.
+  </p>
+
+  <p>
+    O objetivo original era substituir metas genéricas — <em>"melhorar a performance da equipe"</em>, <em>"aumentar os lucros"</em> — por declarações claras: <em>"aumentar a receita em 10% até dezembro, por meio da expansão da carteira de clientes"</em>.
+  </p>
+
+  <p>
+    Desde então, o modelo migrou para inúmeras áreas: gestão pública e privada, educação, saúde pública, projetos sociais, psicologia organizacional. Em MBE, é usado para refinar perguntas clínicas — função para a qual se mostrou particularmente útil.
+  </p>
+
+  <h2 id="cinco-criterios">Os cinco critérios</h2>
+
+  <h3 id="specific">S — Specific (Específica)</h3>
+
+  <p>
+    A pergunta precisa ser <strong>clara e delimitada</strong>. Termos genéricos como "melhor", "mais eficaz" ou "mais seguro" devem ser substituídos por formulações concretas.
+  </p>
+
+  <p><strong>Pergunta vaga:</strong> "Qual o melhor tratamento para depressão?"</p>
+
+  <p>
+    <strong>Pergunta específica:</strong> "Em adultos com depressão moderada, a psicoterapia cognitivo-comportamental é mais eficaz que ISRS isolado para reduzir a pontuação na escala PHQ-9 em 12 semanas?"
+  </p>
+
+  <p>
+    A especificidade delimita população, intervenção, comparação e desfecho. <strong>Quanto mais específico, mais focada será a busca</strong> — e mais relevantes os resultados.
+  </p>
+
+  <h3 id="measurable">M — Measurable (Mensurável)</h3>
+
+  <p>
+    A pergunta deve permitir <strong>respostas baseadas em dados observáveis e quantificáveis</strong>. Os desfechos considerados devem ser mensuráveis para que se possa avaliar se houve benefício clínico, efeito adverso ou outro resultado.
+  </p>
+
+  <p>
+    Evite termos vagos como "melhora significativa" ou "boa evolução". Prefira métricas concretas: taxa de mortalidade em 1 ano, redução percentual de eventos cardiovasculares, dias até retorno ao trabalho, pontuação em escala validada.
+  </p>
+
+  <h3 id="answerable">A — Answerable (Respondível, ou Achievable/Alcançável)</h3>
+
+  <p>
+    A pergunta deve ser <strong>passível de ser respondida com base nas melhores evidências disponíveis</strong>, oriundas de estudos metodologicamente válidos.
+  </p>
+
+  <p>Isso exclui:</p>
+
+  <ul>
+    <li>Perguntas puramente especulativas ("E se um dia descobrirem cura para...")</li>
+    <li>Perguntas filosóficas ou éticas ("É certo prescrever medicamento experimental?")</li>
+    <li>Perguntas dependentes de informação que ainda não existe</li>
+  </ul>
+
+  <p>
+    Perguntas que envolvem juízo moral, preferências pessoais ou dilemas éticos frequentemente exigem outro tipo de abordagem — discussões interdisciplinares ou bioéticas — e não cabem exatamente no escopo da MBE.
+  </p>
+
+  <h3 id="relevant">R — Relevant (Relevante)</h3>
+
+  <p>
+    A pergunta precisa ter <strong>relação direta com a decisão clínica em jogo</strong>. Deve ser útil para o paciente real, no contexto real da prática. Evite perguntas teóricas, acadêmicas ou excessivamente distantes da prática.
+  </p>
+
+  <p>
+    Pergunta-teste: <em>"Se eu encontrar a resposta, isso muda alguma coisa para esse paciente?"</em> Se a resposta é "não", a pergunta talvez seja interessante mas não é relevante para o momento.
+  </p>
+
+  <h3 id="timely">T — Timely (Oportuna)</h3>
+
+  <p>Dois sentidos coexistem aqui:</p>
+
+  <ul>
+    <li><strong>Pertinente ao momento:</strong> a pergunta cabe no contexto atual de cuidado. Uma pergunta sobre evidência de 2010 pode ser irrelevante se o cenário clínico mudou.</li>
+    <li><strong>Com prazo definido:</strong> estabelecer horizonte para responder. Sem isso, a busca fica em loop indefinido.</li>
+  </ul>
+
+  <p>
+    Uma pergunta cientificamente interessante pode ser inócua se não fizer diferença no atendimento atual. Um projeto de estudo pode ter propósito relevante, mas sem aprazamento, há grande chance de não ser concluído.
+  </p>
+
+  <h2 id="aplicando-pratica">Aplicando SMART na prática</h2>
+
+  <p>
+    Considere a inquietação típica do consultório: <em>"Será que essa idosa precisa mesmo da estatina?"</em>
+  </p>
+
+  <p><strong>Versão SMART:</strong></p>
+
+  <blockquote class="featured-quote">
+    <p>Em mulher de 78 anos, sem doença cardiovascular prévia, com colesterol total 240 mg/dL, o início de estatina em prevenção primária reduz a incidência de eventos cardiovasculares maiores em 5 anos, comparado ao não uso, sem aumentar significativamente a incidência de mialgia ou hepatotoxicidade?</p>
+  </blockquote>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Critério</th>
+          <th scope="col">Atende?</th>
+          <th scope="col">Por quê</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S — Específica</strong></td>
+          <td>Sim</td>
+          <td>População delimitada (mulher, 78 anos, sem DCV prévia, colesterol 240); intervenção clara (estatina); comparação clara (não uso)</td>
+        </tr>
+        <tr>
+          <td><strong>M — Mensurável</strong></td>
+          <td>Sim</td>
+          <td>Desfechos quantificáveis (eventos cardiovasculares maiores, mialgia, hepatotoxicidade)</td>
+        </tr>
+        <tr>
+          <td><strong>A — Respondível</strong></td>
+          <td>Sim</td>
+          <td>Há ensaios clínicos e meta-análises sobre estatina em prevenção primária no idoso</td>
+        </tr>
+        <tr>
+          <td><strong>R — Relevante</strong></td>
+          <td>Sim</td>
+          <td>Decisão muda imediatamente a conduta clínica</td>
+        </tr>
+        <tr>
+          <td><strong>T — Oportuna</strong></td>
+          <td>Sim</td>
+          <td>Pertinente ao momento da consulta; busca pode ser feita em horas</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A inquietação inicial — sentimento — virou pergunta investigável. <strong>Esse é o trabalho do SMART.</strong>
+  </p>
+
+  <h2 id="exemplos-contrastantes">Exemplos contrastantes</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Pergunta vaga</th>
+          <th scope="col">Versão SMART</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Será que tem algo melhor para fadiga?"</td>
+          <td>"Em adultos com fadiga inespecífica há 2 semanas, sem sinais de alarme, o hemograma de rotina identifica causa tratável que justifique alterar conduta?"</td>
+        </tr>
+        <tr>
+          <td>"Como orientar melhor sobre dieta?"</td>
+          <td>"Em adultos com hipertensão e sobrepeso na atenção primária, qual estratégia de aconselhamento alimentar (motivacional vs. educativa) tem maior adesão em 3 meses?"</td>
+        </tr>
+        <tr>
+          <td>"Aspirina ajuda no idoso?"</td>
+          <td>"Em adultos ≥ 70 anos sem doença cardiovascular prévia, aspirina 100mg/dia previne eventos cardiovasculares maiores em 5 anos, sem aumentar sangramento maior?"</td>
+        </tr>
+        <tr>
+          <td>"Esse antibiótico é melhor?"</td>
+          <td>"Em crianças de 2-12 anos com pneumonia adquirida na comunidade, amoxicilina 5 dias é não-inferior a 10 dias para falha terapêutica em 14 dias?"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Em todos os casos, a pergunta vaga é honesta — descreve o sentimento real do profissional. A versão SMART é o que torna esse sentimento <strong>investigável</strong>.
+  </p>
+
+  <h2 id="smart-vs-pico">SMART e PICO — complementares, não redundantes</h2>
+
+  <p>
+    <a href={withBase('/conceitos/pico/', base)}>PICO</a> e SMART têm funções diferentes:
+  </p>
+
+  <ul>
+    <li><strong>PICO estrutura</strong> os componentes da pergunta (paciente, intervenção, comparação, outcome)</li>
+    <li><strong>SMART verifica</strong> a qualidade dessa estrutura</li>
+  </ul>
+
+  <p>
+    Uma pergunta pode estar bem estruturada em PICO mas falhar em SMART (por exemplo, com desfecho não mensurável). Inversamente, uma pergunta pode ter bom espírito SMART mas não estar organizada em PICO — daí ser difícil traduzir para busca.
+  </p>
+
+  <p>
+    Na prática, <strong>PICO vem primeiro como esqueleto; SMART vem depois como filtro</strong>. Se a pergunta passa pelos dois, está pronta para virar busca em base biomédica.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Confundir "específica" com "longa".</strong> Uma pergunta específica é delimitada, não necessariamente prolixa. Uma frase de 20 palavras pode ser muito mais específica que uma de 60.</li>
+    <li><strong>Aceitar mensurabilidade indireta.</strong> "Melhora clínica" não é mensurável; "redução ≥50% na escala VAS de dor" é. Sempre que possível, escolha desfecho com escala validada ou contagem objetiva.</li>
+    <li><strong>Esquecer o critério "respondível".</strong> Profissionais formulam perguntas brilhantes que não têm resposta na literatura — desperdício de tempo. Antes de buscar, vale checar se o tema tem corpo de evidência razoável.</li>
+    <li><strong>Confundir "relevante" com "interessante".</strong> Curiosidade fisiopatológica é interessante, mas raramente muda conduta. Em ambiente de tempo escasso, relevante = muda conduta.</li>
+    <li><strong>Pular a oportunidade.</strong> Sem prazo, a busca não acontece. Defina explicitamente: "vou pesquisar isso quinta-feira, das 17h às 18h".</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/perguntar/', base)}>Ask (Perguntar)</a> — primeiro A, onde SMART é aplicado em conjunto com PICO</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — estrutura da pergunta clínica que SMART refina</li>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas</a> — origem da inquietação que SMART transforma em pergunta investigável</li>
+    <li><a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a> — onde a pergunta SMART vira estratégia de busca operacional</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Doran GT. There's a S.M.A.R.T. way to write management goals and objectives. <em>Management Review</em> 1981;70(11):35–6.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 1: Asking answerable clinical questions.
+      </li>
+      <li>
+        Bolderston A. Writing an effective literature review. <em>J Med Imaging Radiat Sci</em> 2008;39(2):86–92.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

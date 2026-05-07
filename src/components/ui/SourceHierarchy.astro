@@ -1,0 +1,183 @@
+---
+/**
+ * Hierarquia de fontes — quatro níveis numerados, do mais sintetizado ao
+ * mais primário. Cada nível é um cartão com ícone, número, título,
+ * descrição e exemplos. Reutilizável: aceita prop `sources` para
+ * customizar os itens.
+ *
+ * Layout: 1 col mobile, 2 cols tablet, 4 cols desktop. Ícones via @lucide/astro.
+ *
+ * Default: hierarquia clínica padrão (sumários → revisões sistemáticas →
+ * estudos primários → buscadores integrados).
+ */
+import { BookOpen, Library, Database, Search } from '@lucide/astro';
+
+type IconComponent = (_props: Record<string, unknown>) => unknown;
+
+export interface Source {
+  num: number;
+  Icon: IconComponent;
+  title: string;
+  description: string;
+  examples: string;
+}
+
+export interface Props {
+  sources?: Source[];
+  /** Aria-label do bloco. Default: "Hierarquia de fontes de evidência". */
+  ariaLabel?: string;
+}
+
+const defaultSources: Source[] = [
+  {
+    num: 1,
+    Icon: BookOpen,
+    title: 'Sumários clínicos baseados em evidências',
+    description: 'Revisões frequentes, organizadas por especialistas',
+    examples: 'UpToDate · BMJ Best Practice · DynaMed',
+  },
+  {
+    num: 2,
+    Icon: Library,
+    title: 'Bases de revisões sistemáticas',
+    description: 'Síntese crítica de múltiplos estudos',
+    examples: 'Cochrane Library · Epistemonikos',
+  },
+  {
+    num: 3,
+    Icon: Database,
+    title: 'Bases de estudos primários',
+    description: 'Amplas, ricas, mas exigem filtros',
+    examples: 'PubMed · Embase · LILACS · SciELO',
+  },
+  {
+    num: 4,
+    Icon: Search,
+    title: 'Buscadores integrados clínico-focados',
+    description: 'Atalho que retorna evidência de múltiplos níveis',
+    examples: 'TripDatabase · PubMed Clinical Queries',
+  },
+];
+
+const { sources = defaultSources, ariaLabel = 'Hierarquia de fontes de evidência' } = Astro.props;
+---
+<section class="not-prose source-hierarchy" aria-label={ariaLabel}>
+  <ol class="sh-grid">
+    {sources.map((s) => (
+      <li class="sh-card">
+        <div class="sh-card-header">
+          <span class="sh-num" aria-hidden="true">{s.num}</span>
+          <span class="sh-icon" aria-hidden="true">
+            <s.Icon size={22} strokeWidth={1.75} />
+          </span>
+        </div>
+        <h3 class="sh-title">{s.title}</h3>
+        <p class="sh-description">{s.description}</p>
+        <p class="sh-examples">{s.examples}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .source-hierarchy {
+    margin: 2rem 0 2.5rem;
+  }
+
+  .sh-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  @media (min-width: 640px) {
+    .sh-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .sh-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .sh-card {
+    margin: 0;
+    padding: 1.125rem 1.125rem 1rem;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+
+  .sh-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border-subtle));
+  }
+
+  .sh-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.875rem;
+  }
+
+  .sh-num {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .sh-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-soft-bg);
+    color: var(--color-accent-soft-text);
+  }
+
+  .sh-title {
+    margin: 0 0 0.375rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--color-text-primary);
+  }
+
+  .sh-description {
+    margin: 0 0 0.625rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    flex: 1;
+  }
+
+  .sh-examples {
+    margin: 0;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--color-border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+</style>

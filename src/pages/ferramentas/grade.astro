@@ -1,14 +1,286 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="GRADE"
-  description="Grading of Recommendations Assessment, Development and Evaluation: certeza da evidência e força de recomendação."
+<DocLayout
+  title="GRADE — qualidade da evidência e força da recomendação"
+  description="O sistema que separa duas coisas que muita gente confunde — quão confiáveis são os estudos, e o quanto devemos agir com base neles."
   section="ferramentas"
 >
-  <h1 class="text-4xl font-medium mb-3">GRADE</h1>
-  <p class="text-lg text-text-secondary mb-6">Grading of Recommendations Assessment, Development and Evaluation: certeza da evidência e força de recomendação.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>GRADE — qualidade da evidência e força da recomendação</h1>
+
+  <p>
+    GRADE — <em>Grading of Recommendations Assessment, Development and Evaluation</em> — é o sistema mais usado no mundo para <strong>classificar a qualidade da evidência</strong> e <strong>graduar a força da recomendação</strong> em diretrizes clínicas. É adotado pela Organização Mundial da Saúde, pela Cochrane Collaboration, pelo NICE britânico, pelo USPSTF americano, pela Canadian Task Force, e por dezenas de sociedades médicas.
+  </p>
+
+  <p>
+    Sua contribuição mais importante é conceitual: <strong>separar duas coisas que muita gente confunde</strong> — <em>quão confiáveis são os estudos</em> (qualidade da evidência) e <em>o quanto devemos agir com base neles</em> (força da recomendação). São coisas diferentes, e perceber isso transforma a maneira como se lê uma diretriz.
+  </p>
+
+  <h2 id="quando-usar">Quando usar</h2>
+
+  <p>Use GRADE quando estiver:</p>
+
+  <ul>
+    <li>Lendo uma diretriz clínica e quiser entender por que uma recomendação é "forte" e outra "condicional"</li>
+    <li>Lendo o resumo de uma revisão sistemática Cochrane (que reporta avaliação GRADE)</li>
+    <li>Tomando uma decisão clínica em que diferentes fontes parecem dizer coisas diferentes</li>
+    <li>Defendendo (ou questionando) uma conduta junto a colegas ou gestores</li>
+  </ul>
+
+  <p>
+    GRADE não é ferramenta para avaliar um único artigo — é ferramenta para avaliar <strong>um corpo de evidência</strong> sobre uma pergunta. Para um artigo isolado, use CASP ou RoB.
+  </p>
+
+  <h2 id="de-onde-veio">De onde veio</h2>
+
+  <p>
+    O GRADE Working Group formou-se em 2000, reunindo metodologistas de várias instituições insatisfeitos com a multiplicidade de sistemas de classificação de evidência então em uso. Cada sociedade tinha o seu próprio (níveis A/B/C, I/II/III, etc.), com critérios incompatíveis e sem distinção clara entre qualidade e força.
+  </p>
+
+  <p>
+    A primeira publicação canônica foi em 2004, no <em>BMJ</em><sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Em 2008, uma série no <em>BMJ</em> consolidou o sistema<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. Hoje, o handbook completo está mantido online e é referência operacional do método<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>.
+  </p>
+
+  <h2 id="duas-dimensoes">Como funciona — duas dimensões</h2>
+
+  <p>GRADE organiza o trabalho em duas dimensões separadas, cada uma com sua escala.</p>
+
+  <h3 id="qualidade-evidencia">Dimensão 1: qualidade da evidência</h3>
+
+  <p>
+    Quão confiantes podemos estar em que o efeito estimado pelos estudos reflete o efeito verdadeiro? Quatro níveis:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Nível</th>
+          <th scope="col">O que significa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alta</strong> <span class="grade-symbol" aria-label="quatro de quatro círculos preenchidos">⊕⊕⊕⊕</span></td>
+          <td>Confiança muito alta. Estudos futuros provavelmente não mudarão a estimativa.</td>
+        </tr>
+        <tr>
+          <td><strong>Moderada</strong> <span class="grade-symbol" aria-label="três de quatro círculos preenchidos">⊕⊕⊕⊖</span></td>
+          <td>Confiança razoável. Estudos futuros podem mudar a estimativa.</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong> <span class="grade-symbol" aria-label="dois de quatro círculos preenchidos">⊕⊕⊖⊖</span></td>
+          <td>Confiança limitada. Estudos futuros provavelmente mudarão a estimativa.</td>
+        </tr>
+        <tr>
+          <td><strong>Muito baixa</strong> <span class="grade-symbol" aria-label="um de quatro círculos preenchidos">⊕⊖⊖⊖</span></td>
+          <td>Confiança muito limitada. A estimativa é incerta.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    ECRs começam em <strong>alta</strong>; estudos observacionais começam em <strong>baixa</strong>. Mas o nível inicial pode subir ou descer:
+  </p>
+
+  <p><strong>Cinco fatores que rebaixam a evidência:</strong></p>
+
+  <ol>
+    <li><strong>Risco de viés</strong> nos estudos incluídos</li>
+    <li><strong>Inconsistência</strong> entre estudos (heterogeneidade não explicada)</li>
+    <li><strong>Evidência indireta</strong> (a população, intervenção ou desfecho dos estudos difere da pergunta de interesse)</li>
+    <li><strong>Imprecisão</strong> (intervalos de confiança amplos, poucos eventos)</li>
+    <li><strong>Viés de publicação</strong> (suspeita de que estudos negativos não foram publicados)</li>
+  </ol>
+
+  <p><strong>Três fatores que elevam evidência observacional:</strong></p>
+
+  <ol>
+    <li><strong>Magnitude grande do efeito</strong> (RR &gt; 2 ou &lt; 0,5)</li>
+    <li><strong>Gradiente dose-resposta</strong> plausível</li>
+    <li><strong>Confundidores residuais que iriam atenuar</strong> (existência de confundidores que, se controlados, tornariam o efeito ainda maior)</li>
+  </ol>
+
+  <h3 id="forca-recomendacao">Dimensão 2: força da recomendação</h3>
+
+  <p>Dado o que sabemos, devemos ou não fazer isso? Apenas dois níveis:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Força</th>
+          <th scope="col">O que significa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Forte</strong></td>
+          <td>A maior parte dos pacientes deve receber a conduta. Pouco espaço para variação.</td>
+        </tr>
+        <tr>
+          <td><strong>Condicional</strong> <em>(ou fraca)</em></td>
+          <td>A conduta deve ser considerada, mas com discussão caso a caso. Espaço amplo para preferência do paciente.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Quatro fatores determinam a força da recomendação:</p>
+
+  <ol>
+    <li><strong>Qualidade da evidência</strong> (a dimensão acima)</li>
+    <li><strong>Balanço entre benefícios e danos</strong></li>
+    <li><strong>Valores e preferências dos pacientes</strong></li>
+    <li><strong>Custos e uso de recursos</strong></li>
+  </ol>
+
+  <h2 id="combinacao">A combinação que muitos não percebem</h2>
+
+  <p>
+    A grande virada conceitual do GRADE é que <strong>qualidade alta nem sempre vira recomendação forte</strong>, e <strong>qualidade baixa às vezes vira recomendação forte</strong>. Quatro combinações possíveis:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Qualidade</th>
+          <th scope="col">Força</th>
+          <th scope="col">Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alta</strong></td>
+          <td><strong>Forte</strong></td>
+          <td>Antibiótico para meningite bacteriana confirmada</td>
+        </tr>
+        <tr>
+          <td><strong>Alta</strong></td>
+          <td><strong>Condicional</strong></td>
+          <td>Aspirina em prevenção primária no idoso (benefício pequeno, dano comparável)</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong></td>
+          <td><strong>Forte</strong></td>
+          <td>Paraquedas em queda livre (sem ECR, mas o risco de não recomendar é evidente)</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong></td>
+          <td><strong>Condicional</strong></td>
+          <td>Maioria das condutas em situações pouco estudadas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Quando você vê uma recomendação de qualidade alta com força condicional — caso da aspirina em prevenção primária —, isso significa: <em>"a evidência é robusta, mas o benefício é tão pequeno que cada paciente deve decidir conforme seus valores"</em>. É uma informação preciosa. Sem GRADE, ela ficaria escondida em "evidência nível A" sem mais explicação.
+  </p>
+
+  <h2 id="summary-of-findings">Tabela Summary of Findings</h2>
+
+  <p>
+    Diretrizes baseadas em GRADE apresentam os achados numa <strong>tabela Summary of Findings (SoF)</strong>, com colunas padronizadas:
+  </p>
+
+  <ul>
+    <li><strong>Desfecho</strong> (mortalidade, eventos cardiovasculares, etc.)</li>
+    <li><strong>Risco assumido com a conduta padrão</strong></li>
+    <li><strong>Risco assumido com a intervenção</strong></li>
+    <li><strong>Diferença absoluta</strong> (com IC 95%)</li>
+    <li><strong>Diferença relativa</strong> (RR ou OR)</li>
+    <li><strong>Número de participantes / estudos</strong></li>
+    <li><strong>Qualidade da evidência (GRADE)</strong></li>
+    <li><strong>Comentários</strong></li>
+  </ul>
+
+  <p>
+    A tabela é a forma mais densa e clara de apresentar evidência para decisão clínica. Aprender a lê-la rapidamente é uma das habilidades mais úteis da MBE moderna.
+  </p>
+
+  <h2 id="exemplo-aplicado">Exemplo aplicado</h2>
+
+  <p>
+    Considere um trecho da diretriz da Organização Mundial da Saúde sobre tratamento da malária não complicada por <em>Plasmodium falciparum</em><sup><a id="fnref-4" href="#fn-4" class="footnote-ref">4</a></sup>. A recomendação central é o uso de <strong>terapia combinada baseada em artemisinina (ACT)</strong> como tratamento de primeira linha.
+  </p>
+
+  <p>Olhando a tabela SoF da diretriz:</p>
+
+  <ul>
+    <li><strong>Desfecho:</strong> falha terapêutica em 28 dias</li>
+    <li><strong>Risco com cloroquina:</strong> muito alto (em regiões com resistência)</li>
+    <li><strong>Risco com ACT:</strong> muito baixo (~2–5%, dependendo da combinação)</li>
+    <li><strong>Diferença absoluta:</strong> redução muito grande</li>
+    <li><strong>Qualidade da evidência:</strong> <span class="grade-symbol" aria-label="quatro de quatro círculos preenchidos">⊕⊕⊕⊕</span> alta — múltiplos ECRs de boa qualidade, alta consistência, magnitude grande do efeito</li>
+    <li><strong>Força da recomendação:</strong> <strong>forte</strong> — qualidade alta + balanço fortemente favorável + custos comparáveis em programas de saúde pública</li>
+  </ul>
+
+  <p>
+    Resultado: profissionais e gestores podem implementar a recomendação com alto grau de confiança. Quase não há espaço para variação clínica.
+  </p>
+
+  <p>
+    Compare com uma recomendação <strong>condicional</strong> sobre o uso de aspirina em prevenção primária no idoso: qualidade alta, mas benefício e dano absolutos comparáveis — daí a força só condicional, com discussão individualizada.
+  </p>
+
+  <h2 id="limitacoes">Limitações conhecidas</h2>
+
+  <ol>
+    <li>
+      <strong>GRADE não é automático.</strong> Os fatores que rebaixam ou elevam evidência exigem julgamento. Dois grupos GRADE podem chegar a níveis ligeiramente diferentes para o mesmo corpo de evidência.
+    </li>
+    <li>
+      <strong>A passagem da qualidade para a força envolve valores.</strong> O passo "balanço benefícios-danos" depende de pesos atribuídos aos desfechos, e esses pesos refletem prioridades. Diretrizes diferentes podem chegar a forças diferentes para a mesma evidência por isso.
+    </li>
+    <li>
+      <strong>Tabelas SoF dependem de boa apresentação.</strong> Algumas diretrizes apresentam GRADE de forma confusa ou incompleta. Saber procurar pela tabela SoF é um diferencial.
+    </li>
+  </ol>
+
+  <h2 id="onde-encontrar">Onde encontrar</h2>
+
+  <ul>
+    <li><strong>GRADE Working Group:</strong> <a href="https://gradeworkinggroup.org" rel="noopener noreferrer" target="_blank">gradeworkinggroup.org</a></li>
+    <li><strong>Handbook completo (online):</strong> <a href="https://gdt.gradepro.org/app/handbook/handbook.html" rel="noopener noreferrer" target="_blank">gdt.gradepro.org/app/handbook</a></li>
+    <li><strong>GRADEpro</strong> — software gratuito para criar tabelas SoF: <a href="https://gradepro.org" rel="noopener noreferrer" target="_blank">gradepro.org</a></li>
+    <li><strong>Capítulos didáticos</strong> do GRADE foram publicados em série no <em>BMJ</em> (2008) e no <em>J Clin Epidemiol</em> (a partir de 2011) — todos com texto completo livre</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde GRADE se encaixa no ciclo dos 5As</li>
+    <li><a href={withBase('/ferramentas/', base)}>Outras ferramentas de avaliação crítica</a> — visão geral comparativa</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — onde GRADE é tipicamente aplicado</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses e fontes de erro</a> — base conceitual do "risco de viés" usado pelo GRADE</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Atkins D, Best D, Briss PA, et al. (GRADE Working Group). Grading quality of evidence and strength of recommendations. <em>BMJ</em> 2004;328(7454):1490. Disponível em: <a href="https://www.bmj.com/content/328/7454/1490" rel="noopener noreferrer" target="_blank">bmj.com/content/328/7454/1490</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Guyatt GH, Oxman AD, Vist GE, et al. GRADE: an emerging consensus on rating quality of evidence and strength of recommendations. <em>BMJ</em> 2008;336(7650):924–6.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Schünemann H, Brożek J, Guyatt G, Oxman A, eds. <em>GRADE Handbook for Grading Quality of Evidence and Strength of Recommendations</em>. The GRADE Working Group; 2013. Disponível em: <a href="https://gdt.gradepro.org/app/handbook/handbook.html" rel="noopener noreferrer" target="_blank">gdt.gradepro.org/app/handbook</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li id="fn-4">
+        World Health Organization. <em>Guidelines for the Treatment of Malaria</em>. 3rd ed. Geneva: WHO; 2015 (atualizações posteriores). Disponível em: <a href="https://www.who.int/publications/i/item/guidelines-for-the-treatment-of-malaria" rel="noopener noreferrer" target="_blank">who.int</a>.
+        <a href="#fnref-4" class="footnote-back" aria-label="Voltar ao texto da nota 4">↩</a>
+      </li>
+    </ol>
+  </section>
+</DocLayout>
+

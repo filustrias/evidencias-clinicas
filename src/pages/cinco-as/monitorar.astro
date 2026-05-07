@@ -1,14 +1,178 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Monitorar (Assess)"
-  description="Avaliar o impacto da decisão e fechar o ciclo de aprendizado clínico."
+<DocLayout
+  title="Assess (Monitorar) — o quinto A"
+  description="O fechamento do ciclo dos 5As. Avaliar o resultado clínico, mas também o processo que levou à decisão."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Monitorar (Assess)</h1>
-  <p class="text-lg text-text-secondary mb-6">Avaliar o impacto da decisão e fechar o ciclo de aprendizado clínico.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Assess (Monitorar) — o quinto A</h1>
+
+  <p>
+    A decisão foi tomada. A conduta foi iniciada. O que vem agora? Para muitos, o ciclo termina aqui — atendeu o paciente, encaminhou para a próxima consulta e seguiu adiante. Mas o ciclo dos 5As não fecha sem o quinto A: <strong>avaliar o que aconteceu, e por quê</strong>.
+  </p>
+
+  <p>
+    O quinto A — Assess, monitorar — é a etapa <strong>clínica, reflexiva e pedagógica</strong> ao mesmo tempo. Avaliar a decisão tomada, tanto em seus efeitos sobre o paciente quanto na forma como foi construída, é o que transforma cada caso em fonte de aprendizado para o próximo.
+  </p>
+
+  <CycleDiagram activeStep="assess" />
+
+  <h2 id="voltando-ao-consultorio">Voltando ao consultório</h2>
+
+  <p>
+    Três meses depois daquela conversa, Sr. António volta para acompanhamento de rotina. Dra. Amélia, ao revisar o prontuário, lembra da decisão difícil sobre a aspirina — e da conversa que mostrou que o balanço benefício-dano era desfavorável. Não iniciaram a aspirina. O que aconteceu desde então?
+  </p>
+
+  <p>
+    A pressão arterial está bem controlada. A glicemia também. Sem eventos cardiovasculares. Sem sangramentos. O paciente diz estar tranquilo com a decisão e satisfeito com a conversa que tiveram. A esposa havia falecido de AVC, a decisão de não iniciar a aspirina foi pesada para ele inicialmente — mas, ao entender os números reais, sentiu-se aliviado.
+  </p>
+
+  <p>
+    Dra. Amélia toma alguns minutos para refletir: a decisão foi acertada? O processo que a levou até ela foi sólido? O que aprendeu desse caso que pode usar no próximo paciente parecido?
+  </p>
+
+  <p>Esse é o quinto A em ação.</p>
+
+  <h2 id="dois-eixos">Avaliar não é só ver se o paciente melhorou</h2>
+
+  <p>
+    Ao contrário do que pode parecer, avaliar não é apenas verificar se o desfecho clínico foi bom. A avaliação em MBE envolve <strong>dois eixos paralelos</strong>:
+  </p>
+
+  <ol>
+    <li><strong>O resultado clínico</strong> — o paciente teve o desfecho esperado? houve eventos adversos? a conduta funcionou no contexto real?</li>
+    <li><strong>O processo de decisão</strong> — a pergunta foi bem formulada? a busca foi adequada? a evidência foi bem avaliada? a aplicação foi sensível ao contexto e às preferências?</li>
+  </ol>
+
+  <p>
+    Os dois eixos precisam ser examinados juntos. Bom resultado com mau processo pode ter sido sorte. Mau resultado com bom processo pode revelar limites genuínos da evidência ou do contexto, não falha do profissional.
+  </p>
+
+  <h2 id="cinco-perguntas">Cinco perguntas que orientam o quinto A</h2>
+
+  <p>
+    A reflexão estruturada do Assess responde a cinco perguntas-chave que percorrem todo o ciclo dos 5As anterior:
+  </p>
+
+  <h3 id="pergunta-1">1. A pergunta inicial foi bem formulada?</h3>
+
+  <p>
+    Uma dúvida mal estruturada pode ter comprometido toda a cadeia de decisões. Volte ao <a href={withBase('/conceitos/pico/', base)}>PICO</a> e <a href={withBase('/conceitos/smart/', base)}>SMART</a> que você usou: cobriam o paciente real? a intervenção realmente comparada? o desfecho que importava? Se não — a pergunta precisa ser refeita para o próximo caso similar.
+  </p>
+
+  <h3 id="pergunta-2">2. A busca foi eficiente?</h3>
+
+  <p>
+    As fontes consultadas foram adequadas? A evidência relevante foi localizada de forma tempestiva? Há fontes que você ainda não usa que poderiam ter sido melhores? Há barreiras de acesso que precisam ser endereçadas no seu serviço (cadastro no Research4Life ainda pendente, por exemplo)?
+  </p>
+
+  <h3 id="pergunta-3">3. A evidência foi interpretada corretamente?</h3>
+
+  <p>
+    Houve leitura crítica dos métodos e dos resultados? Foram consideradas as limitações dos estudos? As <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a> foram entendidas em termos absolutos, não só relativos? Você confiou em desfechos substitutos quando deveria ter buscado desfechos clínicos?
+  </p>
+
+  <h3 id="pergunta-4">4. A aplicação foi adequada ao contexto e ao paciente?</h3>
+
+  <p>
+    A decisão respeitou as preferências do paciente, as possibilidades do serviço e as especificidades do caso? Houve uso adequado de <a href={withBase('/conceitos/decisao-compartilhada/', base)}>decisão compartilhada</a>? O contexto local — recursos, custos, logística — foi considerado?
+  </p>
+
+  <h3 id="pergunta-5">5. O que aprendi com este caso?</h3>
+
+  <p>
+    A pergunta mais negligenciada e a mais importante. O que esse caso ensina que pode ser transferido a outros casos parecidos? Que ajuste na sua prática esse caso pede? Que dúvida nova ele gerou?
+  </p>
+
+  <h2 id="praticas">Monitorar, aprender e evoluir</h2>
+
+  <p>
+    O quinto A é uma oportunidade de <strong>consolidar o raciocínio clínico com base na experiência real</strong>. Algumas práticas que estruturam o Assess no dia a dia:
+  </p>
+
+  <ul>
+    <li><strong>Revisão periódica de prontuários</strong> — uma manhã por mês, dedicada a revisar pacientes complexos do trimestre anterior. O que evoluiu? O que não evoluiu?</li>
+    <li><strong>Discussão de casos em equipe</strong> — sessões semanais ou quinzenais com colegas para discutir casos difíceis. O olhar de outro profissional captura o que o seu não viu.</li>
+    <li><strong>Reflexão estruturada sobre decisões difíceis</strong> — registrar, depois de uma decisão complexa, o raciocínio que levou a ela. Em três meses, reler o registro com olhos novos.</li>
+    <li><strong>Feedback estruturado entre pares</strong> — não apenas elogio ou crítica genérica, mas observação dirigida a pontos específicos do raciocínio.</li>
+    <li><strong>Auditoria de desfechos</strong> — em equipes de atenção primária com sistemas de registro robusto, monitorar indicadores agregados (taxas de controle pressórico, glicêmico, vacinação) revela tendências que casos individuais escondem.</li>
+  </ul>
+
+  <h2 id="cuidado-equipe">O Assess como cuidado da equipe</h2>
+
+  <p>
+    Avaliar também é uma forma de cuidar da equipe. Abrir espaço para feedback, reconhecer acertos, corrigir rotas e compartilhar responsabilidades fortalece a cultura de <strong>segurança e aprendizado coletivo</strong>.
+  </p>
+
+  <p>
+    Em equipes onde Assess é estruturado, os erros são tratados como dados — não como falhas pessoais. Isso muda completamente como profissionais novos se desenvolvem, como casos difíceis são debatidos, e como a qualidade da assistência cresce ao longo do tempo.
+  </p>
+
+  <p>
+    Em equipes onde Assess está ausente, cada caso fica isolado. O profissional aprende sozinho — ou não aprende. O resultado é prática estagnada e cansaço crescente.
+  </p>
+
+  <h2 id="puns-dens">PUNs e DENs — duas naturezas de aprendizado</h2>
+
+  <p>
+    O Assess gera dois tipos de necessidade educacional, que vale a pena nomear separadamente:
+  </p>
+
+  <ul>
+    <li><strong>PUNs</strong> <em>(Patient's Unmet Needs)</em> — necessidades do paciente que não foram plenamente atendidas. Algo que o paciente precisava e não recebeu, ou recebeu de forma insuficiente.</li>
+    <li><strong>DENs</strong> <em>(Doctor's Educational Needs)</em> — necessidades educacionais do profissional. Lacunas de conhecimento que o caso revelou.</li>
+  </ul>
+
+  <p>
+    Os dois tipos não são intercambiáveis. PUN aponta para mudança no serviço, na rotina, no atendimento. DEN aponta para estudo, formação continuada, busca por novo conhecimento. Casos clínicos bem discutidos geram <strong>os dois</strong>, em equilíbrio.
+  </p>
+
+  <h2 id="atitude-profissional">A MBE como atitude profissional</h2>
+
+  <p>
+    Depois desse longo caminho pelos cinco As, vale uma reflexão final. <strong>A MBE não é apenas um método para encontrar o melhor estudo científico sobre um determinado assunto clínico.</strong> É uma atitude profissional — marcada pelo compromisso com a qualidade técnica das informações, com a honestidade na sua comunicação, e com o cuidado contínuo na aplicação ao paciente real.
+  </p>
+
+  <p>
+    O ciclo dos 5As não termina aqui. Cada Assess gera novas perguntas, novas dúvidas, novos casos. O quinto A retorna ao primeiro — e o ciclo recomeça, agora um pouco mais experiente, um pouco mais crítico, um pouco mais sensível ao contexto.
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/perguntar/', base)}>
+    <span>Voltar ao primeiro A: Ask (Perguntar)</span>
+  </a>
+
+  <h2 id="erros-comuns">Erros comuns no quinto A</h2>
+
+  <ul>
+    <li><strong>Confundir avaliar com simplesmente verificar resultado.</strong> Resultado clínico é parte; processo de decisão é outra parte igualmente importante.</li>
+    <li><strong>Reflexão sem registro.</strong> Pensamentos que não viram texto se perdem. Anote, mesmo que brevemente.</li>
+    <li><strong>Buscar culpados em vez de aprendizado.</strong> Quando algo não vai bem, a pergunta produtiva é "o que aprendemos?" — não "de quem foi a culpa?".</li>
+    <li><strong>Tratar Assess como tarefa solitária.</strong> Discussão em equipe enriquece muito mais que reflexão isolada.</li>
+    <li><strong>Pular o Assess por falta de tempo.</strong> É a etapa mais facilmente sacrificada — e a que mais distingue prática estagnada de prática que evolui.</li>
+    <li><strong>Não fechar o ciclo.</strong> Perceber que a pergunta poderia ter sido melhor formulada e não voltar para refazê-la em próximo caso similar é desperdício do aprendizado gerado.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/', base)}>Visão geral dos 5As</a> — o ciclo completo, do qual o Assess é o fechamento</li>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas</a> — onde o ciclo recomeça, com perguntas geradas pelo Assess</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — base cognitiva do que o Assess refina ao longo do tempo</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — onde o Assess do quinto A revisita a qualidade da conversa do quarto</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 8: Evaluating ourselves.</li>
+      <li>Eve R. <em>PUNs and DENs: Discovering Learning Needs in General Practice</em>. Oxford: Radcliffe Publishing; 2003.</li>
+      <li>Slawson DC, Shaughnessy AF. Teaching evidence-based medicine: should we be teaching information management instead? <em>Acad Med</em> 2005;80(7):685–9.</li>
+      <li>Schön DA. <em>The Reflective Practitioner: How Professionals Think in Action</em>. New York: Basic Books; 1983.</li>
+    </ol>
+  </section>
+</DocLayout>

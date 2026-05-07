@@ -1,28 +1,163 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
 import ConceptCard from '@components/ui/ConceptCard.astro';
-import { getSectionNav, withBase } from '@/data/navigation';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const items = getSectionNav('conceitos')?.filter((it) => it.href !== '/conceitos/') ?? [];
+const link = (href: string) => withBase(href, base);
+
+const themes = [
+  {
+    title: 'Fundamentos e contexto',
+    items: [
+      { label: 'História e fundamentos', href: '/conceitos/historia-e-fundamentos/', desc: 'Origem da MBE, pioneiros (Sackett, Guyatt, Haynes), tradição.' },
+      { label: 'Dúvidas clínicas', href: '/conceitos/duvidas-clinicas/', desc: 'Porta de entrada da MBE; foreground vs. background; POEMs vs. DOEs; PUNs e DENs.' },
+      { label: 'Raciocínio clínico', href: '/conceitos/raciocinio-clinico/', desc: 'Sistemas 1 e 2 (Kahneman), vieses cognitivos, comunicação clínica (Calgary-Cambridge).' },
+    ],
+  },
+  {
+    title: 'Estruturando a pergunta',
+    items: [
+      { label: 'SMART', href: '/conceitos/smart/', desc: 'Os cinco critérios para verificar a qualidade da pergunta clínica.' },
+      { label: 'PICO', href: '/conceitos/pico/', desc: 'Estrutura da pergunta focada; variações (PICOT, PICOS, PEO, PIPOH, SPIDER).' },
+    ],
+  },
+  {
+    title: 'Buscando evidência',
+    items: [
+      { label: 'Como buscar', href: '/conceitos/como-buscar/', desc: 'Operadores booleanos, vocabulário controlado (MeSH/DeCS), filtros.' },
+      { label: 'Acesso a fontes', href: '/conceitos/acesso-a-fontes/', desc: 'Research4Life, fontes gratuitas e abertas.' },
+    ],
+  },
+  {
+    title: 'Avaliando estudos',
+    items: [
+      { label: 'Pirâmide de evidências', href: '/conceitos/piramide-evidencias/', desc: 'Pirâmide clássica, atualização de Murad, limitações.' },
+      { label: 'Desenhos de estudo', href: '/conceitos/desenhos-de-estudo/', desc: 'Relato de caso, transversal, caso-controle, coorte, ECR, revisão sistemática.' },
+      { label: 'Vieses', href: '/conceitos/vieses/', desc: 'Seleção, aferição, perda, publicação, confundimento e outros.' },
+    ],
+  },
+  {
+    title: 'Quantificando o efeito',
+    items: [
+      { label: 'Medidas de frequência', href: '/conceitos/medidas-de-frequencia/', desc: 'Prevalência e incidência.' },
+      { label: 'Medidas de efeito', href: '/conceitos/medidas-de-efeito/', desc: 'RR, OR, RAR, RRR, NNT, NNH, IC95%.' },
+    ],
+  },
+  {
+    title: 'Aplicando à prática',
+    items: [
+      { label: 'Decisão compartilhada', href: '/conceitos/decisao-compartilhada/', desc: 'SHARE Approach (AHRQ), Calgary-Cambridge.' },
+      { label: 'Diretrizes e forças-tarefa', href: '/conceitos/diretrizes-e-forcas-tarefa/', desc: 'USPSTF, CTFPHC, NICE, Cochrane e outras.' },
+      { label: 'Rastreamento', href: '/conceitos/rastreamento/', desc: 'Wilson-Jungner, UK NSC, sobrediagnóstico.' },
+      { label: 'Testes diagnósticos', href: '/conceitos/testes-diagnosticos/', desc: 'Sensibilidade, especificidade, VPP, VPN, RV+, RV−.' },
+    ],
+  },
+];
+
+const alphabetical = [
+  { label: 'Acesso a fontes', href: '/conceitos/acesso-a-fontes/', tema: 'Buscar' },
+  { label: 'Como buscar', href: '/conceitos/como-buscar/', tema: 'Buscar' },
+  { label: 'Decisão compartilhada', href: '/conceitos/decisao-compartilhada/', tema: 'Aplicar' },
+  { label: 'Desenhos de estudo', href: '/conceitos/desenhos-de-estudo/', tema: 'Avaliar' },
+  { label: 'Diretrizes e forças-tarefa', href: '/conceitos/diretrizes-e-forcas-tarefa/', tema: 'Aplicar' },
+  { label: 'Dúvidas clínicas', href: '/conceitos/duvidas-clinicas/', tema: 'Fundamentos' },
+  { label: 'História e fundamentos', href: '/conceitos/historia-e-fundamentos/', tema: 'Fundamentos' },
+  { label: 'Medidas de efeito', href: '/conceitos/medidas-de-efeito/', tema: 'Quantificar' },
+  { label: 'Medidas de frequência', href: '/conceitos/medidas-de-frequencia/', tema: 'Quantificar' },
+  { label: 'PICO', href: '/conceitos/pico/', tema: 'Perguntar' },
+  { label: 'Pirâmide de evidências', href: '/conceitos/piramide-evidencias/', tema: 'Avaliar' },
+  { label: 'Raciocínio clínico', href: '/conceitos/raciocinio-clinico/', tema: 'Fundamentos' },
+  { label: 'Rastreamento', href: '/conceitos/rastreamento/', tema: 'Aplicar' },
+  { label: 'SMART', href: '/conceitos/smart/', tema: 'Perguntar' },
+  { label: 'Testes diagnósticos', href: '/conceitos/testes-diagnosticos/', tema: 'Aplicar' },
+  { label: 'Vieses', href: '/conceitos/vieses/', tema: 'Avaliar' },
+];
 ---
-<PageLayout
+<DocLayout
   title="Conceitos"
-  description="Pirâmide de evidências, desenhos de estudo, medidas, vieses e fundamentos de MBE."
+  description="Os fundamentos da Medicina Baseada em Evidências em verbetes curtos e interconectados. PICO, SMART, vieses, medidas de efeito, raciocínio clínico, decisão compartilhada."
   section="conceitos"
-  wide
 >
-  <h1 class="text-4xl font-medium mb-3">Conceitos</h1>
-  <p class="text-lg text-text-secondary mb-8 max-w-prose">
-    O vocabulário e os blocos conceituais que sustentam a leitura crítica e a aplicação das evidências em decisões clínicas.
+  <h1>Conceitos</h1>
+
+  <p>
+    Esta seção reúne os <strong>conceitos fundamentais</strong> da MBE, organizados em verbetes
+    curtos, autocontidos e amplamente interconectados. Cada página pode ser lida isoladamente; todas
+    se conectam às demais por hiperlinks.
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {items.map((it) => (
-      <ConceptCard
-        href={withBase(it.href, base)}
-        title={it.label}
-        badge={it.href === '/conceitos/duvidas-clinicas/' ? 'Em destaque' : undefined}
-      />
-    ))}
+
+  <p>
+    Use o índice abaixo, ou navegue pelo agrupamento temático que faz mais sentido para o que você
+    está buscando agora.
+  </p>
+
+  <h2 id="por-onde-comecar">Por onde começar</h2>
+
+  <p>Se está chegando à seção, três caminhos sugeridos:</p>
+
+  <ul>
+    <li>
+      <strong>Para a base do raciocínio:</strong>
+      <a href={link('/conceitos/duvidas-clinicas/')}>Dúvidas clínicas</a> →
+      <a href={link('/conceitos/raciocinio-clinico/')}>Raciocínio clínico</a> →
+      <a href={link('/conceitos/smart/')}>SMART</a> →
+      <a href={link('/conceitos/pico/')}>PICO</a>
+    </li>
+    <li>
+      <strong>Para entender medidas e estatísticas:</strong>
+      <a href={link('/conceitos/medidas-de-frequencia/')}>Medidas de frequência</a> →
+      <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a> →
+      <a href={link('/conceitos/vieses/')}>Vieses</a>
+    </li>
+    <li>
+      <strong>Para diagnóstico e prevenção:</strong>
+      <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a> →
+      <a href={link('/conceitos/rastreamento/')}>Rastreamento</a> →
+      <a href={link('/conceitos/diretrizes-e-forcas-tarefa/')}>Diretrizes e forças-tarefa</a>
+    </li>
+  </ul>
+
+  <h2 id="por-temas">Por temas</h2>
+
+  {themes.map((theme) => (
+    <>
+      <h3>{theme.title}</h3>
+      <div class="not-prose grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
+        {theme.items.map((it) => (
+          <ConceptCard href={link(it.href)} title={it.label} description={it.desc} />
+        ))}
+      </div>
+    </>
+  ))}
+
+  <h2 id="lista-alfabetica-completa">Lista alfabética completa</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Conceito</th>
+          <th>Tema</th>
+        </tr>
+      </thead>
+      <tbody>
+        {alphabetical.map((row) => (
+          <tr>
+            <td><a href={link(row.href)}>{row.label}</a></td>
+            <td>{row.tema}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <h2 id="outras-secoes-relacionadas">Outras seções relacionadas</h2>
+
+  <ul>
+    <li><a href={link('/cinco-as/')}>Os 5As</a> — o ciclo da prática baseada em evidências</li>
+    <li><a href={link('/ferramentas/')}>Ferramentas</a> — CASP, GRADE, RoB 2.0, AMSTAR-2</li>
+    <li><a href={link('/calculadoras/')}>Calculadoras</a> — testes diagnósticos e medidas de efeito</li>
+    <li><a href={link('/em-pratica/')}>Em prática</a> — quatro casos clínicos integradores</li>
+  </ul>
+</DocLayout>

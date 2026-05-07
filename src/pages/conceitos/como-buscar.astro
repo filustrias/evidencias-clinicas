@@ -1,0 +1,269 @@
+---
+import DocLayout from '@layouts/DocLayout.astro';
+import { Code } from 'astro:components';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+
+const booleanTemplate = `(termo1 OR sinônimo1 OR sinônimo2)
+AND (termo2 OR sinônimo3)
+AND (termo3 OR sinônimo4)
+NOT (termo a excluir)`;
+
+const meshExample = `"aspirin"[MeSH]
+"primary prevention"[MeSH]
+"aged"[MeSH]`;
+
+const finalQuery = `("Aspirin"[MeSH] OR "acetylsalicylic acid")
+AND ("Primary Prevention"[MeSH])
+AND ("Aged"[MeSH] OR elderly OR "older adults")
+AND ("Cardiovascular Diseases"[MeSH] OR cardiovascular events OR MACE)`;
+
+const codeThemes = { light: 'github-light', dark: 'github-dark-default' } as const;
+---
+<DocLayout
+  title="Como buscar — booleanos, descritores e filtros"
+  description="As técnicas elementares de busca em bases biomédicas que poupam horas e melhoram a precisão."
+  section="conceitos"
+>
+  <h1>Como buscar — booleanos, descritores e filtros</h1>
+
+  <p>
+    Encontrar a fonte certa é metade do caminho. A outra metade é saber <strong>falar a língua dela</strong>. Bases biomédicas como PubMed, Cochrane Library, LILACS e Embase têm uma linguagem própria — uma vez compreendida, ela transforma uma busca de mil resultados em uma busca de vinte resultados altamente relevantes.
+  </p>
+
+  <p>
+    Três técnicas formam o núcleo: <strong>operadores booleanos</strong>, <strong>descritores controlados</strong> e <strong>filtros metodológicos</strong>. Esta página explica cada uma e termina com um exemplo prático completo.
+  </p>
+
+  <h2 id="operadores-booleanos">1. Operadores booleanos</h2>
+
+  <p>
+    Booleanos são três palavrinhas em inglês que combinam termos de busca de forma lógica. Estão presentes em praticamente toda base biomédica.
+  </p>
+
+  <h3 id="and">AND — combina conceitos</h3>
+
+  <p>
+    <code>aspirina AND idosos AND prevenção</code> retorna apenas artigos que mencionam <strong>todos os três</strong> termos. Quanto mais conceitos amarrados com <code>AND</code>, mais estreita fica a busca, mais precisa a recuperação.
+  </p>
+
+  <p>
+    Use <code>AND</code> para juntar componentes do PICO. Cada componente vira um conjunto de termos; os componentes são combinados com <code>AND</code>.
+  </p>
+
+  <h3 id="or">OR — amplia sinônimos</h3>
+
+  <p>
+    <code>idosos OR elderly OR aged</code> apanha artigos que mencionem <strong>qualquer um</strong> desses termos. Quanto mais sinônimos amarrados com <code>OR</code>, mais ampla fica a busca.
+  </p>
+
+  <p>
+    Use <code>OR</code> dentro de cada componente do PICO para capturar todas as variações terminológicas — inclusive entre português e inglês, já que muitas bases indexam ambos.
+  </p>
+
+  <h3 id="not">NOT — exclui termos</h3>
+
+  <p>
+    <code>aspirina NOT pediátrico</code> remove resultados sobre uso pediátrico, que não interessam à pergunta sobre idosos. Use com parcimônia — <code>NOT</code> mal usado descarta resultados relevantes que apenas mencionam o termo excluído de passagem.
+  </p>
+
+  <h3 id="combinando">Combinando</h3>
+
+  <p>
+    A boa estratégia combina os três operadores com parênteses para definir prioridades. O padrão típico:
+  </p>
+
+  <Code code={booleanTemplate} lang="sql" themes={codeThemes} defaultColor={false} />
+
+  <p>Cada bloco entre parênteses corresponde a um componente do PICO, com seus sinônimos.</p>
+
+  <h2 id="descritores-controlados">2. Descritores controlados — MeSH e DeCS</h2>
+
+  <p>
+    Bases biomédicas indexam artigos com <strong>vocabulário padronizado</strong>: termos pré-definidos que descrevem cada artigo independentemente das palavras que o autor usou no texto.
+  </p>
+
+  <h3 id="por-que-isso-importa">Por que isso importa</h3>
+
+  <p>
+    Buscar por palavras de texto livre depende de o autor ter escrito exatamente aquela palavra. Buscar por descritor alcança todos os artigos sobre o conceito, independentemente da terminologia usada no título ou resumo.
+  </p>
+
+  <p>
+    Diferença prática: uma busca por <code>myocardial infarction</code> em texto livre no PubMed pode perder artigos que dizem só <code>heart attack</code> ou <code>coronary thrombosis</code> no título; uma busca pelo descritor MeSH <code>Myocardial Infarction</code> apanha <strong>todos</strong>.
+  </p>
+
+  <h3 id="mesh">MeSH — Medical Subject Headings</h3>
+
+  <p>
+    Vocabulário desenvolvido pela US National Library of Medicine, usado para indexar artigos no PubMed e MEDLINE. Cada termo MeSH é selecionado por especialistas humanos que leem o artigo e atribuem os descritores correspondentes.
+  </p>
+
+  <p>Para usar no PubMed, basta escrever o termo seguido de <code>[MeSH]</code>:</p>
+
+  <Code code={meshExample} lang="sql" themes={codeThemes} defaultColor={false} />
+
+  <p>
+    A ferramenta <strong>MeSH Browser</strong> (<a href="https://meshb.nlm.nih.gov" rel="noopener noreferrer" target="_blank">meshb.nlm.nih.gov</a>) permite procurar o termo MeSH correto antes de incluí-lo na busca.
+  </p>
+
+  <h3 id="decs">DeCS — Descritores em Ciências da Saúde</h3>
+
+  <p>
+    Versão multilíngue do MeSH, mantida pela BIREME (OPAS/OMS). Inclui equivalências entre português, espanhol, inglês e francês. É o vocabulário padrão das bases LILACS, SciELO e da Biblioteca Virtual em Saúde (BVS).
+  </p>
+
+  <p>
+    Para profissionais lusófonos, DeCS é especialmente útil: permite buscar simultaneamente em literatura brasileira/portuguesa e internacional usando o mesmo termo.
+  </p>
+
+  <p>Disponível em: <a href="https://decs.bvsalud.org" rel="noopener noreferrer" target="_blank">decs.bvsalud.org</a></p>
+
+  <h2 id="filtros-metodologicos">3. Filtros metodológicos</h2>
+
+  <p>
+    Toda base biomédica séria oferece filtros que recortam resultados por tipo de estudo, idioma, ano, faixa etária, espécie. Os filtros mais úteis na prática clínica:
+  </p>
+
+  <ul>
+    <li><strong>Tipo de publicação</strong> — restringe a ensaios clínicos randomizados, revisões sistemáticas, meta-análises, diretrizes</li>
+    <li><strong>Data</strong> — últimos 5 anos, últimos 10 anos</li>
+    <li><strong>Idioma</strong> — português, inglês</li>
+    <li><strong>Espécie</strong> — humanos (descarta estudos em animais)</li>
+    <li><strong>Faixa etária</strong> — adultos, idosos, crianças</li>
+  </ul>
+
+  <h3 id="pubmed-clinical-queries">PubMed Clinical Queries</h3>
+
+  <p>
+    Recurso especial do PubMed dedicado a perguntas clínicas. Aplica automaticamente filtros metodológicos validados pela pesquisa de Haynes e colaboradores<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>, otimizados para cinco categorias de pergunta: terapia, diagnóstico, etiologia, prognóstico, diretriz clínica.
+  </p>
+
+  <p>Para cada categoria, oferece duas calibrações:</p>
+
+  <ul>
+    <li><strong>Broad</strong> — sensibilidade alta, traz mais resultados (você não perde nada relevante, mas filtra menos)</li>
+    <li><strong>Narrow</strong> — especificidade alta, traz menos resultados (você só vê os mais robustos metodologicamente)</li>
+  </ul>
+
+  <p>
+    Para a maioria das perguntas clínicas no consultório, <strong>Narrow</strong> é o ponto de partida ideal.
+  </p>
+
+  <p>Disponível em: <a href="https://pubmed.ncbi.nlm.nih.gov/clinical/" rel="noopener noreferrer" target="_blank">pubmed.ncbi.nlm.nih.gov/clinical/</a></p>
+
+  <h2 id="exemplo-pratico">Exemplo prático: busca completa</h2>
+
+  <p>
+    Vamos construir, do zero, a busca para a pergunta da Dra. Amélia sobre aspirina em prevenção primária em idosos.
+  </p>
+
+  <h3 id="passo-1">Passo 1 — Decompor o PICO em conceitos</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Componente</th>
+          <th scope="col">Conceito</th>
+          <th scope="col">Termos candidatos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">P</th>
+          <td>Idosos</td>
+          <td>aged, elderly, older adults</td>
+        </tr>
+        <tr>
+          <th scope="row">I</th>
+          <td>Aspirina em baixa dose</td>
+          <td>aspirin, acetylsalicylic acid, low-dose aspirin</td>
+        </tr>
+        <tr>
+          <th scope="row">C</th>
+          <td>Não uso / placebo</td>
+          <td>(implícito em ensaios randomizados)</td>
+        </tr>
+        <tr>
+          <th scope="row">O</th>
+          <td>Eventos cardiovasculares; prevenção primária</td>
+          <td>primary prevention, cardiovascular events, MACE</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="passo-2">Passo 2 — Identificar descritores MeSH</h3>
+
+  <p>Consultando o MeSH Browser:</p>
+
+  <ul>
+    <li><code>Aspirin</code> (MeSH)</li>
+    <li><code>Primary Prevention</code> (MeSH)</li>
+    <li><code>Aged</code> (MeSH)</li>
+    <li><code>Cardiovascular Diseases</code> (MeSH)</li>
+  </ul>
+
+  <h3 id="passo-3">Passo 3 — Construir a estratégia</h3>
+
+  <Code code={finalQuery} lang="sql" themes={codeThemes} defaultColor={false} />
+
+  <h3 id="passo-4">Passo 4 — Aplicar filtros</h3>
+
+  <p>No PubMed, aplicar:</p>
+
+  <ul>
+    <li><strong>Clinical Queries → Therapy → Narrow</strong></li>
+    <li><strong>Article type:</strong> Randomized Controlled Trial OR Systematic Review</li>
+    <li><strong>Publication date:</strong> últimos 5 anos</li>
+    <li><strong>Species:</strong> Humans</li>
+    <li><strong>Language:</strong> English OR Portuguese</li>
+  </ul>
+
+  <h3 id="resultado-esperado">Resultado esperado</h3>
+
+  <p>
+    Da casa de centenas de milhares de artigos sobre aspirina, a busca chega a algumas dezenas de artigos altamente relevantes — incluindo os três grandes ensaios recentes que definem a evidência atual sobre o tema (ASPREE, ARRIVE, ASCEND) e revisões sistemáticas que os sintetizam.
+  </p>
+
+  <p>
+    Tempo total da busca, depois de praticada algumas vezes: <strong>menos de 10 minutos</strong>.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Usar só palavras de texto livre.</strong> Sem MeSH/DeCS, perdem-se artigos relevantes que usaram terminologia ligeiramente diferente.</li>
+    <li><strong>Esquecer parênteses.</strong> Sem eles, a base interpreta a busca em ordem inesperada e os resultados ficam estranhos.</li>
+    <li><strong>Usar <code>NOT</code> cedo demais.</strong> Termos excluídos podem aparecer em artigos relevantes só de passagem. Prefira filtros sobre o tipo de estudo ou a faixa etária.</li>
+    <li><strong>Filtros excessivamente restritivos.</strong> Combinar <code>Narrow</code> + idioma único + últimos 2 anos + tipo de publicação único pode zerar a busca. Comece amplo, restrinja gradualmente.</li>
+    <li><strong>Não traduzir para inglês.</strong> PubMed indexa principalmente literatura em inglês. Buscar só em português perde 90% da literatura biomédica mundial. DeCS resolve isso ao trazer o termo em ambos os idiomas.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/buscar/', base)}>Acquire (Buscar)</a> — onde essas técnicas se encaixam no ciclo dos 5As</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — onde os termos da busca são gerados</li>
+    <li><a href={withBase('/conceitos/acesso-a-fontes/', base)}>Acesso a fontes</a> — Research4Life e fontes genuinamente gratuitas</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — para entender que tipo de estudo a busca deve priorizar</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Haynes RB, Wilczynski N, McKibbon KA, Walker CJ, Sinclair JC. Developing optimal search strategies for detecting clinically sound studies in MEDLINE. <em>J Am Med Inform Assoc</em> 1994;1(6):447–58.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Wilczynski NL, Haynes RB. EMBASE search strategies for identifying methodologically sound causation studies and for finding original articles on the diagnosis of common surgical conditions. <em>J Med Libr Assoc</em> 2007;95(1):85–7.
+      </li>
+      <li>
+        BIREME / OPAS / OMS. <em>DeCS — Descritores em Ciências da Saúde</em>. Disponível em: <a href="https://decs.bvsalud.org" rel="noopener noreferrer" target="_blank">decs.bvsalud.org</a>.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,16 +1,111 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import EffectMeasuresCalculator from '@components/calculadoras/EffectMeasuresCalculator.astro';
+import { withBase } from '@/data/navigation';
+import '@styles/prose.css';
+
+const base = import.meta.env.BASE_URL;
 ---
 <PageLayout
-  title="Medidas de efeito — calculadora"
-  description="Cálculo de RR, OR, redução absoluta de risco, NNT e NNH com intervalos de confiança."
+  title="Calculadora — medidas de efeito"
+  description="De uma tabela 2×2, calcule risco absoluto, risco relativo, OR, RAR, RRR, NNT, NNH e intervalos de confiança em tempo real."
   section="calculadoras"
+  wide
 >
-  <h1 class="text-4xl font-medium mb-3">Medidas de efeito</h1>
-  <p class="text-lg text-text-secondary mb-6">
-    Insira eventos e totais de cada grupo (intervenção/controle) para obter risco relativo,
-    odds ratio, redução absoluta de risco e NNT/NNH com intervalos de confiança.
-  </p>
+  <div class="prose">
+    <h1>Calculadora — medidas de efeito</h1>
+
+    <p>
+      Toda intervenção clínica produz uma <strong>tabela 2×2</strong> que cruza dois eixos: o grupo (intervenção vs. controle) e o desfecho (ocorreu vs. não ocorreu). Dessa tabela saem todas as medidas que quantificam o efeito do tratamento — risco absoluto, risco relativo, OR, RAR, RRR, NNT, NNH e seus intervalos de confiança.
+    </p>
+
+    <p>
+      Esta calculadora faz o cálculo automaticamente. Insira os números do estudo e obtenha as medidas em tempo real, com interpretação ao lado. Para o aprofundamento conceitual, veja <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a>.
+    </p>
+
+    <h2 id="a-calculadora">A calculadora</h2>
+  </div>
+
   <EffectMeasuresCalculator />
+
+  <div class="prose">
+    <h2 id="como-ler-os-resultados">Como ler os resultados</h2>
+
+    <p>
+      A calculadora aceita quatro entradas — as quatro células da tabela 2×2 — e devolve oito medidas de efeito principais, cada uma com intervalo de confiança 95%.
+    </p>
+
+    <p><strong>Medidas absolutas</strong> (mostram a magnitude real):</p>
+
+    <ul>
+      <li><strong>RA grupo intervenção</strong> — quantos % desenvolveram o desfecho recebendo o tratamento</li>
+      <li><strong>RA grupo controle</strong> — quantos % desenvolveram o desfecho sem o tratamento</li>
+      <li><strong>RAR</strong> <em>(redução absoluta de risco)</em> — diferença entre os dois RA, em pontos percentuais</li>
+    </ul>
+
+    <p><strong>Medidas relativas</strong> (comparam os grupos):</p>
+
+    <ul>
+      <li><strong>RR</strong> <em>(risco relativo)</em> — razão entre os dois RA. RR = 1 sem efeito; &lt; 1 protege; &gt; 1 causa dano</li>
+      <li><strong>OR</strong> <em>(odds ratio)</em> — razão entre as chances. Necessária em estudos caso-controle. ≈ RR quando o desfecho é raro</li>
+      <li><strong>RRR</strong> <em>(redução relativa de risco)</em> — proporção do risco-base que o tratamento eliminou</li>
+    </ul>
+
+    <p><strong>Medidas de "tradução clínica"</strong> (úteis para conversa com paciente):</p>
+
+    <ul>
+      <li><strong>NNT</strong> <em>(número necessário a tratar)</em> — pacientes a tratar para evitar 1 desfecho. NNT = 1/RAR</li>
+      <li><strong>NNH</strong> <em>(número necessário causar dano)</em> — pacientes a tratar para 1 efeito adverso. Mesmo cálculo, com AAR de dano</li>
+    </ul>
+
+    <p>
+      Em todos os campos, o IC95% mostra a faixa de incerteza em torno da estimativa pontual. Se o IC95% do RR cruza 1, <strong>o efeito não é estatisticamente significativo a 95% de confiança</strong> — a calculadora destaca isso, e o NNT/NNH passa a "não calculável" (não exibe número que sugeriria certeza falsa).
+    </p>
+
+    <h2 id="cinco-coisas">Cinco coisas para experimentar</h2>
+
+    <p>Algumas perguntas que a calculadora responde em segundos:</p>
+
+    <p><strong>1. A meta-análise da aspirina em prevenção primária.</strong><br />
+    Use o cenário pré-carregado "Aspirina (ASPREE)". O IC do RR cruza 1 — efeito não-significativo. NNT e NNH aparecem como "não calculável", forçando atenção ao fato de que o <strong>dano absoluto é maior que o benefício absoluto</strong>. É o caso da Dra. Amélia, citado nas páginas dos 5As.</p>
+
+    <p><strong>2. O DAPA-HF — quando o efeito é grande.</strong><br />
+    Cenário "Dapagliflozina (DAPA-HF)". RR ≈ 0,74 com IC95% bem estreito; NNT em torno de 16 com IC também estreito. Compare com o cenário ASPREE para ver como NNT diferencia tratamentos com efeitos clinicamente robustos vs. modestos.</p>
+
+    <p><strong>3. O efeito do desfecho raro sobre OR vs. RR.</strong><br />
+    Reduza progressivamente o número de eventos no controle, mantendo proporções. Veja como OR e RR ficam praticamente idênticos quando os eventos são raros (&lt; 10%) e como <strong>OR superestima o efeito</strong> quando os eventos ficam comuns. Isso é importante ao ler estudos com desfechos frequentes.</p>
+
+    <p><strong>4. Como o IC95% se estreita com o tamanho amostral.</strong><br />
+    Use o mesmo RR estimado e dobre todos os números da tabela. Veja como o IC95% se estreita — o efeito estimado não muda, mas a confiança nele aumenta. Esse é o trabalho do erro aleatório (que reduz com mais sujeitos), distinto do trabalho do <a href={withBase('/conceitos/vieses/', base)}>viés</a> (que não muda com tamanho).</p>
+
+    <p><strong>5. Quando a redução relativa engana.</strong><br />
+    Construa dois cenários com a mesma RRR de 50%, mas em risco-base muito diferente:</p>
+
+    <ul>
+      <li>A: 40% controle, 20% intervenção → RRR 50%, RAR 20 pp, NNT 5</li>
+      <li>B: 1% controle, 0,5% intervenção → RRR 50%, RAR 0,5 pp, NNT 200</li>
+    </ul>
+
+    <p>A "redução de 50%" é idêntica nos dois. Os significados clínicos não são. Esta é a razão de <strong>sempre olhar RAR e NNT</strong>, não só RR/RRR.</p>
+
+    <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+    <ul>
+      <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — explicação aprofundada de cada medida</li>
+      <li><a href={withBase('/conceitos/medidas-de-frequencia/', base)}>Medidas de frequência</a> — prevalência e incidência, base das medidas de efeito</li>
+      <li><a href={withBase('/calculadoras/testes-diagnosticos/', base)}>Calculadora de testes diagnósticos</a> — para perguntas diagnósticas, não de tratamento</li>
+      <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — quando os números podem não dizer o que parecem dizer</li>
+      <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde estas medidas determinam importância clínica</li>
+      <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde elas são traduzidas para o paciente</li>
+    </ul>
+
+    <section class="footnotes" aria-label="Referências">
+      <h2 id="referencias">Referências</h2>
+      <ol>
+        <li>Altman DG, Bland JM. Confidence intervals for the number needed to treat. <em>BMJ</em> 1998;317(7168):1309–12.</li>
+        <li>Greenhalgh T. <em>How to Read a Paper: The Basics of Evidence-Based Medicine and Healthcare</em>. 6ª ed. Hoboken: Wiley-Blackwell; 2019.</li>
+        <li>Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 5: Therapy.</li>
+      </ol>
+    </section>
+  </div>
 </PageLayout>

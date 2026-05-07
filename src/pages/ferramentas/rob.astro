@@ -1,14 +1,251 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="RoB"
-  description="Risk of Bias: ferramentas Cochrane para avaliar risco de viés em ECRs e estudos não randomizados."
+<DocLayout
+  title="RoB 2.0 — risco de viés em ensaios clínicos randomizados"
+  description="A ferramenta da Cochrane para avaliar risco de viés em ECRs, organizada em cinco domínios."
   section="ferramentas"
 >
-  <h1 class="text-4xl font-medium mb-3">RoB</h1>
-  <p class="text-lg text-text-secondary mb-6">Risk of Bias: ferramentas Cochrane para avaliar risco de viés em ECRs e estudos não randomizados.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>RoB 2.0 — risco de viés em ensaios clínicos randomizados</h1>
+
+  <p>
+    RoB 2.0 — <em>Risk of Bias 2.0</em> — é a ferramenta atual da Cochrane Collaboration para <strong>avaliar risco de viés em ensaios clínicos randomizados</strong> (ECR). Substituiu, em 2019, a versão original de 2008. É a ferramenta mais técnica e mais usada em revisões sistemáticas formais; é também o padrão exigido por revistas que aceitam revisões sistemáticas.
+  </p>
+
+  <p>
+    Sua diferença para o CASP é o nível de profundidade: enquanto o CASP-RCT pergunta de forma genérica se o ensaio foi bem feito, o RoB 2.0 examina <strong>cinco domínios específicos de viés</strong> com perguntas-sinalizadoras detalhadas, levando a um julgamento estruturado domínio a domínio.
+  </p>
+
+  <h2 id="quando-usar">Quando usar</h2>
+
+  <p>Use RoB 2.0 quando estiver:</p>
+
+  <ul>
+    <li>Lendo ou produzindo uma <strong>revisão sistemática</strong> ou meta-análise de ECRs</li>
+    <li>Avaliando criticamente um ECR individual de alto impacto, especialmente para tomada de decisão importante</li>
+    <li>Ensinando MBE em nível avançado, depois que CASP foi assimilado</li>
+    <li>Justificando metodologicamente por que confia ou desconfia dos achados de um ensaio</li>
+  </ul>
+
+  <p>Para ECR único em uso clínico cotidiano, CASP costuma bastar. RoB é a ferramenta para análise mais formal.</p>
+
+  <h2 id="de-onde-veio">De onde veio</h2>
+
+  <p>
+    A primeira versão (RoB 1.0) foi publicada em 2008 pela Cochrane, com sete domínios e baseada em julgamento "alto/baixo/incerto". Após uma década de uso, dois problemas emergiram: alta variabilidade entre avaliadores, e domínios redundantes ou mal delimitados.
+  </p>
+
+  <p>
+    A versão 2.0, publicada em 2019<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>, reformulou o instrumento em torno de <strong>cinco domínios bem delimitados</strong>, com <strong>perguntas-sinalizadoras</strong> específicas e algoritmo claro para chegar ao julgamento. O resultado: maior reprodutibilidade entre avaliadores e maior alinhamento com a literatura metodológica contemporânea.
+  </p>
+
+  <h2 id="cinco-dominios">Como funciona — cinco domínios</h2>
+
+  <p>
+    Cada domínio é avaliado com perguntas-sinalizadoras (sim, provavelmente sim, provavelmente não, não, sem informação) e termina em julgamento: <strong>baixo risco</strong>, <strong>algumas preocupações</strong>, <strong>alto risco</strong>. Os cinco domínios:
+  </p>
+
+  <h3 id="dominio-1">Domínio 1 — viés decorrente do processo de randomização</h3>
+
+  <p>
+    Pergunta central: a sequência de alocação foi gerada aleatoriamente e foi devidamente ocultada até o momento da designação?
+  </p>
+
+  <p>Pontos de atenção:</p>
+
+  <ul>
+    <li>Métodos centralizados de alocação (telefone, sistema online) reduzem o risco</li>
+    <li>Listas em envelopes selados em sequência são aceitáveis se cumpridos rigorosamente</li>
+    <li>Alternar pacientes ou usar data de nascimento como critério <strong>não é randomização</strong></li>
+  </ul>
+
+  <h3 id="dominio-2">Domínio 2 — viés por desvios da intervenção pretendida</h3>
+
+  <p>
+    Houve cegamento de pacientes e profissionais? Quando inviável, houve outras medidas para reduzir o efeito do conhecimento do tratamento?
+  </p>
+
+  <p>Pontos de atenção:</p>
+
+  <ul>
+    <li>Cegamento perfeito é raro fora de ensaios farmacológicos</li>
+    <li>O importante é que <strong>o conhecimento do tratamento não tenha contaminado o desfecho</strong></li>
+    <li>Análise por intenção de tratar é parte da resposta a este domínio</li>
+  </ul>
+
+  <h3 id="dominio-3">Domínio 3 — viés por dados ausentes do desfecho</h3>
+
+  <p>
+    Os dados estão disponíveis para quase todos os participantes? Quando há perdas, são pequenas e equilibradas entre grupos?
+  </p>
+
+  <p>Pontos de atenção:</p>
+
+  <ul>
+    <li>Perdas &gt; 20% costumam levantar preocupação</li>
+    <li>Perdas balanceadas (mesma proporção nos dois grupos) são menos preocupantes que perdas desbalanceadas</li>
+    <li>Análises de sensibilidade explicando como as perdas afetam o resultado são valiosas</li>
+  </ul>
+
+  <h3 id="dominio-4">Domínio 4 — viés na medição do desfecho</h3>
+
+  <p>
+    O desfecho foi medido de forma apropriada e padronizada? Avaliadores eram cegados? O desfecho é objetivo (mortalidade) ou subjetivo (qualidade de vida)?
+  </p>
+
+  <p>Pontos de atenção:</p>
+
+  <ul>
+    <li>Desfechos objetivos (mortalidade, troponina) sofrem menos com falta de cegamento de avaliadores</li>
+    <li>Desfechos subjetivos (dor relatada, qualidade de vida) sofrem mais</li>
+    <li>Avaliadores cegos para alocação são a norma de referência</li>
+  </ul>
+
+  <h3 id="dominio-5">Domínio 5 — viés na seleção do resultado relatado</h3>
+
+  <p>
+    Os resultados relatados refletem o protocolo registrado, ou foram selecionados após análise para favorecer o achado?
+  </p>
+
+  <p>Pontos de atenção:</p>
+
+  <ul>
+    <li>Comparar com o protocolo registrado em ClinicalTrials.gov ou similar</li>
+    <li>Desfechos primários e secundários pré-especificados deveriam ser todos relatados</li>
+    <li>"Migração de desfechos" (mudar o que era primário pelo que ficou bonito na análise) é viés clássico</li>
+  </ul>
+
+  <h2 id="semaforo">O semáforo</h2>
+
+  <p>
+    O resultado final é frequentemente apresentado como <strong>semáforo</strong> colorido — uma figura compacta mostrando, para cada estudo, cada domínio e o julgamento global:
+  </p>
+
+  <ul class="rob-legend">
+    <li><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <strong>Verde</strong> — baixo risco de viés</li>
+    <li><span class="rob-dot rob-dot--mid" aria-hidden="true"></span> <strong>Amarelo</strong> — algumas preocupações</li>
+    <li><span class="rob-dot rob-dot--bad" aria-hidden="true"></span> <strong>Vermelho</strong> — alto risco de viés</li>
+  </ul>
+
+  <p>
+    Em revisões sistemáticas, esse semáforo é apresentado para todos os ensaios incluídos numa figura única — visualmente, é fácil ver quais ensaios são confiáveis e quais não.
+  </p>
+
+  <p>
+    O <strong>julgamento global</strong> segue regra simples: se algum domínio é <strong>alto risco</strong>, o estudo é alto risco no global. Se nenhum é alto mas algum tem <strong>algumas preocupações</strong>, o global é "algumas preocupações". Só se todos são baixo risco, o global é baixo risco. É uma regra rigorosa — e é assim que deve ser.
+  </p>
+
+  <h2 id="exemplo-aplicado">Exemplo aplicado</h2>
+
+  <p>
+    Tomemos o <strong>DAPA-HF</strong>, ensaio publicado no <em>NEJM</em> em 2019, que comparou dapagliflozina vs. placebo em pacientes com insuficiência cardíaca com fração de ejeção reduzida<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Domínio</th>
+          <th scope="col">Julgamento</th>
+          <th scope="col">Justificativa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Randomização</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span>Baixo</td>
+          <td>Alocação central por sistema interativo, com ocultação adequada</td>
+        </tr>
+        <tr>
+          <td>2. Desvios da intervenção</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span>Baixo</td>
+          <td>Cegamento duplo (paciente + profissional); análise ITT</td>
+        </tr>
+        <tr>
+          <td>3. Dados ausentes</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span>Baixo</td>
+          <td>&lt; 5% de dados ausentes; balanceados entre grupos</td>
+        </tr>
+        <tr>
+          <td>4. Medição do desfecho</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span>Baixo</td>
+          <td>Desfecho composto verificado por comitê adjudicador cego</td>
+        </tr>
+        <tr>
+          <td>5. Seleção de resultados</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span>Baixo</td>
+          <td>Protocolo registrado; resultados primários e secundários alinhados</td>
+        </tr>
+        <tr>
+          <td><strong>Global</strong></td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> <span class="sr-only">Baixo risco. </span><strong>Baixo</strong></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    Resultado: o DAPA-HF tem baixo risco de viés em todos os domínios. Os achados (redução significativa de hospitalização e morte cardiovascular com dapagliflozina) são metodologicamente robustos. Combinado com magnitude grande do efeito (HR 0,74; IC95% 0,65–0,85) e replicação em ensaios subsequentes (EMPEROR-Reduced), constitui evidência de alta qualidade — daí a inclusão da classe nas diretrizes contemporâneas com força forte.
+  </p>
+
+  <h2 id="limitacoes">Limitações conhecidas</h2>
+
+  <ol>
+    <li>
+      <strong>Aplica-se apenas a ECRs.</strong> Para coortes e caso-controle, use a versão <strong>ROBINS-I</strong> (Risk of Bias In Non-randomized Studies of Interventions), também da Cochrane.
+    </li>
+    <li>
+      <strong>Exige tempo.</strong> Avaliação completa de um ensaio com RoB 2.0, feita rigorosamente, leva 30 a 60 minutos. Para revisões com 30 ensaios, é trabalho considerável.
+    </li>
+    <li>
+      <strong>Subjetividade residual.</strong> Apesar da estrutura, alguns julgamentos exigem interpretação. A recomendação Cochrane é que dois avaliadores trabalhem independentemente e resolvam discordâncias por consenso.
+    </li>
+    <li>
+      <strong>Não avalia magnitude do efeito nem aplicabilidade.</strong> RoB cobre apenas validade interna. Importância clínica e validade externa exigem outras ferramentas (medidas de efeito, GRADE, julgamento clínico).
+    </li>
+  </ol>
+
+  <h2 id="onde-encontrar">Onde encontrar</h2>
+
+  <ul>
+    <li><strong>Página oficial:</strong> <a href="https://methods.cochrane.org/bias/resources/rob-2-revised-cochrane-risk-bias-tool-randomized-trials" rel="noopener noreferrer" target="_blank">methods.cochrane.org/bias</a></li>
+    <li><strong>Manual operacional (PDF):</strong> disponível na mesma página</li>
+    <li><strong>Excel template:</strong> Cochrane disponibiliza planilha para auxiliar avaliação</li>
+    <li><strong>robvis</strong> — ferramenta gratuita para gerar visualizações em semáforo: <a href="https://mcguinlu.shinyapps.io/robvis" rel="noopener noreferrer" target="_blank">mcguinlu.shinyapps.io/robvis</a></li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde RoB se encaixa no ciclo dos 5As</li>
+    <li><a href={withBase('/ferramentas/', base)}>Outras ferramentas de avaliação crítica</a> — visão geral comparativa</li>
+    <li><a href={withBase('/ferramentas/casp/', base)}>CASP</a> — alternativa mais simples para ECRs em uso pedagógico</li>
+    <li><a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> — para revisões sistemáticas (não para ECRs individuais)</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses e fontes de erro</a> — fundamentação conceitual dos cinco domínios</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Sterne JAC, Savović J, Page MJ, et al. RoB 2: a revised tool for assessing risk of bias in randomised trials. <em>BMJ</em> 2019;366:l4898. Disponível em: <a href="https://www.bmj.com/content/366/bmj.l4898" rel="noopener noreferrer" target="_blank">bmj.com/content/366/bmj.l4898</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        McMurray JJV, Solomon SD, Inzucchi SE, et al. Dapagliflozin in Patients with Heart Failure and Reduced Ejection Fraction. <em>N Engl J Med</em> 2019;381(21):1995–2008.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li>
+        Higgins JPT, Thomas J, Chandler J, et al, eds. <em>Cochrane Handbook for Systematic Reviews of Interventions</em> version 6.4. Cochrane; 2023. Disponível em: <a href="https://training.cochrane.org/handbook" rel="noopener noreferrer" target="_blank">training.cochrane.org/handbook</a>.
+      </li>
+      <li>
+        Sterne JA, Hernán MA, Reeves BC, et al. ROBINS-I: a tool for assessing risk of bias in non-randomised studies of interventions. <em>BMJ</em> 2016;355:i4919.
+      </li>
+    </ol>
+  </section>
+</DocLayout>
+

@@ -1,14 +1,284 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
+<DocLayout
   title="Raciocínio clínico"
-  description="Modos de pensar do clínico: heurísticas, vieses e probabilidade."
+  description="O conjunto de processos mentais que sustentam a tomada de decisão. Sistemas 1 e 2, vieses cognitivos, e a integração com a comunicação clínica."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Raciocínio clínico</h1>
-  <p class="text-lg text-text-secondary mb-6">Modos de pensar do clínico: heurísticas, vieses e probabilidade.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Raciocínio clínico</h1>
+
+  <p>
+    Raciocínio clínico é o <strong>conjunto de processos mentais — conscientes e inconscientes — que profissionais de saúde utilizam para coletar, interpretar e integrar informações com o objetivo de tomar decisões diagnósticas e terapêuticas</strong>. É a habilidade que permite, ao olhar para um paciente, transformar dados desordenados (queixa, sinais, contexto) em hipóteses, decisões e condutas.
+  </p>
+
+  <p>
+    Não é dom natural. É <strong>habilidade que se desenvolve, refina e adapta ao longo da carreira</strong> — exatamente como qualquer outra habilidade técnica. E está intimamente ligado à MBE, embora os dois domínios sejam frequentemente confundidos.
+  </p>
+
+  <h2 id="raciocinio-vs-mbe">Raciocínio clínico e MBE — domínios complementares</h2>
+
+  <p>
+    São dois domínios de conhecimento que <strong>se complementam e se sobrepõem muitas vezes</strong>, ao ponto de tornar difícil a distinção. Vale separar:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Raciocínio clínico</th>
+          <th scope="col">MBE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Foco</th>
+          <td>Como pensamos para decidir</td>
+          <td>Como integramos evidência à decisão</td>
+        </tr>
+        <tr>
+          <th scope="row">Origem</th>
+          <td>Cognição, psicologia, ensino médico</td>
+          <td>Epidemiologia clínica, estatística</td>
+        </tr>
+        <tr>
+          <th scope="row">Pergunta central</th>
+          <td>"Como cheguei a essa hipótese?"</td>
+          <td>"Que evidência sustenta essa conduta?"</td>
+        </tr>
+        <tr>
+          <th scope="row">Risco principal</th>
+          <td>Vieses cognitivos</td>
+          <td>Aplicação acrítica de estudos</td>
+        </tr>
+        <tr>
+          <th scope="row">Treinamento</th>
+          <td>Discussão de casos, simulação</td>
+          <td>Leitura crítica, busca estruturada</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    São indissociáveis na prática. Sem raciocínio clínico sólido, MBE vira protocolo cego — aplicação mecânica de diretrizes a pacientes que não cabem nelas. Sem MBE, raciocínio clínico vira intuição não-questionada — o "eu acho que..." baseado em casos antigos e na cultura local.
+  </p>
+
+  <h2 id="sistemas-1-2">Sistemas 1 e 2 — a dupla velocidade do pensamento</h2>
+
+  <p>
+    Daniel Kahneman, psicólogo prêmio Nobel, descreveu duas modalidades de pensamento que coexistem em todos nós<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Aplicadas à clínica, ajudam a entender por que tomamos as decisões que tomamos:
+  </p>
+
+  <h3 id="sistema-1">Sistema 1 — rápido, automático, intuitivo</h3>
+
+  <p>
+    Reconhecimento de padrões. O profissional experiente que olha para uma criança e "sabe" que ela está doente antes de qualquer pergunta. O cardiologista que percebe a IC pela posição do paciente na maca. O dermatologista que faz diagnóstico em segundos.
+  </p>
+
+  <p>Vantagens:</p>
+
+  <ul>
+    <li>Velocidade</li>
+    <li>Eficiência cognitiva (não esgota)</li>
+    <li>Integra muitos sinais simultaneamente</li>
+    <li>Funciona muito bem em padrões frequentes</li>
+  </ul>
+
+  <p>Desvantagens:</p>
+
+  <ul>
+    <li>Sujeito a <strong>vieses cognitivos</strong> (mais adiante)</li>
+    <li>Falha quando o caso é atípico</li>
+    <li>Difícil de auditar — você pode estar errado e nem perceber</li>
+  </ul>
+
+  <h3 id="sistema-2">Sistema 2 — lento, deliberado, analítico</h3>
+
+  <p>
+    Pensamento estruturado. Lista de hipóteses diferenciais escrita no papel. Cálculo de risco com calculadora. Aplicação consciente de critério diagnóstico. Releitura crítica de exame de imagem.
+  </p>
+
+  <p>Vantagens:</p>
+
+  <ul>
+    <li>Rigor</li>
+    <li>Auditável (você pode mostrar como chegou ao raciocínio)</li>
+    <li>Funciona bem em casos complexos ou atípicos</li>
+    <li>Reduz vieses do Sistema 1</li>
+  </ul>
+
+  <p>Desvantagens:</p>
+
+  <ul>
+    <li>Lento</li>
+    <li>Esgota cognitivamente (não dá para usar o tempo todo)</li>
+    <li>Pode ser "anti-clínico" se aplicado a casos óbvios</li>
+  </ul>
+
+  <p>
+    A boa prática <strong>alterna entre os dois</strong>: Sistema 1 para reconhecimento inicial; Sistema 2 quando o caso desafia o reconhecimento ou quando o desfecho da decisão é importante o suficiente para merecer revisão consciente.
+  </p>
+
+  <h2 id="vieses-cognitivos">Vieses cognitivos — quando o Sistema 1 falha</h2>
+
+  <p>
+    Como o Sistema 1 é rápido e automático, ele é <strong>sistematicamente enganável</strong> por padrões de pensamento defeituosos. Conhecer os principais vieses cognitivos é a melhor defesa contra eles:
+  </p>
+
+  <p>
+    <strong>Viés de ancoragem.</strong> Apega-se à primeira informação ou hipótese e tem dificuldade de ajustar mesmo quando dados subsequentes contradizem. Paciente chega com "dor torácica" anotada na ficha, e fica difícil considerar refluxo, mesmo que o quadro encaixe melhor.
+  </p>
+
+  <p>
+    <strong>Viés de confirmação.</strong> Procura informações que confirmam a hipótese inicial e ignora as que contradizem. Pergunta dirigida ao que esperava ouvir; exames pedidos com viés.
+  </p>
+
+  <p>
+    <strong>Viés de disponibilidade.</strong> Hipótese mais lembrada (porque é mais recente, mais marcante) parece mais provável que hipóteses menos lembradas, mesmo se forem na verdade mais raras. Profissional que perdeu um diagnóstico de embolia pulmonar passa a pedir D-dímero em quase todos os casos de dispneia.
+  </p>
+
+  <p>
+    <strong>Viés de fechamento prematuro.</strong> Aceita a primeira hipótese plausível e para de considerar alternativas. Particularmente perigoso em casos com sintomas inespecíficos.
+  </p>
+
+  <p>
+    <strong>Excesso de confiança.</strong> Subestima incerteza. Trata hipótese provável como certa.
+  </p>
+
+  <p>
+    <strong>Viés de representatividade.</strong> Julga probabilidade pela aparência de "caso típico", ignorando frequência base. Pessoa jovem com dor torácica? "Provavelmente ansiedade" — sem considerar que mesmo improvável, IAM em jovem ainda merece investigação.
+  </p>
+
+  <p>
+    <strong>Heurística do disponível.</strong> Atalho mental que substitui pergunta difícil ("qual o diagnóstico?") por pergunta fácil ("o que esse caso me lembra?"). Funciona muito mais frequentemente que falha — mas quando falha, falha feio.
+  </p>
+
+  <p>
+    A literatura sobre erros diagnósticos atribui parte importante deles a esses vieses<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. Reconhecê-los <strong>enquanto pensamos</strong> é difícil, mas o esforço estruturado paga: pausar antes de fechar diagnóstico, listar diferenciais alternativos, perguntar "que evidência poderia mudar minha hipótese?".
+  </p>
+
+  <h2 id="comunicacao-base">Habilidades de comunicação — base do raciocínio</h2>
+
+  <p>
+    O universo do raciocínio clínico está intimamente ligado ao universo da <strong>comunicação clínica</strong>. Coletar informações relevantes para a tomada de decisão depende da habilidade do profissional de <strong>conversar com o paciente, conseguir informações relevantes sobre a doença e sobre a experiência de adoecimento</strong>.
+  </p>
+
+  <p>Sem boa comunicação:</p>
+
+  <ul>
+    <li>A queixa relatada não corresponde ao que de fato preocupa o paciente</li>
+    <li>O contexto biopsicossocial fica invisível</li>
+    <li>A história clínica fica truncada</li>
+    <li>Sintomas-chave podem nem ser mencionados</li>
+  </ul>
+
+  <p>
+    Modelos como o <strong>Calgary-Cambridge</strong><sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup> estruturam a entrevista clínica em fases (iniciar, coletar informação, examinar, explicar, planejar, encerrar) e detalham as habilidades específicas em cada fase. Não é teoria abstrata — é treinamento aplicado, baseado em décadas de pesquisa em ensino médico.
+  </p>
+
+  <p>Cinco habilidades especialmente ligadas ao raciocínio clínico:</p>
+
+  <ul>
+    <li><strong>Perguntas abertas no início, fechadas no final</strong> — abertas convidam o paciente a contar a história; fechadas confirmam detalhes. Inverter essa ordem trunca a história.</li>
+    <li><strong>Escuta ativa</strong> — pausas, parafraseamento, sumarização. O paciente precisa sentir que está sendo ouvido para se abrir.</li>
+    <li><strong>Exploração de ICE</strong> <em>(Ideas, Concerns, Expectations)</em> — o que o paciente acha que tem? o que mais o preocupa? o que esperava da consulta? Frequentemente, o que o paciente pensa é o caminho para o diagnóstico real.</li>
+    <li><strong>Uso da silêncio</strong> — depois de perguntar, esperar. O segundo de silêncio permite ao paciente formular o que ele realmente quer dizer.</li>
+    <li><strong>Sumarização periódica</strong> — "deixa eu ver se entendi: você está com isso há 3 meses, piora à noite, e já tentou X sem efeito. É isso?". Confirma compreensão e abre espaço para correções.</li>
+  </ul>
+
+  <p>
+    Comunicação clínica não é habilidade que se desenvolve sozinha pela prática. Como qualquer outra habilidade, <strong>responde a treinamento estruturado</strong> — simulação, role-play, feedback estruturado, observação direta. Profissionais que recebem treinamento formal mostram melhoria mensurável; profissionais que não recebem tipicamente carregam pelo resto da carreira os vícios que aprenderam por imitação dos preceptores.
+  </p>
+
+  <h2 id="como-desenvolve">Como o raciocínio clínico se desenvolve</h2>
+
+  <p>Quatro estratégias que sustentam o desenvolvimento ao longo da carreira:</p>
+
+  <h3 id="repeticao-estruturada">1. Repetição estruturada — o ciclo agir/refletir</h3>
+
+  <p>
+    Não basta atender muitos pacientes. É preciso <strong>refletir sobre cada atendimento difícil</strong>, identificar o que funcionou e o que não funcionou, e ajustar a prática na próxima iteração. O raciocínio clínico se desenvolve como qualquer habilidade — pela repetição deliberada, não pela exposição passiva.
+  </p>
+
+  <h3 id="discussao-casos">2. Discussão de casos clínicos</h3>
+
+  <p>
+    Diferentes profissionais geram diferentes hipóteses para o mesmo caso. Discussão estruturada (sessões clínicas, journal clubs, supervisão) expõe esses raciocínios distintos, e cada participante leva embora repertório expandido. Em isolamento, o profissional aprende muito mais devagar.
+  </p>
+
+  <h3 id="feedback-estruturado">3. Feedback estruturado</h3>
+
+  <p>
+    Não "tá bom" ou "tá ruim", mas observação dirigida: "essa pergunta foi muito direta cedo demais"; "você fechou o diagnóstico antes de explorar diferenciais"; "a sumarização final faltou". Feedback específico mudaria comportamento; genérico, não.
+  </p>
+
+  <h3 id="estudo-erro">4. Estudo deliberado do erro</h3>
+
+  <p>
+    Quando algo não vai bem — diagnóstico tardio, conduta inapropriada, paciente que não melhorou —, <strong>a pergunta produtiva é "o que aprendi?"</strong>, não "de quem foi a culpa?". Casos difíceis de hoje preparam para casos difíceis de amanhã, mas só se forem examinados com olhar honesto.
+  </p>
+
+  <h2 id="onde-mbe-encontra">Onde MBE encontra raciocínio clínico</h2>
+
+  <p>
+    Em três pontos do ciclo dos 5As, o raciocínio clínico é especialmente decisivo:
+  </p>
+
+  <ul>
+    <li><strong>No primeiro A</strong> — reconhecer que existe uma dúvida (e qual exatamente) é trabalho de raciocínio clínico, não de MBE. Profissionais com bom raciocínio geram boas perguntas; profissionais com raciocínio rudimentar geram dúvidas vagas demais para responder.</li>
+    <li><strong>No quarto A</strong> <em>(Apply)</em> — aplicar evidência ao paciente exige avaliar contexto, ler valores, integrar com experiência clínica. Sem raciocínio clínico desenvolvido, MBE vira protocolo cego.</li>
+    <li><strong>No quinto A</strong> <em>(Assess)</em> — refletir sobre a decisão tomada é exercício de raciocínio metacognitivo: pensar sobre como pensei. É como o profissional refina o próprio raciocínio ao longo do tempo.</li>
+  </ul>
+
+  <h2 id="erros-comuns">Erros comuns sobre raciocínio clínico</h2>
+
+  <ul>
+    <li><strong>Confundir intuição com raciocínio.</strong> Intuição é parte do Sistema 1, e funciona muito bem em territórios familiares. Raciocínio clínico inclui intuição, mas inclui também o Sistema 2 deliberado — e a capacidade de saber quando alternar entre os dois.</li>
+    <li><strong>Achar que basta ter "experiência".</strong> Anos de prática sem reflexão estruturada produzem vícios consolidados, não expertise. Raciocínio clínico melhora com prática <strong>deliberada e refletida</strong>, não com tempo apenas.</li>
+    <li><strong>Tratar comunicação como dom.</strong> Profissionais que dispensam treinamento em comunicação clínica geralmente são os que mais precisam dele. A boa notícia: comunicação responde a treino.</li>
+    <li><strong>Subestimar vieses cognitivos.</strong> "Comigo isso não acontece" — o próprio viés mais perigoso. Todos somos sujeitos aos vieses; profissionais experientes os escondem melhor (de si mesmos), não os têm menos.</li>
+    <li><strong>Separar raciocínio clínico de MBE como se fossem opostos.</strong> "Eu sou clínico, não estatístico" — falsa dicotomia. Os dois domínios precisam um do outro.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas</a> — onde o raciocínio clínico gera as perguntas que MBE responde</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — onde comunicação clínica vira instrumento estruturado</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — vieses estatísticos em estudos; complementar aos vieses cognitivos discutidos aqui</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde raciocínio clínico e MBE se integram em decisão</li>
+    <li><a href={withBase('/cinco-as/monitorar/', base)}>Assess (Monitorar)</a> — onde o raciocínio clínico é refinado ao longo do tempo</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Kahneman D. <em>Thinking, Fast and Slow</em>. New York: Farrar, Straus and Giroux; 2011. Edição em português: <em>Rápido e Devagar: Duas Formas de Pensar</em>. Rio de Janeiro: Objetiva; 2012.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Croskerry P. From mindless to mindful practice—cognitive bias and clinical decision making. <em>N Engl J Med</em> 2013;368(26):2445–8. Disponível em: <a href="https://www.nejm.org/doi/full/10.1056/NEJMp1303712" rel="noopener noreferrer" target="_blank">nejm.org/doi/full/10.1056/NEJMp1303712</a>.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Kurtz S, Silverman J, Benson J, Draper J. Marrying content and process in clinical method teaching: enhancing the Calgary-Cambridge guides. <em>Acad Med</em> 2003;78(8):802–9.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li>
+        Norman GR, Eva KW. Diagnostic error and clinical reasoning. <em>Med Educ</em> 2010;44(1):94–100.
+      </li>
+      <li>
+        Schön DA. <em>The Reflective Practitioner: How Professionals Think in Action</em>. New York: Basic Books; 1983.
+      </li>
+      <li>
+        Graber ML, Franklin N, Gordon R. Diagnostic error in internal medicine. <em>Arch Intern Med</em> 2005;165(13):1493–9.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

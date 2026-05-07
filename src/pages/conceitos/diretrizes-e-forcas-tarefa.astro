@@ -1,14 +1,305 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
+<DocLayout
   title="Diretrizes e forças-tarefa"
-  description="Como ler, comparar e aplicar diretrizes clínicas."
+  description="Quem produz recomendações baseadas em evidências, com que metodologia, e como ler os documentos. USPSTF, CTFPHC, NICE, Cochrane e outras."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Diretrizes e forças-tarefa</h1>
-  <p class="text-lg text-text-secondary mb-6">Como ler, comparar e aplicar diretrizes clínicas.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Diretrizes e forças-tarefa</h1>
+
+  <p>
+    Diretrizes clínicas são documentos que sintetizam evidência e produzem recomendações estruturadas para a prática. Não são opinião de especialistas — são produto de processo metodológico explícito, geralmente conduzido por agências independentes ou forças-tarefa nacionais.
+  </p>
+
+  <p>
+    Saber <strong>quem produziu uma diretriz, com que método, e como ela classifica recomendações</strong> é o que permite usá-la com confiança. Esta página apresenta as quatro principais iniciativas internacionais e o quadro brasileiro.
+  </p>
+
+  <h2 id="por-que-existem">Por que existem forças-tarefa</h2>
+
+  <p>
+    Avaliar criticamente toda a literatura sobre rastreamento de câncer de mama, ou sobre indicação de aspirina em prevenção primária, é trabalho que demanda equipes inteiras durante meses. Profissionais individuais não têm como fazê-lo a cada decisão clínica.
+  </p>
+
+  <p>
+    <strong>Forças-tarefa e agências fazem esse trabalho coletivamente</strong>, em escala, e publicam recomendações baseadas em evidência sintetizada. O médico que atende não precisa refazer a revisão sistemática — pode usar a diretriz como atalho confiável, <strong>se conhecer a metodologia que a sustenta</strong>.
+  </p>
+
+  <h2 id="quatro-principais">As quatro principais iniciativas internacionais</h2>
+
+  <h3 id="ctfphc">CTFPHC — Canadian Task Force on Preventive Health Care</h3>
+
+  <p>
+    <strong>Criada em 1976</strong>, no Canadá. Foi a <strong>primeira força-tarefa</strong> dedicada a recomendações preventivas baseadas em evidências — modelo que inspirou as demais.
+  </p>
+
+  <ul>
+    <li><strong>Foco:</strong> cuidados preventivos em adultos e crianças assintomáticos, com forte ênfase em atenção primária à saúde</li>
+    <li><strong>Metodologia:</strong> revisões sistemáticas conduzidas pelo grupo de apoio científico, envolvimento de stakeholders, revisão por pares</li>
+    <li><strong>Sistema de classificação:</strong> GRADE</li>
+    <li><strong>Site oficial:</strong> <a href="https://canadiantaskforce.ca" rel="noopener noreferrer" target="_blank">canadiantaskforce.ca</a></li>
+  </ul>
+
+  <h3 id="uspstf">USPSTF — United States Preventive Services Task Force</h3>
+
+  <p>
+    <strong>Criada em 1984</strong>, nos Estados Unidos. Talvez a força-tarefa mais conhecida e citada internacionalmente.
+  </p>
+
+  <ul>
+    <li><strong>Foco:</strong> rastreamento, aconselhamentos preventivos e medicamentos profiláticos para população assintomática</li>
+    <li><strong>Metodologia:</strong> revisões sistemáticas com processo transparente e consulta pública</li>
+    <li><strong>Sistema de classificação:</strong> próprio — letras <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, <strong>D</strong> ou <strong>I</strong>:</li>
+  </ul>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Grau</th>
+          <th scope="col">Significado</th>
+          <th scope="col">O que fazer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>A</strong></td>
+          <td>Alta certeza de benefício substancial</td>
+          <td>Recomendar</td>
+        </tr>
+        <tr>
+          <td><strong>B</strong></td>
+          <td>Alta certeza de benefício moderado, ou moderada certeza de benefício moderado a substancial</td>
+          <td>Recomendar</td>
+        </tr>
+        <tr>
+          <td><strong>C</strong></td>
+          <td>Recomenda-se selecionar pacientes individualmente, com base em julgamento profissional e preferências do paciente</td>
+          <td>Caso a caso</td>
+        </tr>
+        <tr>
+          <td><strong>D</strong></td>
+          <td>Evidência moderada ou alta de que não há benefício, ou que dano supera benefício</td>
+          <td>Não recomendar</td>
+        </tr>
+        <tr>
+          <td><strong>I</strong></td>
+          <td>Evidência insuficiente para avaliar balanço benefício/dano</td>
+          <td>Indeterminado — discutir limites com o paciente</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <ul>
+    <li><strong>Site oficial:</strong> <a href="https://www.uspreventiveservicestaskforce.org" rel="noopener noreferrer" target="_blank">uspreventiveservicestaskforce.org</a></li>
+  </ul>
+
+  <h3 id="nice">NICE — National Institute for Health and Care Excellence</h3>
+
+  <p>
+    <strong>Criado em 1999</strong>, no Reino Unido. Difere das forças-tarefa puramente preventivas por seu escopo mais amplo.
+  </p>
+
+  <ul>
+    <li><strong>Foco:</strong> diretrizes e recomendações clínicas para o sistema de saúde da Inglaterra/Reino Unido — incluindo prevenção, mas também diagnóstico, tratamento, avaliação de tecnologias e análise econômica</li>
+    <li><strong>Metodologia:</strong> revisões sistemáticas + modelagens econômicas + consulta pública ampla, com forte componente institucional de governança</li>
+    <li><strong>Sistema de classificação:</strong> GRADE para a evidência + métodos de economia em saúde para custo-efetividade</li>
+    <li><strong>Característica distintiva:</strong> considera explicitamente <strong>custo-efetividade</strong> na recomendação. Uma intervenção pode ser eficaz mas não recomendada pelo NICE por relação custo-benefício desfavorável</li>
+    <li><strong>Site oficial:</strong> <a href="https://www.nice.org.uk" rel="noopener noreferrer" target="_blank">nice.org.uk</a></li>
+  </ul>
+
+  <h3 id="cochrane">Cochrane — Colaboração Cochrane</h3>
+
+  <p>
+    <strong>Fundada em 1993</strong>, é uma rede global independente de pesquisadores, profissionais e pacientes.
+  </p>
+
+  <ul>
+    <li><strong>Foco:</strong> produção de revisões sistemáticas (Cochrane Reviews) sobre intervenções em saúde</li>
+    <li><strong>Metodologia:</strong> padrões rigorosos, protocolos pré-registrados, atualizações frequentes, busca em literatura cinzenta</li>
+    <li><strong>Sistema de classificação:</strong> GRADE para avaliar qualidade da evidência</li>
+    <li><strong>Característica distintiva:</strong> <strong>não emite recomendações diretamente</strong>. Suas sínteses são base para diretrizes de OMS, OPAS e forças-tarefa nacionais</li>
+    <li><strong>Site oficial:</strong> <a href="https://www.cochrane.org" rel="noopener noreferrer" target="_blank">cochrane.org</a></li>
+  </ul>
+
+  <h2 id="comparacao">Comparação rápida</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">CTFPHC</th>
+          <th scope="col">USPSTF</th>
+          <th scope="col">NICE</th>
+          <th scope="col">Cochrane</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>Criação</strong></th>
+          <td>1976</td>
+          <td>1984</td>
+          <td>1999</td>
+          <td>1993</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>País</strong></th>
+          <td>Canadá</td>
+          <td>EUA</td>
+          <td>Reino Unido</td>
+          <td>Internacional</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>Escopo</strong></th>
+          <td>Prevenção</td>
+          <td>Prevenção</td>
+          <td>Amplo (incluindo tratamento)</td>
+          <td>Síntese de evidência</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>Sistema</strong></th>
+          <td>GRADE</td>
+          <td>A/B/C/D/I próprio</td>
+          <td>GRADE</td>
+          <td>GRADE</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>Custo-efetividade</strong></th>
+          <td>Considera</td>
+          <td>Não enfatiza</td>
+          <td><strong>Sim, central</strong></td>
+          <td>Não aplica</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>Emite recomendação?</strong></th>
+          <td>Sim</td>
+          <td>Sim</td>
+          <td>Sim</td>
+          <td>Não</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="outras">Outras iniciativas relevantes</h2>
+
+  <p>Além das quatro principais, várias outras instituições produzem recomendações que merecem atenção:</p>
+
+  <ul>
+    <li><strong>OMS — Organização Mundial da Saúde</strong> — diretrizes globais, frequentemente baseadas em revisões Cochrane. Especialmente relevantes para temas tropicais e para PALOP. Disponíveis em <a href="https://www.who.int/publications/who-guidelines" rel="noopener noreferrer" target="_blank">who.int/publications/who-guidelines</a></li>
+    <li><strong>OPAS — Organização Pan-Americana da Saúde</strong> — adaptações regionais de diretrizes da OMS para as Américas</li>
+    <li><strong>NCCN — National Comprehensive Cancer Network</strong> — diretrizes oncológicas amplamente usadas globalmente</li>
+    <li><strong>ESC, ACC/AHA</strong> — sociedades cardiológicas europeia e americana</li>
+    <li><strong>GOLD</strong> — diretrizes globais para DPOC</li>
+    <li><strong>GINA</strong> — diretrizes globais para asma</li>
+    <li><strong>IDSA</strong> — diretrizes de doenças infecciosas</li>
+    <li><strong>Sociedades médicas nacionais</strong> — Sociedade Brasileira de Cardiologia, Sociedade Brasileira de Diabetes, etc.</li>
+  </ul>
+
+  <h2 id="quadro-brasileiro">O quadro brasileiro</h2>
+
+  <p>
+    O Brasil produz documentos com recomendações de rastreamento, prevenção e manejo, frequentemente englobados em documentos maiores que cobrem do rastreamento à reabilitação e cuidados paliativos.
+  </p>
+
+  <p><strong>Principais produtores nacionais:</strong></p>
+
+  <ul>
+    <li><strong>Ministério da Saúde</strong> — diretrizes e protocolos clínicos para o SUS</li>
+    <li><strong>CONITEC</strong> — Comissão Nacional de Incorporação de Tecnologias no SUS, responsável por avaliar e recomendar incorporação de novas tecnologias (com base em evidência e custo-efetividade)</li>
+    <li><strong>INCA — Instituto Nacional de Câncer</strong> — diretrizes oncológicas, incluindo rastreamento. Exemplo: <em>Diretrizes brasileiras para o rastreamento do câncer do colo do útero</em>, produzido em colaboração com Fiocruz, UFRJ e sociedades de ginecologia</li>
+    <li><strong>Sociedades médicas</strong> — diretrizes específicas por especialidade (SBC, SBD, SBR, FEBRASGO, etc.)</li>
+    <li><strong>ANVISA</strong> — protocolos clínicos para uso de medicamentos sob regulação</li>
+  </ul>
+
+  <h2 id="leitura-critica">Como ler uma diretriz com olhar crítico</h2>
+
+  <p>Cinco perguntas que separam diretriz robusta de diretriz frágil:</p>
+
+  <h3 id="quem-produziu">1. Quem produziu?</h3>
+
+  <p>
+    Agência independente, sociedade médica, força-tarefa governamental? Cada uma traz vieses específicos. Sociedades médicas tendem a ser mais permissivas com intervenções da própria especialidade. Forças-tarefa públicas tendem a ser mais conservadoras.
+  </p>
+
+  <h3 id="metodo">2. Qual o método declarado?</h3>
+
+  <p>
+    Foi feita revisão sistemática? Houve consulta pública? Há protocolo registrado? Diretriz sem método explícito é, na prática, opinião de especialistas com formato de diretriz.
+  </p>
+
+  <h3 id="conflitos">3. Como conflitos de interesse foram declarados e gerenciados?</h3>
+
+  <p>
+    Membros do painel receberam dinheiro de fabricantes? Houve membros sem conflitos? Como votos foram conduzidos quando havia conflito? Diretrizes recentes da OMS exigem maioria do painel sem conflitos comerciais.
+  </p>
+
+  <h3 id="classificacao">4. Qual sistema de classificação foi usado?</h3>
+
+  <p>
+    GRADE? Sistema próprio (USPSTF)? Outro? GRADE é hoje o padrão mais transparente — separa <strong>qualidade da evidência</strong> (alta, moderada, baixa, muito baixa) da <strong>força da recomendação</strong> (forte ou fraca). Diretrizes que não distinguem essas duas dimensões devem ser lidas com mais cautela.
+  </p>
+
+  <p>→ Aprofunde-se em <a href={withBase('/ferramentas/grade/', base)}>GRADE</a>.</p>
+
+  <h3 id="data">5. Quando foi publicada e quando será atualizada?</h3>
+
+  <p>
+    Diretriz com mais de 5 anos pode estar desatualizada — especialmente em áreas com rápida produção de evidência. Boas instituições têm calendário de revisão (geralmente 3 a 5 anos).
+  </p>
+
+  <h2 id="quando-divergem">Quando diretrizes divergem</h2>
+
+  <p>
+    Não é raro encontrar recomendações divergentes entre USPSTF, NICE e CTFPHC para o mesmo tema — por exemplo, rastreamento de câncer de próstata. As razões podem ser:
+  </p>
+
+  <ul>
+    <li><strong>Diferenças metodológicas</strong> — uma força-tarefa pode ter incluído estudos que outra excluiu</li>
+    <li><strong>Diferenças de valores</strong> — quanto peso dar a falsos positivos e ansiedade vs. detecção precoce?</li>
+    <li><strong>Diferenças de contexto</strong> — recomendação para sistema com cobertura universal pode diferir de recomendação para sistema misto</li>
+    <li><strong>Diferenças de timing</strong> — uma força-tarefa pode ter atualizado a recomendação após estudo recente; outra ainda não</li>
+  </ul>
+
+  <p>
+    Quando houver divergência, vale <strong>ler cada diretriz para entender o porquê</strong>. Frequentemente, a divergência reflete genuína incerteza no campo — e essa incerteza precisa ser comunicada ao paciente, não escondida atrás de uma recomendação única.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Tratar diretriz como obrigação inflexível.</strong> Diretriz é apoio à decisão, não substituto dela. O paciente real frequentemente tem características fora dos critérios da diretriz.</li>
+    <li><strong>Aceitar recomendação sem verificar a metodologia.</strong> Diretrizes patrocinadas pela indústria farmacêutica existem, e seu aval em diretriz não substitui análise crítica.</li>
+    <li><strong>Aplicar diretriz internacional sem considerar contexto local.</strong> Recomendação de rastreamento de câncer de cólon dos EUA pode não ser viável em região com poucos endoscopistas. NICE pode ter recomendação dependente de tecnologia indisponível localmente.</li>
+    <li><strong>Confundir "ausência de recomendação" com "não recomendar".</strong> USPSTF "I" significa <strong>evidência insuficiente</strong> — não significa "não fazer". A decisão volta para o profissional, com transparência sobre a incerteza.</li>
+    <li><strong>Ignorar a data.</strong> Diretriz de 2015 pode estar superada em área de evolução rápida (oncologia, cardiologia).</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a> — onde forças-tarefa preventivas concentram boa parte da produção</li>
+    <li><a href={withBase('/ferramentas/grade/', base)}>GRADE</a> — sistema usado pela maioria das diretrizes modernas</li>
+    <li><a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> — para avaliar revisões sistemáticas, base de muitas diretrizes</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde a diretriz encontra o paciente real</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — especialmente importante quando diretrizes divergem ou são "C" no USPSTF</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>U.S. Preventive Services Task Force. <em>Procedure Manual</em>. Disponível em: <a href="https://www.uspreventiveservicestaskforce.org/uspstf/about-uspstf/methods-and-processes/procedure-manual" rel="noopener noreferrer" target="_blank">uspreventiveservicestaskforce.org</a>.</li>
+      <li>Canadian Task Force on Preventive Health Care. <em>Methods</em>. Disponível em: <a href="https://canadiantaskforce.ca/methods/" rel="noopener noreferrer" target="_blank">canadiantaskforce.ca/methods</a>.</li>
+      <li>National Institute for Health and Care Excellence. <em>Developing NICE guidelines: the manual</em>. Disponível em: <a href="https://www.nice.org.uk/process/pmg20" rel="noopener noreferrer" target="_blank">nice.org.uk/process/pmg20</a>.</li>
+      <li>Higgins JPT, Thomas J, Chandler J, et al, eds. <em>Cochrane Handbook for Systematic Reviews of Interventions</em> version 6.4. Cochrane; 2023. Disponível em: <a href="https://training.cochrane.org/handbook" rel="noopener noreferrer" target="_blank">training.cochrane.org/handbook</a>.</li>
+      <li>Brasil. Ministério da Saúde. <em>Diretrizes Metodológicas: Sistema GRADE — Manual de graduação da qualidade da evidência e força de recomendação para tomada de decisão em saúde</em>. Brasília: Ministério da Saúde; 2014.</li>
+      <li>INCA. <em>Diretrizes brasileiras para o rastreamento do câncer do colo do útero</em>. 2ª ed. Rio de Janeiro: INCA; 2016.</li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,14 +1,175 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Medidas de frequência"
-  description="Prevalência, incidência, taxa, risco — como interpretar e quando usar cada uma."
+<DocLayout
+  title="Medidas de frequência — prevalência e incidência"
+  description="Os dois conceitos básicos para descrever a ocorrência de um evento numa população, e por que confundi-los muda decisões clínicas."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Medidas de frequência</h1>
-  <p class="text-lg text-text-secondary mb-6">Prevalência, incidência, taxa, risco — como interpretar e quando usar cada uma.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Medidas de frequência — prevalência e incidência</h1>
+
+  <p>
+    Quando dizemos que "10% da população tem diabetes", é prevalência. Quando dizemos que "5 em 1000 pessoas desenvolvem diabetes a cada ano", é incidência. São coisas diferentes, descrevem situações distintas, e confundi-las leva a decisões clínicas erradas — desde alocação de recursos até interpretação de risco para um paciente específico.
+  </p>
+
+  <p>Esta página explica ambas e mostra por que cada uma importa.</p>
+
+  <h2 id="prevalencia">Prevalência — a fotografia</h2>
+
+  <p>
+    <strong>Prevalência</strong> é a proporção de indivíduos numa população que apresentam uma determinada condição <strong>num dado momento ou período</strong>. É essencialmente uma fotografia da carga de doença atual.
+  </p>
+
+  <code class="formula">Prevalência = casos existentes / população total</code>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li>Em 2025, aproximadamente <strong>10% dos brasileiros adultos vivem com diabetes</strong>. Esta é a <strong>prevalência pontual</strong> (numa dada data).</li>
+    <li>Numa unidade de saúde com 3000 adultos cadastrados, 600 têm hipertensão diagnosticada. A <strong>prevalência de hipertensão</strong> nesta população é 600/3000 = <strong>20%</strong>.</li>
+    <li>Numa turma de 100 estudantes, 10 estão gripados hoje. A <strong>prevalência de gripe</strong> na turma hoje é 10%.</li>
+  </ul>
+
+  <p>
+    A prevalência é útil para <strong>planejamento de recursos</strong>: quantos pacientes precisam de acompanhamento? quantas consultas por mês? quantas medicações em estoque? Ela responde "quão comum é a doença agora".
+  </p>
+
+  <h2 id="incidencia">Incidência — o filme</h2>
+
+  <p>
+    <strong>Incidência</strong> é a taxa ou proporção de <strong>novos casos</strong> que se desenvolvem numa população suscetível <strong>durante um determinado período</strong>. Mede o risco ou velocidade de surgimento da condição.
+  </p>
+
+  <code class="formula">Incidência = novos casos no período / população em risco no início do período</code>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li>Numa cidade, em um ano, ocorrem 50 novos casos de dengue por 1000 habitantes. A <strong>incidência anual</strong> de dengue é 50/1000 = 5%.</li>
+    <li>Na unidade de saúde com 2400 adultos não hipertensos, surgem 50 novos casos de hipertensão num ano. A <strong>incidência anual</strong> é 50/2400 = <strong>~2%</strong>.</li>
+    <li>Na turma de 100 estudantes, ao longo de uma semana, 5 estudantes saudáveis adoecem. A <strong>incidência semanal</strong> é 5/100 = 5% por semana.</li>
+  </ul>
+
+  <p>
+    A incidência é útil para <strong>estudos de causa de doença</strong> e <strong>avaliação de impacto de intervenções preventivas</strong>. Ela responde "qual o risco de novos casos surgirem"? É a medida que muda quando uma vacina funciona, quando uma campanha de prevenção tem efeito, quando uma exposição é eliminada.
+  </p>
+
+  <h2 id="diferenca">A diferença que muda tudo</h2>
+
+  <p>
+    Resumindo: <strong>prevalência reflete quantos já estão doentes</strong> (uma foto instantânea); <strong>incidência reflete quantos ficam doentes ao longo do tempo</strong> (uma filmagem). Elas se complementam, mas não são intercambiáveis.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Prevalência</th>
+          <th scope="col">Incidência</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Pergunta que responde</th>
+          <td>Quão comum é?</td>
+          <td>Qual o risco de surgir?</td>
+        </tr>
+        <tr>
+          <th scope="row">Numerador</th>
+          <td>Casos existentes</td>
+          <td>Casos novos</td>
+        </tr>
+        <tr>
+          <th scope="row">Denominador</th>
+          <td>População total</td>
+          <td>População em risco</td>
+        </tr>
+        <tr>
+          <th scope="row">Tempo</th>
+          <td>Um momento ou período</td>
+          <td>Período definido</td>
+        </tr>
+        <tr>
+          <th scope="row">Útil para</th>
+          <td>Planejamento de recursos</td>
+          <td>Avaliar prevenção, identificar causas</td>
+        </tr>
+        <tr>
+          <th scope="row">Aumenta com</th>
+          <td>Mais incidência <strong>e</strong> maior duração da doença</td>
+          <td>Maior exposição ao fator de risco</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    Um detalhe importante: <strong>uma doença crônica pode ter alta prevalência mesmo com baixa incidência</strong>, porque os casos se acumulam. O HIV em tratamento é exemplo: a incidência caiu drasticamente nas últimas duas décadas, mas a prevalência <strong>subiu</strong> — porque quem tem o vírus vive muito mais tempo. Sem a distinção, programas de saúde ficam confusos.
+  </p>
+
+  <h2 id="exemplo-pratico">Um exemplo prático</h2>
+
+  <p>
+    Considere uma unidade de saúde no interior, com 3000 adultos cadastrados. Dr. José quer planejar o cuidado a hipertensos. Ele tem dois números:
+  </p>
+
+  <ul>
+    <li><strong>600 adultos com hipertensão diagnosticada</strong> (prevalência atual de 20%)</li>
+    <li><strong>50 novos casos de hipertensão por ano</strong> entre os 2400 adultos sem o diagnóstico (incidência anual de 2%)</li>
+  </ul>
+
+  <p>
+    A prevalência diz que ele precisa <strong>acompanhar 600 pessoas hoje</strong> — isso define quantas consultas, exames de rotina, prescrições continuadas. A incidência diz que ele precisa <strong>estar preparado para 50 novos diagnósticos por ano</strong> — isso define quanto tempo reservar para investigação inicial, quanto material educativo distribuir, quanta capacidade preventiva oferecer.
+  </p>
+
+  <p>
+    São decisões diferentes, baseadas em medidas diferentes. Confundir as duas leva a sub-planejar uma das frentes.
+  </p>
+
+  <h2 id="onde-aparecem-mbe">Onde elas aparecem na MBE</h2>
+
+  <p>Em quase todas as etapas dos 5As, mas com papéis distintos:</p>
+
+  <ul>
+    <li><strong>Em PICO</strong>: o componente "P" (paciente/população) frequentemente envolve descrição de <strong>prevalência</strong> ("idosos com hipertensão")</li>
+    <li><strong>Em estudos diagnósticos</strong>: a <strong>prevalência da doença</strong> muda o valor preditivo do teste — base de toda a calculadora de testes diagnósticos</li>
+    <li><strong>Em estudos terapêuticos</strong>: a <strong>incidência do desfecho</strong> nos grupos é o que se compara para calcular risco relativo, redução absoluta de risco, NNT</li>
+    <li><strong>Em estudos preventivos</strong>: o objetivo geralmente é <strong>reduzir a incidência</strong> de uma condição em uma população em risco</li>
+  </ul>
+
+  <p>
+    A próxima página, <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a>, explica como combinar incidências em dois grupos para chegar a RR, RAR, NNT e NNH — as medidas que dizem se um tratamento funciona e o quanto.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>"50 casos de gripe na escola hoje" — isso é prevalência ou incidência?</strong> Depende. Se você está dizendo "atualmente há 50 alunos gripados", é prevalência. Se está dizendo "esta semana 50 alunos adoeceram", é incidência. A frase precisa ser explícita.</li>
+    <li><strong>Incidência sem denominador-em-risco.</strong> Calcular incidência de hipertensão dividindo novos casos pela população <strong>total</strong> (incluindo quem já tem) infla o denominador e subestima o risco real. Tem que excluir quem já está doente.</li>
+    <li><strong>Prevalência sem período definido.</strong> "A prevalência de depressão é 8%" — em qualquer momento? em algum momento da vida? num ano? São números diferentes (prevalência pontual vs. prevalência ao longo da vida). Sem o período, o número não significa nada concreto.</li>
+    <li><strong>Comparar prevalência de cidade A com incidência de cidade B.</strong> Erro comum em discussões — descrevem fenômenos diferentes e não cabe comparar diretamente.</li>
+    <li><strong>Concluir causa por prevalência alta.</strong> Que uma condição seja prevalente num grupo não diz que o grupo causa a condição. Doenças crônicas têm prevalência alta em idosos não porque a idade cause; é porque o tempo de exposição e a duração da doença se acumulam.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — como combinar incidências para calcular RR, RAR, NNT</li>
+    <li><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Testes diagnósticos</a> — onde a prevalência muda o valor preditivo</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — qual desenho mede prevalência (transversal) vs. incidência (coorte, ECR)</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — o lugar dos estudos de frequência</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Rothman KJ, Greenland S, Lash TL. <em>Modern Epidemiology</em>. 4ª ed. Philadelphia: Lippincott Williams & Wilkins; 2021. Capítulo 3.</li>
+      <li>Porta M, ed. <em>A Dictionary of Epidemiology</em>. 6ª ed. Oxford: Oxford University Press; 2014. Verbetes "Incidence" e "Prevalence".</li>
+      <li>International Diabetes Federation. <em>IDF Diabetes Atlas</em>, 10th ed. Brussels: IDF; 2021. Disponível em: <a href="https://diabetesatlas.org" rel="noopener noreferrer" target="_blank">diabetesatlas.org</a>.</li>
+    </ol>
+  </section>
+</DocLayout>

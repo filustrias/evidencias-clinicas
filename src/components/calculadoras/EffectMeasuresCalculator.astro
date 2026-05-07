@@ -1,19 +1,976 @@
 ---
 /**
- * Placeholder. Especificação detalhada virá em documento separado.
- * Quando implementada, deve oferecer cálculo de RR, OR, RD, NNT/NNH,
- * com intervalos de confiança e interpretação clínica.
+ * EffectMeasuresCalculator.astro
+ *
+ * Calculadora de medidas de efeito a partir de uma tabela 2×2.
+ *
+ * Inputs (4 células da tabela): a (intervenção+evento), b (intervenção+sem evento),
+ *                                c (controle+evento), d (controle+sem evento)
+ * Outputs: RA grupos, RR (com IC95%), OR (com IC95%), RAR (com IC95%),
+ *          RRR, NNT (com IC95%), NNH (com IC95%)
+ *
+ * Quando o IC do RAR cruza zero (não-significativo), o NNT é matematicamente
+ * indefinido — a calculadora indica isso explicitamente e não exibe um número
+ * que sugeriria certeza falsa.
+ *
+ * Cenários pré-definidos: ASPREE (aspirina prevenção primária), DAPA-HF (dapagliflozina),
+ *                          Cálcio (Hofmeyr), Reset.
+ *
+ * Componente standalone — pode ser importado em qualquer página.
+ * Usa as CSS variables definidas em src/styles/global.css.
+ *
+ * Localização sugerida: src/components/calculadoras/EffectMeasuresCalculator.astro
+ *
+ * Uso:
+ *   import EffectMeasuresCalculator from '@/components/calculadoras/EffectMeasuresCalculator.astro';
+ *   ...
+ *   <EffectMeasuresCalculator />
  */
 ---
-<div data-pagefind-ignore class="rounded-lg border border-dashed border-border-default bg-surface p-8 text-center my-8">
-  <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent-soft-bg mb-4">
-    <svg viewBox="0 0 24 24" class="h-6 w-6 text-accent-soft-text" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-      <path d="M3 12h4l3-7 4 14 3-7h4" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
+
+<section class="em-calc" aria-labelledby="em-calc-title">
+  <header class="em-calc__header">
+    <h2 id="em-calc-title">Calculadora interativa</h2>
+    <p>Insira as quatro células da tabela 2×2 do estudo. As medidas calculam-se em tempo real.</p>
+  </header>
+
+  <div class="em-calc__presets" role="toolbar" aria-label="Cenários de exemplo">
+    <span class="em-calc__preset-label">Cenários:</span>
+    <span class="em-calc__preset-pair">
+      <button type="button" class="em-calc__preset" data-preset="aspree">Aspirina (ASPREE)</button>
+      <button type="button" class="em-calc__preset-info" data-preset-info="aspree" aria-label="Sobre o estudo ASPREE" aria-expanded="false" aria-controls="em-calc__info">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" />
+          <path d="M8 7v4" stroke-linecap="round" />
+          <circle cx="8" cy="5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      </button>
+    </span>
+    <span class="em-calc__preset-pair">
+      <button type="button" class="em-calc__preset" data-preset="dapa">Dapagliflozina (DAPA-HF)</button>
+      <button type="button" class="em-calc__preset-info" data-preset-info="dapa" aria-label="Sobre o estudo DAPA-HF" aria-expanded="false" aria-controls="em-calc__info">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" />
+          <path d="M8 7v4" stroke-linecap="round" />
+          <circle cx="8" cy="5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      </button>
+    </span>
+    <span class="em-calc__preset-pair">
+      <button type="button" class="em-calc__preset" data-preset="calcio">Cálcio (Hofmeyr)</button>
+      <button type="button" class="em-calc__preset-info" data-preset-info="calcio" aria-label="Sobre o estudo de cálcio em pré-eclâmpsia" aria-expanded="false" aria-controls="em-calc__info">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" />
+          <path d="M8 7v4" stroke-linecap="round" />
+          <circle cx="8" cy="5" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+      </button>
+    </span>
+    <button type="button" class="em-calc__preset em-calc__preset--ghost" data-preset="reset">Reiniciar</button>
   </div>
-  <h3 class="text-lg font-medium text-text-primary mb-1">Calculadora em construção</h3>
-  <p class="text-sm text-text-secondary max-w-md mx-auto">
-    Calculadora de medidas de efeito: RR, OR, redução absoluta de risco, NNT e NNH com intervalos de confiança.
-    Especificação técnica e implementação em documento subsequente.
-  </p>
-</div>
+
+  <div id="em-calc__info" class="em-calc__info-panel" hidden>
+    <button type="button" class="em-calc__info-close" aria-label="Fechar informações sobre o estudo">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path d="M4 4l8 8M12 4L4 12" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <article data-info-content="aspree" hidden>
+      <h3>ASPREE — Aspirina em prevenção primária no idoso</h3>
+      <p><strong>Tema clínico:</strong> prevenção primária cardiovascular no idoso saudável.</p>
+      <p>
+        <strong>Estudo:</strong> <em>Aspirin in Reducing Events in the Elderly</em> (ASPREE) — ensaio clínico randomizado, duplo-cego, controlado por placebo, multicêntrico (Austrália e EUA), publicado em 2018 no <em>New England Journal of Medicine</em>. <strong>Amostra: 19.114 participantes.</strong>
+      </p>
+      <p>
+        <strong>População:</strong> adultos com 70 anos ou mais (ou 65 anos para afro-americanos e hispânicos), sem doença cardiovascular estabelecida, sem demência, sem condições limitantes da expectativa de vida. Mediana de seguimento de 4,7 anos.
+      </p>
+      <p>
+        <strong>Intervenção:</strong> aspirina 100 mg ao dia (n = 9.525). <strong>Controle:</strong> placebo (n = 9.589).
+      </p>
+      <p>
+        <strong>Desfecho de interesse aqui:</strong> doença cardiovascular (infarto fatal, AVC fatal, hospitalização por insuficiência cardíaca, AVC ou infarto não-fatal). <em>Resultado: sem diferença estatisticamente significativa entre os grupos. Este é o cenário no qual o NNT é matematicamente indefinido.</em>
+      </p>
+      <p class="em-calc__info-link">
+        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1805819" rel="noopener noreferrer" target="_blank">Acesso ao artigo (NEJM, 2018)</a>
+      </p>
+    </article>
+
+    <article data-info-content="dapa" hidden>
+      <h3>DAPA-HF — Dapagliflozina em insuficiência cardíaca</h3>
+      <p><strong>Tema clínico:</strong> terapia farmacológica em insuficiência cardíaca com fração de ejeção reduzida.</p>
+      <p>
+        <strong>Estudo:</strong> <em>Dapagliflozin And Prevention of Adverse-outcomes in Heart Failure</em> (DAPA-HF) — ensaio clínico randomizado, duplo-cego, controlado por placebo, multicêntrico (20 países, 410 centros), publicado em 2019 no <em>New England Journal of Medicine</em>. <strong>Amostra: 4.744 participantes.</strong> Mediana de seguimento de 18,2 meses.
+      </p>
+      <p>
+        <strong>População:</strong> adultos com insuficiência cardíaca crônica (NYHA classe II–IV), fração de ejeção do ventrículo esquerdo ≤ 40%, NT-proBNP elevado. Pacientes com e sem diabetes tipo 2 foram incluídos.
+      </p>
+      <p>
+        <strong>Intervenção:</strong> dapagliflozina 10 mg ao dia, em adição ao tratamento padrão (n = 2.373). <strong>Controle:</strong> placebo, em adição ao tratamento padrão (n = 2.371).
+      </p>
+      <p>
+        <strong>Desfecho composto a ser evitado:</strong> piora da insuficiência cardíaca (hospitalização ou consulta urgente exigindo terapia intravenosa) ou morte cardiovascular. <em>Resultado: redução estatisticamente significativa, com benefício consistente entre subgrupos.</em>
+      </p>
+      <p class="em-calc__info-link">
+        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1911303" rel="noopener noreferrer" target="_blank">Acesso ao artigo (NEJM, 2019)</a>
+      </p>
+    </article>
+
+    <article data-info-content="calcio" hidden>
+      <h3>Cálcio em prevenção de pré-eclâmpsia (Hofmeyr Cochrane, 2018)</h3>
+      <p><strong>Tema clínico:</strong> prevenção de doença hipertensiva específica da gestação.</p>
+      <p>
+        <strong>Estudo:</strong> <em>Calcium supplementation during pregnancy for preventing hypertensive disorders and related problems</em> — revisão sistemática e meta-análise da Cochrane, conduzida por Hofmeyr, Lawrie, Atallah e Torloni, publicada em 2018. <strong>Síntese de 13 ensaios clínicos randomizados, totalizando 15.730 mulheres</strong> (análise específica de cálcio em alta dose, ≥ 1 g/dia).
+      </p>
+      <p>
+        <strong>População:</strong> gestantes a partir do segundo trimestre, com diferentes níveis de risco para pré-eclâmpsia. Maioria dos ensaios em populações com baixa ingestão dietética de cálcio.
+      </p>
+      <p>
+        <strong>Intervenção:</strong> suplementação de cálcio em alta dose (≥ 1 g/dia), iniciada por volta de 20 semanas de gestação. <strong>Controle:</strong> placebo.
+      </p>
+      <p>
+        <strong>Desfecho a ser evitado:</strong> pré-eclâmpsia. <em>Resultado da revisão de 2018: redução de aproximadamente 50% no risco. Sustentou a recomendação da OMS para suplementação rotineira em populações com baixa ingestão dietética de cálcio.</em>
+      </p>
+      <aside class="em-calc__info-warning">
+        <strong>Nota importante:</strong> a revisão Cochrane foi atualizada em 2025 (Cluver et al, CD001059.pub6), incluindo ensaios maiores e mais recentes — e os novos resultados <strong>não confirmam o efeito protetor</strong>. A evidência atual é de <strong>alta certeza para ausência de efeito</strong> sobre pré-eclâmpsia. Este preset reflete a evidência <strong>histórica</strong> de 2018, e ilustra exatamente um fenômeno central da MBE: a evidência muda com o tempo, e recomendações fortes podem ser revertidas por estudos posteriores.
+      </aside>
+      <p class="em-calc__info-link">
+        <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD001059.pub5/full" rel="noopener noreferrer" target="_blank">Revisão original (Hofmeyr 2018)</a>
+        ·
+        <a href="https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD001059.pub6/full" rel="noopener noreferrer" target="_blank">Atualização (Cluver 2025)</a>
+      </p>
+    </article>
+  </div>
+
+  <div class="em-calc__grid">
+    <div class="em-calc__inputs">
+      <p class="em-calc__cap">Tabela 2×2 do estudo:</p>
+      <table class="em-calc__table" aria-label="Inputs da tabela 2 por 2">
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col">Desfecho ocorreu</th>
+            <th scope="col">Não ocorreu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Intervenção</th>
+            <td><input type="number" id="em-a" min="0" value="25" aria-label="Intervenção, evento ocorreu" /></td>
+            <td><input type="number" id="em-b" min="0" value="475" aria-label="Intervenção, sem evento" /></td>
+          </tr>
+          <tr>
+            <th scope="row">Controle</th>
+            <td><input type="number" id="em-c" min="0" value="50" aria-label="Controle, evento ocorreu" /></td>
+            <td><input type="number" id="em-d" min="0" value="450" aria-label="Controle, sem evento" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="em-calc__rates">
+        <div class="em-calc__rate">
+          <span class="em-calc__rate-label">RA intervenção</span>
+          <span class="em-calc__rate-value" id="em-ra-int">5,0%</span>
+        </div>
+        <div class="em-calc__rate">
+          <span class="em-calc__rate-label">RA controle</span>
+          <span class="em-calc__rate-value" id="em-ra-con">10,0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="em-calc__outputs">
+      <div class="em-calc__output">
+        <span class="em-calc__output-label">Risco relativo (RR)</span>
+        <span class="em-calc__output-value" id="em-rr">0,50</span>
+        <span class="em-calc__output-ci" id="em-rr-ci">IC 95%: 0,32 – 0,79</span>
+      </div>
+
+      <div class="em-calc__output">
+        <span class="em-calc__output-label">Odds ratio (OR)</span>
+        <span class="em-calc__output-value" id="em-or">0,47</span>
+        <span class="em-calc__output-ci" id="em-or-ci">IC 95%: 0,29 – 0,77</span>
+      </div>
+
+      <div class="em-calc__output">
+        <span class="em-calc__output-label">Redução absoluta de risco (RAR)</span>
+        <span class="em-calc__output-value" id="em-rar">5,0 pp</span>
+        <span class="em-calc__output-ci" id="em-rar-ci">IC 95%: 1,7 – 8,3 pp</span>
+      </div>
+
+      <div class="em-calc__output">
+        <span class="em-calc__output-label">Redução relativa de risco (RRR)</span>
+        <span class="em-calc__output-value" id="em-rrr">50,0%</span>
+        <span class="em-calc__output-ci" id="em-rrr-note">Cuidado: RRR sozinha esconde magnitude absoluta</span>
+      </div>
+
+      <div class="em-calc__output em-calc__output--highlight">
+        <span class="em-calc__output-label">NNT</span>
+        <span class="em-calc__output-value" id="em-nnt">20</span>
+        <span class="em-calc__output-ci" id="em-nnt-ci">IC 95%: 12 – 59</span>
+        <span class="em-calc__output-note" id="em-nnt-note">Tratar 20 pacientes para evitar 1 desfecho</span>
+      </div>
+
+      <div class="em-calc__output">
+        <span class="em-calc__output-label">NNH (se intervenção causa o desfecho)</span>
+        <span class="em-calc__output-value" id="em-nnh">—</span>
+        <span class="em-calc__output-ci" id="em-nnh-ci"></span>
+        <span class="em-calc__output-note" id="em-nnh-note">Aparece quando intervenção aumenta o risco</span>
+      </div>
+
+      <div class="em-calc__insight" role="status" aria-live="polite">
+        <p id="em-insight">A intervenção reduz o risco em 50% relativos (RR 0,50), com diferença absoluta de 5 pontos percentuais. O NNT de 20 indica efeito clinicamente significativo. O IC95% do RR não cruza 1, então o resultado é estatisticamente significativo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .em-calc {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-family: var(--font-sans);
+  }
+
+  .em-calc__header h2 {
+    margin: 0 0 0.375rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .em-calc__header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .em-calc__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .em-calc__preset-label {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.25rem;
+  }
+
+  .em-calc__preset {
+    background: transparent;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: border-color 150ms ease-out, color 150ms ease-out, background-color 150ms ease-out;
+    font-family: inherit;
+  }
+
+  .em-calc__preset:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+    border-color: var(--color-accent);
+  }
+
+  .em-calc__preset:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .em-calc__preset--ghost {
+    color: var(--color-text-muted);
+    border-color: transparent;
+  }
+
+  .em-calc__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .em-calc__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .em-calc__cap {
+    margin: 0 0 0.625rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .em-calc__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+  }
+
+  .em-calc__table thead th {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.25rem;
+  }
+
+  .em-calc__table tbody th {
+    text-align: left;
+    padding-right: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+  }
+
+  .em-calc__table input[type="number"] {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    background: var(--color-bg-canvas);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+
+  .em-calc__table input[type="number"]::-webkit-outer-spin-button,
+  .em-calc__table input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .em-calc__table input[type="number"]:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-accent);
+  }
+
+  .em-calc__rates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .em-calc__rate {
+    background: var(--color-bg-elevated);
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--radius-md);
+  }
+
+  .em-calc__rate-label {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .em-calc__rate-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.1;
+  }
+
+  .em-calc__output {
+    margin-bottom: 1.25rem;
+  }
+
+  .em-calc__output--highlight {
+    background: var(--color-accent-soft-bg);
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+  }
+
+  .em-calc__output--highlight .em-calc__output-value {
+    color: var(--color-accent);
+  }
+
+  .em-calc__output--highlight .em-calc__output-label {
+    color: var(--color-accent-soft-text);
+  }
+
+  .em-calc__output--undefined .em-calc__output-value {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .em-calc__output-label {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .em-calc__output-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.1;
+  }
+
+  .em-calc__output-ci {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+  }
+
+  .em-calc__output-ci.em-calc__not-significant {
+    color: var(--color-warning-text);
+  }
+
+  .em-calc__output-note {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.375rem;
+  }
+
+  .em-calc__insight {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .em-calc__insight p {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .em-calc__preset {
+      transition: none;
+    }
+  }
+
+  /* ---------- Pares preset + info button ---------- */
+  .em-calc__preset-pair {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 1px;
+    border-radius: var(--radius-md);
+  }
+  .em-calc__preset-pair .em-calc__preset {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+  }
+  .em-calc__preset-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    background: transparent;
+    border: 1px solid var(--color-border-default);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: border-color 150ms ease-out, color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .em-calc__preset-info:hover,
+  .em-calc__preset-info[aria-expanded='true'] {
+    background: var(--color-bg-elevated);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .em-calc__preset-info:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Painel de informação do estudo ---------- */
+  .em-calc__info-panel {
+    position: relative;
+    margin: -0.25rem 0 1.25rem;
+    padding: 1.125rem 1.375rem 1rem;
+    background: var(--color-bg-canvas);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border-subtle));
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+  }
+
+  .em-calc__info-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+  .em-calc__info-close:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+  .em-calc__info-close:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .em-calc__info-panel article {
+    margin: 0;
+  }
+  .em-calc__info-panel h3 {
+    margin: 0 2.25rem 0.75rem 0;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+  }
+  .em-calc__info-panel p {
+    margin: 0 0 0.625rem;
+    color: var(--color-text-primary);
+  }
+  .em-calc__info-panel p:last-child {
+    margin-bottom: 0;
+  }
+  .em-calc__info-panel em {
+    font-style: italic;
+    color: var(--color-text-secondary);
+  }
+  .em-calc__info-panel a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .em-calc__info-panel a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .em-calc__info-link {
+    margin-top: 0.875rem !important;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--color-border-subtle);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .em-calc__info-warning {
+    margin: 0.875rem 0;
+    padding: 0.875rem 1rem;
+    background: var(--color-warning-bg);
+    border-left: 3px solid var(--color-warning);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-warning-text);
+  }
+  .em-calc__info-warning strong {
+    color: var(--color-warning-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .em-calc__preset-info,
+    .em-calc__info-close {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type Preset = { a: number; b: number; c: number; d: number };
+
+  // Cenários reais (aproximações arredondadas para fins didáticos)
+  const PRESETS: Record<string, Preset> = {
+    // ASPREE: aspirina em prevenção primária; eventos cardiovasculares maiores em ~5 anos
+    aspree:  { a: 448,  b: 9075, c: 474,  d: 9047 },
+    // DAPA-HF: dapagliflozina em ICFER; desfecho composto cardiovascular
+    dapa:    { a: 386,  b: 1987, c: 502,  d: 1869 },
+    // Hofmeyr Cochrane: cálcio em prevenção de pré-eclâmpsia (alta dose)
+    calcio:  { a: 156,  b: 6840, c: 309,  d: 6687 },
+    // Caso didático: 25/500 vs 50/500 — RR 0,5, NNT 20
+    reset:   { a: 25,   b: 475,  c: 50,   d: 450 },
+  };
+
+  function calculate(a: number, b: number, c: number, d: number) {
+    const intTotal = a + b;
+    const conTotal = c + d;
+    const total = intTotal + conTotal;
+
+    if (intTotal === 0 || conTotal === 0 || total === 0) {
+      return null;
+    }
+
+    const raInt = a / intTotal;
+    const raCon = c / conTotal;
+
+    // RR e IC 95% (log-transformado)
+    let rr = NaN, rrLow = NaN, rrHigh = NaN;
+    if (raCon > 0 && raInt > 0) {
+      rr = raInt / raCon;
+      const seLnRR = Math.sqrt((1 / a) - (1 / intTotal) + (1 / c) - (1 / conTotal));
+      const lnRR = Math.log(rr);
+      rrLow = Math.exp(lnRR - 1.96 * seLnRR);
+      rrHigh = Math.exp(lnRR + 1.96 * seLnRR);
+    }
+
+    // OR e IC 95%
+    let or = NaN, orLow = NaN, orHigh = NaN;
+    if (a > 0 && b > 0 && c > 0 && d > 0) {
+      or = (a * d) / (b * c);
+      const seLnOR = Math.sqrt((1/a) + (1/b) + (1/c) + (1/d));
+      const lnOR = Math.log(or);
+      orLow = Math.exp(lnOR - 1.96 * seLnOR);
+      orHigh = Math.exp(lnOR + 1.96 * seLnOR);
+    }
+
+    // RAR e IC 95% (Wald). Definição: RAR positivo quando intervenção reduz risco.
+    const rar = raCon - raInt;
+    const seRAR = Math.sqrt(
+      (raInt * (1 - raInt)) / intTotal + (raCon * (1 - raCon)) / conTotal
+    );
+    const rarLow = rar - 1.96 * seRAR;
+    const rarHigh = rar + 1.96 * seRAR;
+
+    // RRR
+    const rrr = raCon > 0 ? (raCon - raInt) / raCon : 0;
+
+    // Significância: o IC do RAR cruza zero?
+    // (equivalente: o IC do RR cruza 1)
+    const rarCrossesZero = rarLow <= 0 && rarHigh >= 0;
+    const significant = !rarCrossesZero;
+
+    // Direção da estimativa pontual
+    const intervenceProtects = rar > 0;
+    const intervenceHarms = rar < 0;
+
+    // NNT/NNH só são definidos quando o resultado é estatisticamente significativo.
+    // Quando o IC do RAR cruza zero, NNT/NNH são matematicamente indefinidos —
+    // o IC se estenderia para valores positivos E negativos (de NNT muito grande
+    // a NNH muito grande), o que não tem interpretação clínica útil.
+    let nnt: number | null = null;
+    let nntLow: number | null = null;
+    let nntHigh: number | null = null;
+    let nnh: number | null = null;
+    let nnhLow: number | null = null;
+    let nnhHigh: number | null = null;
+
+    if (significant) {
+      if (intervenceProtects) {
+        // NNT pontual e IC: IC do NNT vem do IC da RAR (positiva)
+        nnt = 1 / rar;
+        // Para um IC inteiramente positivo do RAR, o IC do NNT é 1/limites trocados
+        // (porque o limite superior do RAR dá o limite inferior do NNT, e vice-versa)
+        if (rarLow > 0 && rarHigh > 0) {
+          nntLow = 1 / rarHigh;   // RAR maior → NNT menor
+          nntHigh = 1 / rarLow;   // RAR menor → NNT maior
+        }
+      } else if (intervenceHarms) {
+        // NNH: usar valor absoluto do RAR
+        nnh = 1 / Math.abs(rar);
+        if (rarLow < 0 && rarHigh < 0) {
+          nnhLow = 1 / Math.abs(rarHigh);
+          nnhHigh = 1 / Math.abs(rarLow);
+        }
+      }
+    }
+
+    return {
+      raInt, raCon,
+      rr, rrLow, rrHigh,
+      or, orLow, orHigh,
+      rar, rarLow, rarHigh,
+      rrr,
+      nnt, nntLow, nntHigh,
+      nnh, nnhLow, nnhHigh,
+      significant,
+      intervenceProtects,
+      intervenceHarms,
+      rarCrossesZero,
+    };
+  }
+
+  function formatBR(n: number, decimals: number): string {
+    if (isNaN(n) || !isFinite(n)) return '—';
+    return n.toFixed(decimals).replace('.', ',');
+  }
+
+  function formatPct(n: number, decimals: number): string {
+    if (isNaN(n) || !isFinite(n)) return '—';
+    return formatBR(n * 100, decimals) + '%';
+  }
+
+  function formatPp(n: number, decimals: number): string {
+    if (isNaN(n) || !isFinite(n)) return '—';
+    return formatBR(n * 100, decimals) + ' pp';
+  }
+
+  function generateInsight(r: any): string {
+    if (!r) return 'Insira valores válidos nas quatro células da tabela.';
+
+    if (r.rar === 0) {
+      return 'Os riscos absolutos são iguais entre os grupos. Sem efeito.';
+    }
+
+    // Caso não-significativo (IC do RAR cruza zero)
+    if (!r.significant) {
+      const rrr = Math.round(r.rrr * 100);
+      const rarPp = (r.rar * 100).toFixed(1).replace('.', ',');
+      if (r.intervenceProtects) {
+        return `A estimativa pontual sugere redução de ${rrr}% no risco relativo (RAR ${rarPp} pp). Mas o IC 95% do RAR cruza zero — o resultado não é estatisticamente significativo. Por isso, NNT é matematicamente indefinido aqui: o intervalo se estenderia de NNT a NNH, sem interpretação clínica útil. Pode haver efeito real pequeno, pode haver ausência de efeito ou até dano dentro dos limites de incerteza.`;
+      }
+      const aar = (Math.abs(r.rar) * 100).toFixed(1).replace('.', ',');
+      return `A estimativa pontual sugere aumento de risco de ${aar} pp absolutos. Mas o IC 95% do RAR cruza zero — o resultado não é estatisticamente significativo. NNH é indefinido aqui.`;
+    }
+
+    // Caso significativo, intervenção protege
+    if (r.intervenceProtects) {
+      const rarPp = (r.rar * 100).toFixed(1).replace('.', ',');
+      const rrr = Math.round(r.rrr * 100);
+      const nntInt = Math.round(r.nnt!);
+      const ciText = (r.nntLow && r.nntHigh)
+        ? ` (IC 95%: ${Math.round(r.nntLow)} a ${Math.round(r.nntHigh)})`
+        : '';
+      if (r.nnt && r.nnt > 100) {
+        return `Redução de ${rrr}% no risco relativo é estatisticamente significativa, mas a magnitude absoluta é pequena: RAR ${rarPp} pp, NNT ${nntInt}${ciText}. Avalie se justifica a exposição ao tratamento — especialmente se houver risco de dano (NNH).`;
+      }
+      return `Redução de ${rrr}% no risco relativo (RAR ${rarPp} pp). NNT de ${nntInt}${ciText} indica efeito clinicamente significativo. Para conversa com paciente: para cada ${nntInt} pacientes tratados, 1 evita o desfecho.`;
+    }
+
+    // Caso significativo, intervenção causa dano
+    const aar = (Math.abs(r.rar) * 100).toFixed(1).replace('.', ',');
+    const nnhInt = Math.round(r.nnh!);
+    const ciText = (r.nnhLow && r.nnhHigh)
+      ? ` (IC 95%: ${Math.round(r.nnhLow)} a ${Math.round(r.nnhHigh)})`
+      : '';
+    return `A intervenção aumenta o risco em ${aar} pp absolutos. NNH de ${nnhInt}${ciText} indica que a cada ${nnhInt} pacientes expostos, 1 desenvolve o desfecho adicional.`;
+  }
+
+  function setText(id: string, value: string) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function getValue(id: string): number {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    return el ? parseInt(el.value, 10) || 0 : 0;
+  }
+
+  function setValue(id: string, v: number) {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    if (el) el.value = String(v);
+  }
+
+  function setNotSignificantClass(id: string, isNotSig: boolean) {
+    const el = document.getElementById(id);
+    if (el) {
+      if (isNotSig) el.classList.add('em-calc__not-significant');
+      else el.classList.remove('em-calc__not-significant');
+    }
+  }
+
+  function setUndefinedClass(id: string, isUndefined: boolean) {
+    const el = document.getElementById(id);
+    if (el) {
+      if (isUndefined) el.classList.add('em-calc__output--undefined');
+      else el.classList.remove('em-calc__output--undefined');
+    }
+  }
+
+  function update() {
+    const a = getValue('em-a');
+    const b = getValue('em-b');
+    const c = getValue('em-c');
+    const d = getValue('em-d');
+
+    const r = calculate(a, b, c, d);
+
+    if (!r) {
+      ['em-ra-int','em-ra-con','em-rr','em-or','em-rar','em-rrr','em-nnt','em-nnh'].forEach(id => setText(id, '—'));
+      ['em-rr-ci','em-or-ci','em-rar-ci','em-nnt-ci','em-nnh-ci','em-nnt-note','em-nnh-note'].forEach(id => setText(id, ''));
+      setText('em-insight', 'Insira valores válidos nas quatro células da tabela.');
+      return;
+    }
+
+    setText('em-ra-int', formatPct(r.raInt, 1));
+    setText('em-ra-con', formatPct(r.raCon, 1));
+
+    setText('em-rr', formatBR(r.rr, 2));
+    let rrCi = `IC 95%: ${formatBR(r.rrLow, 2)} – ${formatBR(r.rrHigh, 2)}`;
+    if (!r.significant && !isNaN(r.rr)) rrCi += ' (cruza 1)';
+    setText('em-rr-ci', rrCi);
+    setNotSignificantClass('em-rr-ci', !r.significant && !isNaN(r.rr));
+
+    setText('em-or', formatBR(r.or, 2));
+    setText('em-or-ci', `IC 95%: ${formatBR(r.orLow, 2)} – ${formatBR(r.orHigh, 2)}`);
+
+    setText('em-rar', formatPp(r.rar, 1));
+    let rarCi = `IC 95%: ${formatPp(r.rarLow, 1)} – ${formatPp(r.rarHigh, 1)}`;
+    if (r.rarCrossesZero) rarCi += ' (cruza 0)';
+    setText('em-rar-ci', rarCi);
+    setNotSignificantClass('em-rar-ci', r.rarCrossesZero);
+
+    setText('em-rrr', formatPct(r.rrr, 1));
+
+    // NNT: só exibe número quando o resultado é estatisticamente significativo
+    // E a intervenção está reduzindo o risco. Caso contrário, marca como
+    // "não calculável" — escolha pedagógica para evitar números enganosos.
+    const nntBox = document.querySelector('.em-calc__output--highlight') as HTMLElement | null;
+    if (r.nnt !== null && r.intervenceProtects) {
+      setText('em-nnt', String(Math.round(r.nnt)));
+      setText('em-nnt-ci', (r.nntLow && r.nntHigh)
+        ? `IC 95%: ${Math.round(r.nntLow)} – ${Math.round(r.nntHigh)}`
+        : '');
+      setText('em-nnt-note', `Tratar ${Math.round(r.nnt)} pacientes para evitar 1 desfecho`);
+      setUndefinedClass('em-nnt', false);
+      if (nntBox) nntBox.style.display = '';
+    } else if (r.intervenceHarms) {
+      setText('em-nnt', '—');
+      setText('em-nnt-ci', '');
+      setText('em-nnt-note', 'A intervenção parece causar o desfecho — veja NNH');
+      setUndefinedClass('em-nnt', true);
+      if (nntBox) nntBox.style.display = '';
+    } else {
+      // Não-significativo
+      setText('em-nnt', 'não calculável');
+      setText('em-nnt-ci', '');
+      setText('em-nnt-note', 'NNT só faz sentido quando o IC do RAR não cruza zero');
+      setUndefinedClass('em-nnt', true);
+      if (nntBox) nntBox.style.display = '';
+    }
+
+    // NNH: análoga ao NNT, mas para dano
+    if (r.nnh !== null && r.intervenceHarms) {
+      setText('em-nnh', String(Math.round(r.nnh)));
+      setText('em-nnh-ci', (r.nnhLow && r.nnhHigh)
+        ? `IC 95%: ${Math.round(r.nnhLow)} – ${Math.round(r.nnhHigh)}`
+        : '');
+      setText('em-nnh-note', `${Math.round(r.nnh)} pacientes expostos para 1 desfecho adicional`);
+      setUndefinedClass('em-nnh', false);
+    } else if (r.intervenceProtects && r.significant) {
+      setText('em-nnh', '—');
+      setText('em-nnh-ci', '');
+      setText('em-nnh-note', 'A intervenção protege — veja NNT');
+      setUndefinedClass('em-nnh', true);
+    } else if (!r.significant) {
+      setText('em-nnh', 'não calculável');
+      setText('em-nnh-ci', '');
+      setText('em-nnh-note', 'NNH só faz sentido quando o IC do RAR não cruza zero');
+      setUndefinedClass('em-nnh', true);
+    } else {
+      setText('em-nnh', '—');
+      setText('em-nnh-ci', '');
+      setText('em-nnh-note', 'Aparece quando intervenção aumenta o risco');
+      setUndefinedClass('em-nnh', true);
+    }
+
+    setText('em-insight', generateInsight(r));
+  }
+
+  ['em-a', 'em-b', 'em-c', 'em-d'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', update);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.preset;
+      if (!key || !(key in PRESETS)) return;
+      const preset = PRESETS[key];
+      setValue('em-a', preset.a);
+      setValue('em-b', preset.b);
+      setValue('em-c', preset.c);
+      setValue('em-d', preset.d);
+      update();
+      // Trocar de cenário fecha automaticamente o popover de informações
+      // do estudo anterior — evita dissonância entre o conteúdo aberto e o
+      // preset agora ativo.
+      closeInfoPanel();
+    });
+  });
+
+  // ---------- Info popovers ----------
+  // Cada botão `[data-preset-info]` alterna a visibilidade do painel
+  // compartilhado e mostra o conteúdo correspondente.
+  const infoPanel = document.getElementById('em-calc__info');
+  const infoButtons = document.querySelectorAll<HTMLButtonElement>('[data-preset-info]');
+  const infoArticles = document.querySelectorAll<HTMLElement>('[data-info-content]');
+  const infoCloseBtn = document.querySelector<HTMLButtonElement>('.em-calc__info-close');
+
+  function closeInfoPanel() {
+    if (!infoPanel) return;
+    infoPanel.hidden = true;
+    infoArticles.forEach((a) => { a.hidden = true; });
+    infoButtons.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+  }
+
+  function openInfoFor(key: string) {
+    if (!infoPanel) return;
+    let found = false;
+    infoArticles.forEach((a) => {
+      const match = a.dataset.infoContent === key;
+      a.hidden = !match;
+      if (match) found = true;
+    });
+    if (!found) return;
+    infoPanel.hidden = false;
+    infoButtons.forEach((b) => {
+      b.setAttribute('aria-expanded', String(b.dataset.presetInfo === key));
+    });
+  }
+
+  infoButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.presetInfo;
+      if (!key) return;
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closeInfoPanel();
+      } else {
+        openInfoFor(key);
+      }
+    });
+  });
+
+  infoCloseBtn?.addEventListener('click', closeInfoPanel);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && infoPanel && !infoPanel.hidden) {
+      closeInfoPanel();
+    }
+  });
+
+  update();
+</script>

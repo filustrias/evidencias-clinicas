@@ -1,15 +1,390 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const link = (href: string) => withBase(href, base);
+
+const letters = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W'];
 ---
-<PageLayout
+<DocLayout
   title="Glossário"
-  description="Termos-chave de Medicina Baseada em Evidências, com definições concisas."
+  description="Vocabulário essencial da Medicina Baseada em Evidências. Termos técnicos definidos de forma direta, com link para a página detalhada."
+  showToc={false}
 >
-  <h1 class="text-4xl font-medium mb-3">Glossário</h1>
-  <p class="text-lg text-text-secondary mb-6">
-    Termos de MBE com definições objetivas — desde tipos de estudo até medidas estatísticas.
+  <h1>Glossário</h1>
+
+  <p>
+    Vocabulário essencial da MBE em ordem alfabética. Cada verbete define o termo de forma direta e
+    remete à página onde o conceito é trabalhado em detalhe.
   </p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+
+  <div class="not-prose my-6 flex flex-wrap gap-2 text-sm">
+    {letters.map((l) => (
+      <a
+        href={`#letra-${l.toLowerCase()}`}
+        class="inline-flex items-center justify-center w-9 h-9 rounded border border-border-default bg-surface text-text-primary font-medium hover:bg-elevated transition-colors"
+      >
+        {l}
+      </a>
+    ))}
   </div>
-</PageLayout>
+
+  <h2 id="letra-a">A</h2>
+
+  <p>
+    <strong>Acquire (Buscar)</strong> — Segundo dos <a href={link('/cinco-as/')}>5As</a>. Buscar a
+    melhor evidência disponível para responder à pergunta clínica formulada. → <a href={link('/cinco-as/buscar/')}>Acquire</a>
+  </p>
+
+  <p>
+    <strong>AMSTAR-2</strong> — <em>A MeaSurement Tool to Assess systematic Reviews</em>. Ferramenta de
+    16 itens para avaliar a qualidade metodológica de revisões sistemáticas. → <a href={link('/ferramentas/amstar/')}>AMSTAR-2</a>
+  </p>
+
+  <p>
+    <strong>Apply (Aplicar)</strong> — Quarto dos <a href={link('/cinco-as/')}>5As</a>. Integrar
+    evidência, contexto e preferências do paciente para tomar a decisão clínica. → <a href={link('/cinco-as/aplicar/')}>Apply</a>
+  </p>
+
+  <p>
+    <strong>Appraise (Avaliar)</strong> — Terceiro dos <a href={link('/cinco-as/')}>5As</a>. Avaliar
+    criticamente a evidência encontrada quanto à validade, importância e aplicabilidade. → <a href={link('/cinco-as/avaliar/')}>Appraise</a>
+  </p>
+
+  <p>
+    <strong>Ask (Perguntar)</strong> — Primeiro dos <a href={link('/cinco-as/')}>5As</a>. Transformar
+    dúvida clínica em pergunta investigável estruturada. → <a href={link('/cinco-as/perguntar/')}>Ask</a>
+  </p>
+
+  <p>
+    <strong>Assess (Monitorar)</strong> — Quinto e último dos <a href={link('/cinco-as/')}>5As</a>.
+    Avaliar resultado clínico e o processo que levou à decisão. → <a href={link('/cinco-as/monitorar/')}>Assess</a>
+  </p>
+
+  <h2 id="letra-c">C</h2>
+
+  <p>
+    <strong>Caso-controle</strong> — <a href={link('/conceitos/desenhos-de-estudo/')}>Desenho de
+    estudo</a> retrospectivo que compara grupo com a doença (casos) e grupo sem (controles),
+    investigando exposições prévias. Útil para doenças raras.
+  </p>
+
+  <p>
+    <strong>CASP</strong> — <em>Critical Appraisal Skills Programme</em>. Conjunto de checklists para
+    avaliação crítica de diferentes tipos de estudo. → <a href={link('/ferramentas/casp/')}>CASP</a>
+  </p>
+
+  <p>
+    <strong>Cegamento</strong> — Procedimento em que pacientes, profissionais ou avaliadores não sabem
+    qual intervenção foi alocada a quem. Reduz <a href={link('/conceitos/vieses/')}>viés de aferição</a>.
+  </p>
+
+  <p>
+    <strong>Coorte</strong> — <a href={link('/conceitos/desenhos-de-estudo/')}>Desenho de estudo</a>
+    que acompanha grupo de pessoas ao longo do tempo, registrando exposições e desfechos. Apropriado
+    para questões de prognóstico.
+  </p>
+
+  <p>
+    <strong>CTFPHC</strong> — <em>Canadian Task Force on Preventive Health Care</em>. Força-tarefa
+    criada em 1976, primeira no mundo dedicada a recomendações preventivas baseadas em evidência. →
+    <a href={link('/conceitos/diretrizes-e-forcas-tarefa/')}>Diretrizes e forças-tarefa</a>
+  </p>
+
+  <h2 id="letra-d">D</h2>
+
+  <p>
+    <strong>Decisão compartilhada</strong> — Processo em que profissional e paciente decidem juntos a
+    conduta, integrando evidência e preferências. → <a href={link('/conceitos/decisao-compartilhada/')}>Decisão compartilhada</a>
+  </p>
+
+  <p>
+    <strong>Desfecho composto</strong> — Combinação de múltiplos eventos como desfecho único de um
+    estudo (ex.: morte cardiovascular ou hospitalização ou IAM). Aumenta poder estatístico, mas pode
+    obscurecer efeitos diferentes nos componentes.
+  </p>
+
+  <p>
+    <strong>Desfecho substituto</strong> — Marcador biológico ou intermediário usado em lugar de
+    desfecho clínico final (ex.: LDL em vez de IAM; HbA1c em vez de mortalidade). Atalho útil mas
+    perigoso. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <h2 id="letra-e">E</h2>
+
+  <p>
+    <strong>ECR</strong> — Ensaio Clínico Randomizado. <a href={link('/conceitos/desenhos-de-estudo/')}>Desenho
+    de estudo</a> em que participantes são alocados aleatoriamente entre intervenção e comparador.
+    Padrão-ouro para questões de eficácia.
+  </p>
+
+  <p>
+    <strong>Especificidade</strong> — Proporção de não-doentes corretamente identificados como
+    negativos pelo teste. Teste muito específico → resultado positivo confirma a doença (SpPin). →
+    <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <h2 id="letra-f">F</h2>
+
+  <p><strong>Falso negativo</strong> — Pessoa com a doença que recebe resultado negativo no teste.</p>
+
+  <p><strong>Falso positivo</strong> — Pessoa sem a doença que recebe resultado positivo no teste.</p>
+
+  <p>
+    <strong>Foreground vs. background</strong> — Distinção entre pergunta clínica focada e específica
+    (foreground) e pergunta ampla sobre tema (background). Cada uma demanda fonte distinta. →
+    <a href={link('/conceitos/duvidas-clinicas/')}>Dúvidas clínicas</a>
+  </p>
+
+  <h2 id="letra-g">G</h2>
+
+  <p>
+    <strong>GRADE</strong> — <em>Grading of Recommendations Assessment, Development and Evaluation</em>.
+    Sistema para avaliar certeza da evidência (alta, moderada, baixa, muito baixa) e força da
+    recomendação (forte ou fraca). → <a href={link('/ferramentas/grade/')}>GRADE</a>
+  </p>
+
+  <h2 id="letra-h">H</h2>
+
+  <p>
+    <strong>Hazard ratio (HR)</strong> — Razão de risco que considera o tempo até o evento. Comum em
+    análises de sobrevida e estudos de prognóstico.
+  </p>
+
+  <p>
+    <strong>Heterogeneidade</strong> — Variação entre estudos de uma meta-análise. Pode ser
+    estatística (I²) ou clínica (diferenças nas populações, intervenções, desfechos).
+  </p>
+
+  <p>
+    <strong>HPV-DNA</strong> — Teste molecular para detecção de papilomavírus humano oncogênicos.
+    Recomendado pela OMS como rastreamento primário de câncer de colo. →
+    <a href={link('/em-pratica/diagnostica/')}>Em prática — diagnóstica</a>
+  </p>
+
+  <h2 id="letra-i">I</h2>
+
+  <p>
+    <strong>IC95% (Intervalo de Confiança 95%)</strong> — Faixa que tem 95% de probabilidade de conter
+    o valor verdadeiro do efeito na população. Quando cruza o valor de "sem efeito" (1 para RR/OR; 0
+    para RAR), o resultado não é estatisticamente significativo.
+  </p>
+
+  <p>
+    <strong>Incidência</strong> — Taxa de novos casos numa população em determinado período.
+    Diferente de <a href="#letra-p">prevalência</a>. → <a href={link('/conceitos/medidas-de-frequencia/')}>Medidas de frequência</a>
+  </p>
+
+  <p>
+    <strong>IPTp</strong> — <em>Intermittent Preventive Treatment in pregnancy</em>. Estratégia
+    preventiva da malária na gestação, com sulfadoxina-pirimetamina. →
+    <a href={link('/em-pratica/preventiva/')}>Em prática — preventiva</a>
+  </p>
+
+  <h2 id="letra-m">M</h2>
+
+  <p>
+    <strong>MeSH / DeCS</strong> — <em>Medical Subject Headings</em> (vocabulário controlado do
+    PubMed) e <em>Descritores em Ciências da Saúde</em> (BIREME). →
+    <a href={link('/conceitos/como-buscar/')}>Como buscar</a>
+  </p>
+
+  <p>
+    <strong>Meta-análise</strong> — Combinação estatística dos resultados de múltiplos estudos numa
+    revisão sistemática. → <a href={link('/conceitos/desenhos-de-estudo/')}>Desenhos de estudo</a>
+  </p>
+
+  <h2 id="letra-n">N</h2>
+
+  <p>
+    <strong>NICE</strong> — <em>National Institute for Health and Care Excellence</em>. Agência do
+    Reino Unido, criada em 1999, que produz diretrizes considerando evidência e custo-efetividade. →
+    <a href={link('/conceitos/diretrizes-e-forcas-tarefa/')}>Diretrizes e forças-tarefa</a>
+  </p>
+
+  <p>
+    <strong>NNH</strong> — <em>Number Needed to Harm</em>. Número de pacientes tratados para um
+    desenvolver efeito adverso. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <p>
+    <strong>NNT</strong> — <em>Number Needed to Treat</em>. Número de pacientes que precisam ser
+    tratados para um evitar desfecho indesejado. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <h2 id="letra-o">O</h2>
+
+  <p>
+    <strong>Odds Ratio (OR)</strong> — Razão de chances. Próxima ao <a href="#letra-r">Risco
+    Relativo</a> quando o desfecho é raro; superestima RR quando é comum. Obrigatória em estudos
+    caso-controle.
+  </p>
+
+  <h2 id="letra-p">P</h2>
+
+  <p>
+    <strong>Padrão-ouro</strong> — Teste de referência considerado correto, contra o qual se compara
+    o teste em avaliação. → <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <p>
+    <strong>PEO</strong> — Variação do PICO para perguntas etiológicas (sem comparador): População,
+    Exposição, Outcome. → <a href={link('/conceitos/pico/')}>PICO</a>
+  </p>
+
+  <p>
+    <strong>PICO</strong> — Estrutura de pergunta clínica: Paciente, Intervenção, Comparação,
+    Outcome (desfecho). → <a href={link('/conceitos/pico/')}>PICO</a>
+  </p>
+
+  <p>
+    <strong>Pirâmide de evidências</strong> — Hierarquia visual dos desenhos de estudo por força da
+    evidência. → <a href={link('/conceitos/piramide-evidencias/')}>Pirâmide de evidências</a>
+  </p>
+
+  <p>
+    <strong>POEMs vs. DOEs</strong> — <em>Patient-Oriented Evidence that Matters</em> vs.
+    <em>Disease-Oriented Evidence</em>. Distinção entre evidência que muda conduta clínica vs.
+    mecanismo de doença. → <a href={link('/conceitos/duvidas-clinicas/')}>Dúvidas clínicas</a>
+  </p>
+
+  <p>
+    <strong>Prevalência</strong> — Proporção de pessoas com a condição em determinado momento. →
+    <a href={link('/conceitos/medidas-de-frequencia/')}>Medidas de frequência</a>
+  </p>
+
+  <p>
+    <strong>PUNs e DENs</strong> — <em>Patient's Unmet Needs</em> e <em>Doctor's Educational Needs</em>.
+    Duas categorias de aprendizado que casos clínicos geram. →
+    <a href={link('/conceitos/duvidas-clinicas/')}>Dúvidas clínicas</a>
+  </p>
+
+  <h2 id="letra-r">R</h2>
+
+  <p>
+    <strong>Randomização</strong> — Alocação aleatória de participantes entre grupos. Distribui
+    fatores de <a href={link('/conceitos/vieses/')}>confundimento</a> (conhecidos e desconhecidos)
+    entre os grupos.
+  </p>
+
+  <p>
+    <strong>RAR</strong> — Redução Absoluta de Risco. Diferença entre risco do controle e risco da
+    intervenção, em pontos percentuais. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <p>
+    <strong>Rastreamento</strong> — Teste em pessoas assintomáticas para detectar precocemente risco
+    de doença. → <a href={link('/conceitos/rastreamento/')}>Rastreamento</a>
+  </p>
+
+  <p>
+    <strong>Razão de Verossimilhança (RV+ e RV−)</strong> — Métricas que indicam quanto o resultado
+    de um teste muda a probabilidade de doença. Independem da prevalência. →
+    <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <p>
+    <strong>Revisão sistemática</strong> — Síntese de estudos primários sobre uma pergunta específica,
+    com método explícito de busca, seleção e avaliação. →
+    <a href={link('/conceitos/desenhos-de-estudo/')}>Desenhos de estudo</a>
+  </p>
+
+  <p>
+    <strong>Risco Absoluto (RA)</strong> — Probabilidade ou incidência de um evento ocorrer em um
+    grupo. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <p>
+    <strong>Risco Relativo (RR)</strong> — Razão entre os riscos absolutos de dois grupos. RR = 1
+    sem efeito; &lt; 1 protege; &gt; 1 causa dano. →
+    <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <p>
+    <strong>RoB 2.0</strong> — <em>Risk of Bias 2.0</em>. Ferramenta da Cochrane para avaliar risco
+    de viés em ensaios clínicos randomizados. → <a href={link('/ferramentas/rob/')}>RoB 2.0</a>
+  </p>
+
+  <p>
+    <strong>RRR</strong> — Redução Relativa de Risco. Proporção do risco do controle eliminada pela
+    intervenção. Pode enganar quando isolada de <a href="#letra-r">RAR</a> e
+    <a href="#letra-n">NNT</a>. → <a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a>
+  </p>
+
+  <h2 id="letra-s">S</h2>
+
+  <p>
+    <strong>Sensibilidade</strong> — Proporção de doentes corretamente identificados como positivos
+    pelo teste. Teste muito sensível → resultado negativo descarta a doença (SnNout). →
+    <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <p>
+    <strong>SHARE Approach</strong> — Modelo de
+    <a href={link('/conceitos/decisao-compartilhada/')}>decisão compartilhada</a> da AHRQ. Cinco
+    etapas: <em>Seek, Help, Assess, Reach, Evaluate</em>.
+  </p>
+
+  <p>
+    <strong>Sistema 1 e Sistema 2</strong> — Duas modalidades de pensamento (Kahneman) —
+    rápido/intuitivo e lento/analítico — que coexistem na decisão clínica. →
+    <a href={link('/conceitos/raciocinio-clinico/')}>Raciocínio clínico</a>
+  </p>
+
+  <p>
+    <strong>SMART</strong> — Critérios para avaliar qualidade da pergunta clínica: Specific,
+    Measurable, Achievable, Relevant, Timely. → <a href={link('/conceitos/smart/')}>SMART</a>
+  </p>
+
+  <p>
+    <strong>Sobrediagnóstico</strong> — Detecção de condições que nunca causariam problema clínico.
+    Risco frequente em <a href={link('/conceitos/rastreamento/')}>rastreamento</a>.
+  </p>
+
+  <h2 id="letra-t">T</h2>
+
+  <p>
+    <strong>Transversal</strong> — <a href={link('/conceitos/desenhos-de-estudo/')}>Desenho de
+    estudo</a> que coleta dados num único momento. Útil para prevalência.
+  </p>
+
+  <h2 id="letra-u">U</h2>
+
+  <p>
+    <strong>USPSTF</strong> — <em>United States Preventive Services Task Force</em>. Força-tarefa
+    norte-americana, criada em 1984. Sistema próprio A/B/C/D/I de classificação de recomendações. →
+    <a href={link('/conceitos/diretrizes-e-forcas-tarefa/')}>Diretrizes e forças-tarefa</a>
+  </p>
+
+  <h2 id="letra-v">V</h2>
+
+  <p>
+    <strong>VIA</strong> — <em>Visual Inspection with Acetic acid</em>. Método de rastreamento de
+    câncer de colo, recomendado pela OMS para contextos de baixa renda. →
+    <a href={link('/em-pratica/diagnostica/')}>Em prática — diagnóstica</a>
+  </p>
+
+  <p>
+    <strong>Viés</strong> — Erro sistemático que distorce resultados numa direção específica.
+    Diferente de erro aleatório. → <a href={link('/conceitos/vieses/')}>Vieses</a>
+  </p>
+
+  <p>
+    <strong>VPN</strong> — Valor Preditivo Negativo. Probabilidade de não ter a doença, dado teste
+    negativo. → <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <p>
+    <strong>VPP</strong> — Valor Preditivo Positivo. Probabilidade de ter a doença, dado teste
+    positivo. Depende fortemente da <a href="#letra-p">prevalência</a>. →
+    <a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a>
+  </p>
+
+  <h2 id="letra-w">W</h2>
+
+  <p>
+    <strong>Wilson-Jungner</strong> — Os 10 critérios clássicos da OMS (1968) para programa de
+    <a href={link('/conceitos/rastreamento/')}>rastreamento</a> populacional.
+  </p>
+</DocLayout>

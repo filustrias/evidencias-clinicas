@@ -1,14 +1,277 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="PICO"
-  description="Estrutura PICO para perguntas clínicas: Paciente, Intervenção, Comparador, Outcome."
+<DocLayout
+  title="PICO — estruturando a pergunta clínica"
+  description="Os quatro componentes que decompõem qualquer questão clínica focada. Paciente, intervenção, comparação, outcome. Variações do modelo."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">PICO</h1>
-  <p class="text-lg text-text-secondary mb-6">Estrutura PICO para perguntas clínicas: Paciente, Intervenção, Comparador, Outcome.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>PICO — estruturando a pergunta clínica</h1>
+
+  <p>
+    PICO é a forma padrão de estruturar uma pergunta clínica focada. Quatro componentes — Paciente, Intervenção, Comparação, Outcome (desfecho) — decompõem qualquer dúvida sobre conduta em partes que podem ser usadas para construir uma busca em base biomédica.
+  </p>
+
+  <p>
+    É instrumento operacional, não teórico. Sem PICO, a busca em PubMed ou Cochrane fica imprecisa demais ou ampla demais. Com PICO bem feito, a busca chega a estudos específicos em poucos minutos.
+  </p>
+
+  <h2 id="quatro-componentes">Os quatro componentes</h2>
+
+  <h3 id="paciente">P — Paciente, População ou Problema</h3>
+
+  <p>
+    Descreve <strong>o grupo de pacientes ou condição clínica de interesse</strong>. Definir características relevantes: idade, sexo, diagnóstico primário, comorbidades, contexto clínico, fatores de risco.
+  </p>
+
+  <p>
+    Quanto mais específico o detalhamento, mais focada a busca — mas atenção: especificidade demais pode tornar a pergunta inrespondível por falta de estudos. Equilíbrio.
+  </p>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li><em>Mulher de 78 anos, sem doença cardiovascular prévia, com colesterol total 240 mg/dL</em></li>
+    <li><em>Idosos ≥ 70 anos, sem demência ou doença cardiovascular</em></li>
+    <li><em>Adultos com depressão moderada na atenção primária</em></li>
+    <li><em>Crianças de 2 a 12 anos com pneumonia adquirida na comunidade</em></li>
+    <li><em>Gestantes com baixa ingestão dietética de cálcio</em></li>
+  </ul>
+
+  <h3 id="intervencao">I — Intervenção (ou Interesse)</h3>
+
+  <p>
+    Especifica <strong>o tratamento, exposição, fator prognóstico ou teste diagnóstico investigado</strong>. Pode ser:
+  </p>
+
+  <ul>
+    <li>Medicamento (incluindo dose, via, duração)</li>
+    <li>Procedimento cirúrgico</li>
+    <li>Terapia não-farmacológica (fisioterapia, psicoterapia, mudança de estilo de vida)</li>
+    <li>Programa de rastreamento ou prevenção</li>
+    <li>Teste diagnóstico</li>
+    <li>Exposição (em estudos etiológicos)</li>
+  </ul>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li><em>Estatina em prevenção primária</em></li>
+    <li><em>Aspirina 100 mg/dia</em></li>
+    <li><em>Psicoterapia cognitivo-comportamental</em></li>
+    <li><em>Suplementação de cálcio em alta dose (≥ 1 g/dia)</em></li>
+    <li><em>Dapagliflozina 10 mg/dia</em></li>
+  </ul>
+
+  <h3 id="comparacao">C — Comparação</h3>
+
+  <p>
+    Identifica <strong>a alternativa à intervenção que será o ponto de comparação</strong>. Pode ser:
+  </p>
+
+  <ul>
+    <li>Outro tratamento ativo</li>
+    <li>Placebo</li>
+    <li>Ausência de tratamento</li>
+    <li>Tratamento padrão (<em>standard care</em>)</li>
+    <li>Outro teste diagnóstico</li>
+    <li>Dose ou via diferente da mesma intervenção</li>
+  </ul>
+
+  <p>
+    Em muitos casos, especialmente quando o objetivo é avaliar uma intervenção contra o tratamento usual, <strong>o comparador pode não ser explicitamente buscado na literatura</strong> — mas defini-lo clarifica a pergunta e ajuda a localizar estudos comparativos.
+  </p>
+
+  <h3 id="outcome">O — Outcome (Resultados ou desfechos)</h3>
+
+  <p>
+    Descreve <strong>o resultado clínico que se espera observar</strong>. O outcome ideal atende aos critérios <a href={withBase('/conceitos/smart/', base)}>SMART</a>: específico, mensurável, alcançável, relevante e com prazo definido.
+  </p>
+
+  <p>Tipos comuns de outcome:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Categoria</th>
+          <th scope="col">Exemplos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cura ou remissão</strong></td>
+          <td>Remissão completa de depressão; cura microbiológica de tuberculose</td>
+        </tr>
+        <tr>
+          <td><strong>Alívio de sintomas</strong></td>
+          <td>Redução da intensidade da dor; melhora da qualidade de vida</td>
+        </tr>
+        <tr>
+          <td><strong>Redução de fator de risco</strong></td>
+          <td>Controle pressórico; redução do LDL; queda de HbA1c</td>
+        </tr>
+        <tr>
+          <td><strong>Prevenção de evento</strong></td>
+          <td>Redução de IAM, AVC; prevenção de morte; prevenção de hospitalização</td>
+        </tr>
+        <tr>
+          <td><strong>Melhora funcional</strong></td>
+          <td>Aumento da capacidade física; mobilidade; AVDs</td>
+        </tr>
+        <tr>
+          <td><strong>Tempo até evento</strong></td>
+          <td>Sobrevida; tempo até recidiva; tempo até alta</td>
+        </tr>
+        <tr>
+          <td><strong>Efeitos adversos</strong></td>
+          <td>Sangramento maior; mialgia; hospitalização por evento adverso</td>
+        </tr>
+        <tr>
+          <td><strong>Desfecho composto</strong></td>
+          <td>Combinação de eventos relevantes (morte CV + AVC + IAM)</td>
+        </tr>
+        <tr>
+          <td><strong>Desfecho substituto</strong></td>
+          <td>LDL, HbA1c, pressão arterial — quando o desfecho clínico final ainda não está disponível</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    <strong>Atenção a desfechos substitutos.</strong> Eles são úteis em fases iniciais de investigação, mas não substituem desfechos clínicos. Estudo que mostra redução de LDL não prova redução de infarto.
+  </p>
+
+  <h2 id="aplicando">Aplicando PICO ao caso completo</h2>
+
+  <p>Inquietação: <em>"Será que essa idosa precisa mesmo da estatina?"</em></p>
+
+  <p>Decomposição em PICO:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Componente</th>
+          <th scope="col">Definição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Mulher de 78 anos, sem doença cardiovascular prévia, com colesterol total 240 mg/dL</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>I</strong></th>
+          <td>Iniciar estatina em prevenção primária</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>C</strong></th>
+          <td>Não iniciar estatina (manter monitorização clínica)</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Redução de eventos cardiovasculares maiores em 5 anos; mortalidade total; eventos adversos (mialgia, hepatotoxicidade)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Essa estrutura organiza os termos da busca: cada componente vira um conjunto de palavras-chave (com sinônimos), e os conjuntos são combinados com <code>AND</code> na base biomédica. Veja o passo a passo em <a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a>.
+  </p>
+
+  <h2 id="variacoes">Variações do PICO</h2>
+
+  <p>A flexibilidade do modelo permite adaptações conforme o tipo de pergunta:</p>
+
+  <h3 id="picot">PICOT</h3>
+
+  <p>
+    Adiciona <strong>T — Tempo</strong> (horizonte de avaliação ou seguimento). Especialmente útil quando o desfecho depende criticamente do tempo.
+  </p>
+
+  <p>Exemplo: redução de IAM em <strong>5 anos</strong>, ou cura de tuberculose em <strong>6 meses</strong>.</p>
+
+  <h3 id="picos">PICOS</h3>
+
+  <p>
+    Adiciona <strong>S — Study design</strong> (desenho de estudo). Útil quando se pretende restringir a busca a um tipo específico de estudo (ECRs, revisões sistemáticas, coortes).
+  </p>
+
+  <p>Exemplo: "...avaliado em ensaios clínicos randomizados".</p>
+
+  <h3 id="picott">PICOTT</h3>
+
+  <p>Combina T (tempo) e T (tipo de estudo). Comum em revisões sistemáticas formais.</p>
+
+  <h3 id="peo">PEO</h3>
+
+  <p>
+    Para perguntas etiológicas ou de exposição, sem intervenção controlada: <strong>P — População</strong>, <strong>E — Exposição</strong>, <strong>O — Outcome</strong>. Sem comparador definido, porque o foco é a associação entre exposição e desfecho.
+  </p>
+
+  <p>Exemplo: "Em trabalhadores expostos a benzeno, há aumento da incidência de leucemia?"</p>
+
+  <h3 id="pipoh">PIPOH</h3>
+
+  <p>
+    Para questões de saúde populacional ou diretrizes: <strong>P — População</strong>, <strong>I — Intervenção</strong>, <strong>P — Profissionais</strong>, <strong>O — Outcomes</strong>, <strong>H — Healthcare setting</strong>.
+  </p>
+
+  <h3 id="spider">Para questões qualitativas: SPIDER</h3>
+
+  <p>
+    <strong>S — Sample</strong>, <strong>PI — Phenomenon of Interest</strong>, <strong>D — Design</strong>, <strong>E — Evaluation</strong>, <strong>R — Research type</strong>. Usado quando o foco é experiência, percepção, vivência — não eficácia de intervenção.
+  </p>
+
+  <p>
+    Para a maioria das perguntas clínicas no consultório, <strong>PICO clássico ou PICOT é suficiente</strong>. As variações servem a cenários específicos.
+  </p>
+
+  <h2 id="quando-nao-cabe">Quando PICO não cabe</h2>
+
+  <p>Nem toda dúvida clínica encaixa bem no PICO. Sinais de que outro formato pode servir melhor:</p>
+
+  <ul>
+    <li><strong>Pergunta sobre mecanismo de doença</strong> (DOE — <em>disease-oriented evidence</em>) — não precisa de comparador, talvez não tenha desfecho clínico claro. Use livros-texto e sumários, não PICO.</li>
+    <li><strong>Pergunta sobre experiência subjetiva ou cultura</strong> — use SPIDER ou outro formato qualitativo</li>
+    <li><strong>Pergunta sobre acurácia de teste diagnóstico</strong> — PICO funciona, mas o "I" passa a ser o teste e o "C" pode ser o padrão-ouro; o "O" é a acurácia (sensibilidade, especificidade)</li>
+    <li><strong>Pergunta sobre prognóstico</strong> — PEO frequentemente serve melhor</li>
+  </ul>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Definir P de forma genérica demais.</strong> "Adultos com diabetes" é amplo demais; especifique tipo, idade, condição (controle, comorbidade).</li>
+    <li><strong>Definir P de forma específica demais.</strong> "Mulher de 67 anos com diabetes tipo 2 há 12 anos, IMC 28..." pode tornar a pergunta inrespondível por falta de estudos.</li>
+    <li><strong>Misturar I e O.</strong> Especialmente comum: incluir dose ou indicação no I, e o efeito esperado também no I. O efeito vai sempre no O.</li>
+    <li><strong>Esquecer o C.</strong> Toda pergunta de tratamento tem comparador implícito (placebo, tratamento padrão). Defini-lo é parte do exercício.</li>
+    <li><strong>Outcome não-mensurável.</strong> "Melhora clínica" não serve. Precisa ser quantificável ou estruturado em escala validada.</li>
+    <li><strong>Confundir desfecho substituto com clínico.</strong> LDL não é IAM; HbA1c não é morte. Quando o substituto é o que o estudo mediu, é importante saber.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/perguntar/', base)}>Ask (Perguntar)</a> — primeiro A, onde PICO é aplicado em conjunto com SMART</li>
+    <li><a href={withBase('/conceitos/smart/', base)}>SMART</a> — critérios para verificar a qualidade da pergunta PICO</li>
+    <li><a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a> — onde os componentes do PICO viram termos de busca</li>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas</a> — origem das inquietações que viram PICO</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — para entender o tipo de estudo apropriado a cada PICO</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Richardson WS, Wilson MC, Nishikawa J, Hayward RS. The well-built clinical question: a key to evidence-based decisions. <em>ACP J Club</em> 1995;123(3):A12–3.</li>
+      <li>Schardt C, Adams MB, Owens T, Keitz S, Fontelo P. Utilization of the PICO framework to improve searching PubMed for clinical questions. <em>BMC Med Inform Decis Mak</em> 2007;7:16.</li>
+      <li>Methley AM, Campbell S, Chew-Graham C, McNally R, Cheraghi-Sohi S. PICO, PICOS and SPIDER: a comparison study of specificity and sensitivity in three search tools for qualitative systematic reviews. <em>BMC Health Serv Res</em> 2014;14:579.</li>
+      <li>Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 1.</li>
+    </ol>
+  </section>
+</DocLayout>

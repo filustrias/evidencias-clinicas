@@ -1,14 +1,480 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
+<DocLayout
   title="Testes diagnósticos"
-  description="Sensibilidade, especificidade, VPP, VPN, razões de verossimilhança e probabilidade pós-teste."
+  description="Propriedades dos testes diagnósticos. Sensibilidade, especificidade, valores preditivos, razões de verossimilhança, e por que prevalência muda tudo."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Testes diagnósticos</h1>
-  <p class="text-lg text-text-secondary mb-6">Sensibilidade, especificidade, VPP, VPN, razões de verossimilhança e probabilidade pós-teste.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Testes diagnósticos</h1>
+
+  <p>
+    Todo teste diagnóstico tem <strong>propriedades mensuráveis</strong> que determinam sua utilidade clínica: sensibilidade, especificidade, valores preditivos, razões de verossimilhança. Conhecer essas propriedades — e saber como usá-las — é diferença entre interpretar resultados corretamente e tomar decisões baseadas em impressão.
+  </p>
+
+  <p>Esta página explica cada propriedade, como calcular e quando usar.</p>
+
+  <h2 id="tabela-2x2">A tabela 2×2 que sustenta tudo</h2>
+
+  <p>
+    Toda análise de teste diagnóstico parte da comparação entre o <strong>teste em avaliação</strong> e um <strong>padrão-ouro</strong> (gold standard) — o teste de referência considerado correto.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Tem a doença</th>
+          <th scope="col">Não tem a doença</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Teste positivo</th>
+          <td><em>a</em> (verdadeiro positivo)</td>
+          <td><em>b</em> (falso positivo)</td>
+          <td><em>a + b</em></td>
+        </tr>
+        <tr>
+          <th scope="row">Teste negativo</th>
+          <td><em>c</em> (falso negativo)</td>
+          <td><em>d</em> (verdadeiro negativo)</td>
+          <td><em>c + d</em></td>
+        </tr>
+        <tr>
+          <th scope="row">Total</th>
+          <td><em>a + c</em></td>
+          <td><em>b + d</em></td>
+          <td><em>a + b + c + d</em></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A partir dessa tabela, calculam-se as propriedades. Vamos usar um exemplo concreto: 1.000 pacientes testados, 100 com a doença (10% de prevalência), 900 sem.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Tem a doença</th>
+          <th scope="col">Não tem a doença</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Teste positivo</th>
+          <td>87</td>
+          <td>35</td>
+          <td>122</td>
+        </tr>
+        <tr>
+          <th scope="row">Teste negativo</th>
+          <td>13</td>
+          <td>865</td>
+          <td>878</td>
+        </tr>
+        <tr>
+          <th scope="row">Total</th>
+          <td>100</td>
+          <td>900</td>
+          <td>1.000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="sensibilidade">Sensibilidade</h2>
+
+  <p>
+    <strong>Definição:</strong> proporção de doentes que o teste identifica corretamente. <em>"Entre os doentes, quantos o teste pega?"</em>
+  </p>
+
+  <code class="formula">Sensibilidade = a / (a + c)</code>
+
+  <p>
+    No exemplo: 87/100 = <strong>87%</strong>. O teste detecta 87% dos doentes; 13% escapam (falsos negativos).
+  </p>
+
+  <p>
+    <strong>Interpretação:</strong> teste <strong>altamente sensível</strong> tem poucos falsos negativos. Resultado negativo, então, <strong>descarta</strong> a doença com maior segurança. Regra mnemônica: <strong>SnNout</strong> — <em>Sensitive test, when Negative, rules Out</em>.
+  </p>
+
+  <p>
+    <strong>Quando priorizar sensibilidade:</strong> rastreamento, triagem, doenças graves cujo atraso de diagnóstico custa caro. Você prefere falsos alarmes a casos perdidos.
+  </p>
+
+  <h2 id="especificidade">Especificidade</h2>
+
+  <p>
+    <strong>Definição:</strong> proporção de não-doentes que o teste classifica corretamente como negativos. <em>"Entre os saudáveis, quantos o teste deixa em paz?"</em>
+  </p>
+
+  <code class="formula">Especificidade = d / (b + d)</code>
+
+  <p>
+    No exemplo: 865/900 = <strong>96%</strong>. O teste classifica corretamente 96% dos saudáveis; 4% recebem falso positivo.
+  </p>
+
+  <p>
+    <strong>Interpretação:</strong> teste <strong>altamente específico</strong> tem poucos falsos positivos. Resultado positivo, então, <strong>confirma</strong> a doença com maior segurança. Regra mnemônica: <strong>SpPin</strong> — <em>Specific test, when Positive, rules In</em>.
+  </p>
+
+  <p>
+    <strong>Quando priorizar especificidade:</strong> confirmação diagnóstica, antes de tratamento agressivo, em doenças cujo tratamento tem efeitos adversos sérios. Você prefere perder alguns casos a tratar quem não precisa.
+  </p>
+
+  <h2 id="equilibrio">O equilíbrio sensibilidade–especificidade</h2>
+
+  <p>
+    Não há almoço grátis. Em quase todo teste, <strong>aumentar sensibilidade reduz especificidade</strong> e vice-versa. O ponto de corte é o que controla esse equilíbrio.
+  </p>
+
+  <p>
+    Considere um teste laboratorial com escala contínua (ex.: troponina). Em ponto de corte baixo: muitos positivos detectados → sensibilidade alta, especificidade baixa (vários saudáveis falso-positivos). Em ponto de corte alto: poucos positivos → sensibilidade baixa, especificidade alta.
+  </p>
+
+  <p>
+    A escolha do ponto de corte depende do contexto clínico — não há valor universal. Por isso, leitura crítica de estudo diagnóstico precisa explicitar o ponto de corte usado e justificar.
+  </p>
+
+  <h2 id="vpp">Valor preditivo positivo (VPP)</h2>
+
+  <p>
+    <strong>Definição:</strong> probabilidade de <strong>realmente ter a doença</strong> dado que o teste foi positivo. <em>"Resultado positivo — que chance tenho de fato ter isso?"</em>
+  </p>
+
+  <code class="formula">VPP = a / (a + b)</code>
+
+  <p>No exemplo: 87/122 = <strong>71%</strong>.</p>
+
+  <p>
+    <strong>Interpretação:</strong> entre os 122 testes positivos, 87 são verdadeiros (tem a doença) e 35 são falsos. Confiança no resultado positivo é de 71%.
+  </p>
+
+  <h2 id="vpn">Valor preditivo negativo (VPN)</h2>
+
+  <p>
+    <strong>Definição:</strong> probabilidade de <strong>realmente não ter a doença</strong> dado que o teste foi negativo. <em>"Resultado negativo — que chance tenho de estar livre disso?"</em>
+  </p>
+
+  <code class="formula">VPN = d / (c + d)</code>
+
+  <p>No exemplo: 865/878 = <strong>98,5%</strong>.</p>
+
+  <p>
+    <strong>Interpretação:</strong> entre os 878 negativos, 865 são verdadeiros e apenas 13 são falsos. Resultado negativo é altamente confiável.
+  </p>
+
+  <h2 id="prevalencia-muda-tudo">A propriedade que muda tudo: VPP e VPN dependem da prevalência</h2>
+
+  <p>
+    <strong>Sensibilidade e especificidade são propriedades fixas do teste</strong>, independentes do contexto. <strong>VPP e VPN, não.</strong> Eles variam conforme a <strong>prevalência da doença na população testada</strong>.
+  </p>
+
+  <p>Por quê? Imagine o mesmo teste (sensibilidade 87%, especificidade 96%) aplicado em duas populações diferentes:</p>
+
+  <h3 id="cenario-a">Cenário A — prevalência alta (10%, do exemplo acima)</h3>
+
+  <ul>
+    <li>100 doentes, 900 sem doença em 1.000 pessoas</li>
+    <li>VPP = 87/122 = <strong>71%</strong></li>
+    <li>VPN = 865/878 = <strong>98,5%</strong></li>
+  </ul>
+
+  <h3 id="cenario-b">Cenário B — prevalência muito baixa (0,1%)</h3>
+
+  <ul>
+    <li>1 doente, 999 sem doença em 1.000 pessoas</li>
+    <li>Verdadeiros positivos: 0,87 (≈ 1)</li>
+    <li>Falsos positivos: 999 × 4% = 40</li>
+    <li>Total positivos: ≈ 41</li>
+    <li>VPP = 1/41 ≈ <strong>2,4%</strong></li>
+  </ul>
+
+  <p>
+    <strong>O mesmo teste, com características idênticas, tem VPP de 71% num contexto e 2,4% noutro.</strong> A diferença é só a prevalência.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Contexto</th>
+          <th scope="col">VPP</th>
+          <th scope="col">VPN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>Prevalência alta</strong></th>
+          <td>Sobe (positivo é confiável)</td>
+          <td>Desce (negativo perde valor)</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>Prevalência baixa</strong></th>
+          <td>Cai (muitos positivos são falsos)</td>
+          <td>Sobe (negativo é muito confiável)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    <strong>Implicação clínica fundamental:</strong> o mesmo teste positivo significa coisas diferentes em pacientes diferentes. Pessoa de baixo risco com teste positivo tem alta probabilidade de falso positivo. Pessoa de alto risco com teste negativo tem maior risco de falso negativo.
+  </p>
+
+  <p>
+    → Veja <a href={withBase('/calculadoras/testes-diagnosticos/', base)}>calculadora de testes diagnósticos</a> para experimentar com diferentes prevalências.
+  </p>
+
+  <h2 id="razoes-verossimilhanca">Razões de verossimilhança (RV+ e RV−)</h2>
+
+  <p>
+    <strong>Definição:</strong> medidas que combinam sensibilidade e especificidade em um único número, indicando <strong>quanto o resultado do teste muda a probabilidade de doença</strong>. Independem da prevalência — são propriedades do teste.
+  </p>
+
+  <h3 id="rv-mais">Razão de verossimilhança positiva (RV+)</h3>
+
+  <p><em>"Quantas vezes mais provável é o diagnóstico, dado que o teste foi positivo?"</em></p>
+
+  <code class="formula">RV+ = Sensibilidade / (1 − Especificidade)</code>
+
+  <p>No exemplo: RV+ = 0,87 / (1 − 0,96) = 0,87 / 0,04 = <strong>21,75</strong>.</p>
+
+  <p>Resultado positivo torna a doença ~22 vezes mais provável.</p>
+
+  <h3 id="rv-menos">Razão de verossimilhança negativa (RV−)</h3>
+
+  <p><em>"Quantas vezes menos provável é o diagnóstico, dado que o teste foi negativo?"</em></p>
+
+  <code class="formula">RV− = (1 − Sensibilidade) / Especificidade</code>
+
+  <p>No exemplo: RV− = (1 − 0,87) / 0,96 = 0,13 / 0,96 = <strong>0,135</strong>.</p>
+
+  <p>Resultado negativo torna a doença ~7 vezes menos provável (1/0,135 ≈ 7,4).</p>
+
+  <h3 id="interpretar-rv">Como interpretar RV</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Valor de RV+</th>
+          <th scope="col">Mudança na probabilidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&gt; 10</td>
+          <td><strong>Aumento substancial</strong> — confirmação forte</td>
+        </tr>
+        <tr>
+          <td>5 a 10</td>
+          <td>Aumento moderado</td>
+        </tr>
+        <tr>
+          <td>2 a 5</td>
+          <td>Aumento pequeno</td>
+        </tr>
+        <tr>
+          <td>1 a 2</td>
+          <td>Aumento mínimo, raramente útil</td>
+        </tr>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><strong>Sem mudança</strong> — teste inútil</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Valor de RV−</th>
+          <th scope="col">Mudança na probabilidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&lt; 0,1</td>
+          <td><strong>Redução substancial</strong> — descarte forte</td>
+        </tr>
+        <tr>
+          <td>0,1 a 0,2</td>
+          <td>Redução moderada</td>
+        </tr>
+        <tr>
+          <td>0,2 a 0,5</td>
+          <td>Redução pequena</td>
+        </tr>
+        <tr>
+          <td>0,5 a 1</td>
+          <td>Redução mínima, raramente útil</td>
+        </tr>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><strong>Sem mudança</strong> — teste inútil</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="rv-vs-vpp">Por que RV é melhor que VPP/VPN para conversa clínica</h3>
+
+  <p>
+    VPP e VPN dão a probabilidade pós-teste <strong>direta</strong>, mas dependem da prevalência. RV permite calcular probabilidade pós-teste a partir de <strong>qualquer probabilidade pré-teste</strong> — funciona em qualquer contexto.
+  </p>
+
+  <p>Probabilidade pós-teste = Probabilidade pré-teste × RV (em odds, com correção)</p>
+
+  <p>Na prática, usa-se <strong>nomograma de Fagan</strong> ou calculadora.</p>
+
+  <p>
+    → A <a href={withBase('/calculadoras/testes-diagnosticos/', base)}>calculadora de testes diagnósticos</a> faz esse cálculo automaticamente.
+  </p>
+
+  <h2 id="resumo">Resumo das propriedades</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Propriedade</th>
+          <th scope="col">Pergunta que responde</th>
+          <th scope="col">Fórmula</th>
+          <th scope="col">Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sensibilidade</td>
+          <td>Entre os doentes, quantos detecta?</td>
+          <td><em>a / (a+c)</em></td>
+          <td>0,87</td>
+        </tr>
+        <tr>
+          <td>Especificidade</td>
+          <td>Entre os saudáveis, quantos identifica?</td>
+          <td><em>d / (b+d)</em></td>
+          <td>0,96</td>
+        </tr>
+        <tr>
+          <td>VPP</td>
+          <td>Resultado positivo — chance real de doença?</td>
+          <td><em>a / (a+b)</em></td>
+          <td>0,71</td>
+        </tr>
+        <tr>
+          <td>VPN</td>
+          <td>Resultado negativo — chance real de saúde?</td>
+          <td><em>d / (c+d)</em></td>
+          <td>0,985</td>
+        </tr>
+        <tr>
+          <td>RV+</td>
+          <td>Quanto positivo aumenta a probabilidade?</td>
+          <td><em>Sens / (1−Esp)</em></td>
+          <td>21,75</td>
+        </tr>
+        <tr>
+          <td>RV−</td>
+          <td>Quanto negativo diminui a probabilidade?</td>
+          <td><em>(1−Sens) / Esp</em></td>
+          <td>0,135</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="aplicacao-pratica">Aplicação prática — quando escolher cada métrica</h2>
+
+  <p>Depende do que você quer fazer:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Decisão clínica</th>
+          <th scope="col">Métrica chave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Escolher teste para rastreamento</td>
+          <td>Sensibilidade alta</td>
+        </tr>
+        <tr>
+          <td>Escolher teste para confirmação</td>
+          <td>Especificidade alta</td>
+        </tr>
+        <tr>
+          <td>Interpretar resultado em paciente individual</td>
+          <td>VPP/VPN no contexto, ou RV</td>
+        </tr>
+        <tr>
+          <td>Comparar acurácia de testes</td>
+          <td>Curva ROC, AUC</td>
+        </tr>
+        <tr>
+          <td>Comunicar resultado ao paciente</td>
+          <td>Probabilidade pós-teste em linguagem natural</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Confundir sensibilidade com VPP.</strong> Sensibilidade é probabilidade de teste positivo dado que tem a doença. VPP é o inverso: probabilidade de doença dado teste positivo.</li>
+    <li><strong>Esquecer da prevalência.</strong> Aplicar VPP de um estudo (com prevalência X) a um paciente de contexto Y (prevalência diferente) é erro frequente.</li>
+    <li><strong>Tratar teste como certeza.</strong> Mesmo teste com sensibilidade 99% tem 1% de falsos negativos. Tratar resultado como verdade absoluta ignora isso.</li>
+    <li><strong>Não considerar probabilidade pré-teste.</strong> Resultado de teste muda a probabilidade — não a determina sozinho. Pessoa de baixo risco com teste positivo pode ter probabilidade pós-teste ainda baixa.</li>
+    <li><strong>Usar RV+ e RV− isoladamente.</strong> O valor está em <strong>combinar</strong> com a probabilidade pré-teste para gerar probabilidade pós-teste.</li>
+    <li><strong>Usar mesmo teste para rastrear e confirmar.</strong> Estratégia melhor: teste sensível para rastrear (poucos falsos negativos), teste específico para confirmar positivos (poucos falsos positivos no diagnóstico final).</li>
+  </ul>
+
+  <h2 id="situacao-real">Em situações reais — doação de sangue</h2>
+
+  <p>
+    Em bancos de sangue, doadores fazem <strong>testes muito sensíveis</strong> primeiro — a prioridade é não deixar nenhuma bolsa contaminada passar. Resultados positivos vão para <strong>teste confirmatório mais específico</strong>. Por que não fazer logo o teste específico? Porque o específico geralmente perde sensibilidade — alguns positivos verdadeiros escapariam.
+  </p>
+
+  <p>
+    Esta sequência — <strong>sensível primeiro, específico depois</strong> — é princípio geral em rastreamento e investigação inicial: detectar amplo, confirmar com precisão.
+  </p>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/calculadoras/testes-diagnosticos/', base)}>Calculadora de testes diagnósticos</a> — para experimentar com diferentes prevalências e cenários</li>
+    <li><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a> — onde sensibilidade alta é prioritária</li>
+    <li><a href={withBase('/conceitos/medidas-de-frequencia/', base)}>Medidas de frequência</a> — prevalência, base do cálculo de VPP/VPN</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — desenho específico para teste diagnóstico (estudos de acurácia)</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde a interpretação encontra o paciente real</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Pewsner D, Battaglia M, Minder C, Marx A, Bucher HC, Egger M. Ruling a diagnosis in or out with "SpPIn" and "SnNOut": a note of caution. <em>BMJ</em> 2004;329(7459):209–13.</li>
+      <li>Akobeng AK. Understanding diagnostic tests 1: sensitivity, specificity and predictive values. <em>Acta Paediatr</em> 2007;96(3):338–41.</li>
+      <li>Akobeng AK. Understanding diagnostic tests 2: likelihood ratios, pre- and post-test probabilities. <em>Acta Paediatr</em> 2007;96(4):487–91.</li>
+      <li>Whiting PF, Rutjes AW, Westwood ME, et al. QUADAS-2: a revised tool for the quality assessment of diagnostic accuracy studies. <em>Ann Intern Med</em> 2011;155(8):529–36.</li>
+      <li>Sackett DL, Haynes RB, Guyatt GH, Tugwell P. <em>Clinical Epidemiology: A Basic Science for Clinical Medicine</em>. 2ª ed. Boston: Little, Brown; 1991.</li>
+      <li>Fagan TJ. Nomogram for Bayes theorem. <em>N Engl J Med</em> 1975;293(5):257.</li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,14 +1,299 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Rastreamento"
-  description="Princípios do rastreamento populacional: critérios de Wilson-Jungner e armadilhas."
+<DocLayout
+  title="Rastreamento — princípios e armadilhas"
+  description="O que é rastreamento, quando é apropriado, e por que &quot;prevenir é sempre melhor que remediar&quot; é um ditado enganoso. Wilson-Jungner, UK NSC, framework brasileiro."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Rastreamento</h1>
-  <p class="text-lg text-text-secondary mb-6">Princípios do rastreamento populacional: critérios de Wilson-Jungner e armadilhas.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Rastreamento — princípios e armadilhas</h1>
+
+  <p>
+    Rastreamento (em inglês <em>screening</em>) é a realização de testes em <strong>pessoas assintomáticas</strong> para detectar precocemente risco de doença ou doença em fase inicial. A lógica é intuitiva: detectar antes para tratar antes, com melhor resultado.
+  </p>
+
+  <p>
+    Mas a prática é mais complicada que a lógica. <strong>Poucas condições têm rastreamento realmente eficaz</strong>, e muitos programas amplamente realizados causam mais dano que benefício. Esta página explica por quê — e como decidir, com base em evidência, quando recomendar e quando desencorajar um exame de rastreamento.
+  </p>
+
+  <h2 id="rastreamento-vs-diagnostico">Rastreamento, diagnóstico oportuno e diagnóstico tardio</h2>
+
+  <p>Termos frequentemente confundidos. As distinções importam:</p>
+
+  <ul>
+    <li><strong>Rastreamento</strong> — exame em <strong>pessoa assintomática</strong>, para detectar antes que apareçam sinais. Exemplo: mamografia em mulher de 60 anos sem queixa.</li>
+    <li><strong>Diagnóstico oportuno</strong> — exame após o <strong>surgimento dos primeiros sintomas</strong>, mas com a doença ainda em estágio inicial. Exemplo: retossigmoidoscopia em paciente com sangramento retal recente.</li>
+    <li><strong>Diagnóstico tardio</strong> — descoberta da doença em <strong>estágio avançado</strong>, frequentemente após complicações. Exemplo: paciente com sangramento intestinal não investigado, que volta com obstrução intestinal e perda de peso.</li>
+  </ul>
+
+  <p>Rastreamento atua <strong>antes do sintoma</strong>. Os outros dois, depois.</p>
+
+  <h2 id="por-que-dificil">Por que rastreamento é mais difícil do que parece</h2>
+
+  <p>
+    Há um ditado popular: <strong>"prevenir é sempre melhor que remediar"</strong>. Embora otimista, transmite ideia imprecisa — sugere que exames médicos são sempre eficazes, isentos de riscos e capazes de detectar qualquer problema.
+  </p>
+
+  <p>
+    Na prática, <strong>isso não é verdade</strong>. Poucas condições se beneficiam de rastreamento realmente seguro e eficaz. Na maioria dos casos, os benefícios são modestos e vêm acompanhados de riscos reais.
+  </p>
+
+  <p>Quatro razões pelas quais rastreamento pode causar dano:</p>
+
+  <ol>
+    <li><strong>Falsos positivos</strong> — pessoas saudáveis classificadas como "suspeitas", levadas a investigações invasivas, ansiedade, exames adicionais</li>
+    <li><strong>Falsos negativos</strong> — pessoas doentes que recebem resultado tranquilizador errado, atrasando diagnóstico</li>
+    <li><strong>Sobrediagnóstico</strong> — detecção de condições que nunca causariam problema clínico (especialmente importante em câncer de tireoide e próstata)</li>
+    <li><strong>Sobretratamento</strong> — tratar achados que não causariam dano, com efeitos adversos do próprio tratamento</li>
+  </ol>
+
+  <p>Por isso programas de rastreamento exigem <strong>avaliação rigorosa</strong> antes de serem recomendados em larga escala.</p>
+
+  <h2 id="wilson-jungner">Wilson-Jungner — os critérios clássicos</h2>
+
+  <p>
+    Em 1968, <strong>James Wilson</strong> e <strong>Gunnar Jungner</strong> publicaram, pela OMS, <em>Principles and Practice of Screening for Disease</em>, definindo <strong>10 critérios clássicos</strong> que um problema de saúde deve atender para ser candidato a rastreamento populacional<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Os critérios influenciaram toda a literatura subsequente:
+  </p>
+
+  <ol>
+    <li>A condição deve ser problema de saúde importante</li>
+    <li>Deve haver tratamento eficaz para casos identificados</li>
+    <li>Devem existir instalações para diagnóstico e tratamento</li>
+    <li>Deve haver fase latente ou pré-sintomática reconhecível</li>
+    <li>Deve haver teste apropriado, com sensibilidade e especificidade adequadas</li>
+    <li>O teste deve ser aceitável para a população</li>
+    <li>A história natural da condição deve ser compreendida</li>
+    <li>Deve haver política sobre quem tratar</li>
+    <li>O custo (incluindo diagnóstico e tratamento) deve ser equilibrado com gastos médicos como um todo</li>
+    <li>Encontrar casos deve ser processo contínuo, não pontual</li>
+  </ol>
+
+  <p>Esses critérios são a base. Mas a literatura subsequente refinou e ampliou.</p>
+
+  <h2 id="uk-nsc">UK NSC — os 20 critérios modernos</h2>
+
+  <p>
+    O <strong>Comitê Nacional de Rastreio do Reino Unido (UK National Screening Committee)</strong> atualizou em 2022 a lista para <strong>20 critérios</strong> organizados em quatro grandes blocos<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>:
+  </p>
+
+  <h3 id="sobre-condicao">Sobre a condição a ser rastreada</h3>
+
+  <ol>
+    <li>Condição deve ser problema de saúde importante (frequência e/ou gravidade)</li>
+    <li>Intervenções custo-efetivas de <strong>prevenção primária</strong> devem ter sido implementadas antes</li>
+    <li>Se rastreamento for por mutação genética, história natural dos portadores deve ser bem compreendida (incluindo implicações psicológicas)</li>
+  </ol>
+
+  <h3 id="sobre-teste">Sobre o teste de rastreio</h3>
+
+  <ol start="4">
+    <li>Teste deve ser <strong>simples, seguro, preciso e validado</strong></li>
+    <li>Distribuição dos valores do teste na população-alvo deve ser conhecida; ponto de corte adequado deve ser definido</li>
+    <li>Teste deve ser <strong>aceitável</strong> para a população</li>
+    <li>Deve haver política acordada sobre investigação adicional após resultado positivo, com opções claras de manejo</li>
+    <li>Se teste for genético, método de seleção da mutação deve ser explícito</li>
+  </ol>
+
+  <h3 id="sobre-intervencao">Sobre a intervenção terapêutica disponível</h3>
+
+  <ol start="9">
+    <li>Deve haver intervenção eficaz para identificados, com evidência de que tratamento na fase pré-sintomática <strong>leva a melhores resultados</strong> que cuidado usual</li>
+    <li>Devem haver políticas baseadas em evidência sobre quem tratar e como</li>
+  </ol>
+
+  <h3 id="sobre-programa">Sobre o programa de rastreamento</h3>
+
+  <ol start="11">
+    <li>Devem haver evidências de <strong>ECRs de alta qualidade</strong> mostrando que o programa reduz mortalidade ou morbidade</li>
+    <li>Programa completo (teste + diagnóstico + tratamento) deve ser <strong>clinicamente, socialmente e eticamente aceitável</strong></li>
+    <li><strong>Benefícios devem superar danos</strong> (sobrediagnóstico, sobretratamento, falsos positivos, ansiedade)</li>
+    <li>Custo de oportunidade do programa deve ser equilibrado em relação aos gastos com assistência como um todo</li>
+  </ol>
+
+  <h3 id="sobre-implementacao">Sobre a implementação</h3>
+
+  <ol start="15">
+    <li>Manejo clínico da condição deve ser otimizado em todos os provedores <strong>antes</strong> da implementação</li>
+    <li>Outras opções (melhoria do tratamento existente, outros serviços) devem ter sido consideradas</li>
+    <li>Plano para gerenciar e monitorar o programa, com padrões de qualidade</li>
+    <li>Instalações e profissionais preparados antes do início</li>
+    <li>Informação baseada em evidência disponível para participantes — para escolha informada</li>
+    <li>Pressão pública para ampliar critérios deve ser antecipada e respondida cientificamente</li>
+  </ol>
+
+  <p>A lista parece extensa. Mas cada critério evita uma armadilha real de rastreamentos historicamente recomendados sem suporte adequado.</p>
+
+  <h2 id="framework-brasileiro">Framework brasileiro — magnitude, transcendência, vulnerabilidade</h2>
+
+  <p>
+    A literatura brasileira de saúde pública sintetiza os critérios em <strong>três dimensões</strong> complementares aos critérios técnicos:
+  </p>
+
+  <ul>
+    <li><strong>MAGNITUDE</strong> — quão prevalente é o problema na população?</li>
+    <li><strong>TRANSCENDÊNCIA</strong> — qual o impacto que a condição tem para a sociedade? (incapacidade, mortalidade, custo social, qualidade de vida)</li>
+    <li><strong>VULNERABILIDADE</strong> — o problema é suscetível a intervenções disponíveis e acessíveis no sistema de saúde?</li>
+  </ul>
+
+  <p>
+    A síntese dessas três dimensões orienta a decisão sobre <strong>se a doença é candidata a programa de rastreamento populacional</strong>.
+  </p>
+
+  <p><strong>Exemplo: hipertensão arterial.</strong></p>
+
+  <ul>
+    <li>Magnitude: alta — afeta cerca de 25% dos adultos brasileiros</li>
+    <li>Transcendência: alta — causa AVC, IAM, IC, IRC, com grande impacto funcional e econômico</li>
+    <li>Vulnerabilidade: alta — diagnóstico simples (esfigmomanômetro), tratamento eficaz e barato disponível no SUS</li>
+  </ul>
+
+  <p>Conclusão: hipertensão é boa candidata a rastreamento. Não por acaso, é parte de qualquer programa de saúde pública sério.</p>
+
+  <p><strong>Contraexemplo: rastreamento de glioblastoma com TC de crânio em adultos saudáveis.</strong></p>
+
+  <ul>
+    <li>Magnitude: muito baixa</li>
+    <li>Transcendência: alta (mortalidade alta)</li>
+    <li>Vulnerabilidade: baixa — mesmo detectado precocemente, prognóstico não muda significativamente</li>
+  </ul>
+
+  <p>Conclusão: não é candidato. Magnitude baixa e vulnerabilidade baixa pesam mais que transcendência.</p>
+
+  <h2 id="sete-pontos">Sintetizando os critérios em sete pontos práticos</h2>
+
+  <p>Para uso no consultório, sete itens condensados:</p>
+
+  <ol>
+    <li><strong>Prevalência da doença</strong> (magnitude)</li>
+    <li><strong>Gravidade da condição</strong> (transcendência)</li>
+    <li><strong>História natural bem conhecida</strong> (especialmente fase pré-sintomática)</li>
+    <li><strong>Disponibilidade de intervenções eficazes</strong> (vulnerabilidade)</li>
+    <li><strong>Confiabilidade do teste de rastreio</strong> (sensibilidade, especificidade, segurança, aceitabilidade)</li>
+    <li><strong>Custo-efetividade</strong></li>
+    <li><strong>Implicações éticas e sociais</strong></li>
+  </ol>
+
+  <h2 id="quando-causa-dano">Quando o rastreamento causa dano</h2>
+
+  <p>Cinco mecanismos pelos quais programas de rastreamento podem prejudicar:</p>
+
+  <h3 id="falsos-positivos">1. Falsos positivos em escala</h3>
+
+  <p>
+    Em condição rara, mesmo teste com 99% de especificidade gera muitos falsos positivos absolutos. Cada um leva a investigação adicional, ansiedade e custos.
+  </p>
+
+  <h3 id="sobrediagnostico">2. Sobrediagnóstico</h3>
+
+  <p>
+    Detecção de condições que nunca se manifestariam clinicamente. <strong>Câncer de próstata</strong> é o caso paradigmático: muitos cânceres detectados pelo PSA jamais causariam sintomas, mas todos são tratados — com efeitos adversos significativos (incontinência, disfunção sexual).
+  </p>
+
+  <h3 id="sobretratamento">3. Sobretratamento</h3>
+
+  <p>Decorre do sobrediagnóstico. Pacientes com achados que não causariam dano são submetidos a tratamento que causa.</p>
+
+  <h3 id="falsa-seguranca">4. Falsa segurança após teste negativo</h3>
+
+  <p>
+    Pacientes com resultado negativo podem se sentir "garantidos" e ignorar sintomas que apareçam depois — atrasando diagnóstico genuíno.
+  </p>
+
+  <h3 id="custo-oportunidade">5. Custo de oportunidade</h3>
+
+  <p>
+    Recursos investidos em rastreamento de baixo benefício deixam de ser investidos em intervenções com maior impacto. Em sistemas com recursos limitados (como SUS, ou sistemas de PALOP), o custo de oportunidade é decisivo.
+  </p>
+
+  <h2 id="vieses-rastreamento">Vieses específicos do rastreamento</h2>
+
+  <p>Três vieses que podem dar <strong>falsa impressão de benefício</strong> quando se compara sobrevida em rastreados vs. não rastreados:</p>
+
+  <ul>
+    <li><strong>Lead-time bias</strong> — rastreamento detecta a doença mais cedo. Mesmo se o tratamento não muda a morte, o tempo entre diagnóstico e morte parece maior — falsa impressão de "ganho de sobrevida"</li>
+    <li><strong>Length-time bias</strong> — rastreamento tende a detectar casos de evolução mais lenta (que ficam mais tempo em fase pré-clínica detectável). Casos rápidos e agressivos escapam entre rastreamentos. A análise super-representa casos de bom prognóstico</li>
+    <li><strong>Viés do voluntário</strong> — pessoas que aderem a rastreamento são, em geral, mais saudáveis e atentas à saúde que as que não aderem. A diferença nos desfechos pode refletir essa diferença basal, não o efeito do rastreamento</li>
+  </ul>
+
+  <p>
+    Por isso, <strong>avaliar rastreamento exige ECR com mortalidade total como desfecho</strong> — não estudos observacionais com sobrevida.
+  </p>
+
+  <h2 id="exemplos">Exemplos brasileiros e internacionais</h2>
+
+  <h3 id="colo-utero">Câncer de colo do útero</h3>
+
+  <p>
+    Bom candidato em todos os critérios. Diretrizes brasileiras do INCA recomendam citologia (Papanicolau) entre 25-64 anos a cada 3 anos (após 2 negativos consecutivos anuais). Rastreamento populacional bem estabelecido<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>.
+  </p>
+
+  <h3 id="prostata">Câncer de próstata</h3>
+
+  <p>
+    Caso emblemático de divergência entre forças-tarefa. USPSTF: grau <strong>C</strong> (decisão individualizada) entre 55-69 anos; grau <strong>D</strong> (não recomendar) acima de 70. Sociedades urológicas mais permissivas. Discussão sobre sobrediagnóstico ainda em aberto.
+  </p>
+
+  <h3 id="pulmao-tc">Câncer de pulmão por TC de tórax</h3>
+
+  <p>
+    USPSTF: grau <strong>B</strong> para adultos 50-80 anos com história de tabagismo significativa (≥ 20 maços-ano). Em pacientes assintomáticos sem fator de risco, <strong>não recomendado</strong>.
+  </p>
+
+  <h3 id="aspirina-prevencao">Aspirina em prevenção primária no idoso</h3>
+
+  <p>
+    Após estudos como ASPREE, USPSTF retirou recomendação de aspirina para prevenção primária em adultos ≥ 60 anos. Caso clássico de evidência reverter recomendação prévia.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Tratar rastreamento como bem em si.</strong> "Quanto mais exames, melhor" — ignora danos do sobrediagnóstico e sobretratamento.</li>
+    <li><strong>Confundir rastreamento com diagnóstico oportuno.</strong> Paciente com sintoma não está sendo rastreado — está sendo investigado. Critérios e expectativas são diferentes.</li>
+    <li><strong>Esquecer de comunicar incerteza.</strong> Pacientes têm direito a saber que rastreamento tem benefícios modestos e riscos reais. Decisão compartilhada é particularmente importante aqui.</li>
+    <li><strong>Aplicar rastreamento sem cadeia diagnóstica/terapêutica disponível.</strong> Rastrear sem ter como confirmar e tratar é desperdício e cria expectativas frustrantes.</li>
+    <li><strong>Aceitar pressão para ampliar rastreamento sem evidência.</strong> Sociedades de especialidade frequentemente pressionam por rastreamentos mais amplos. Forças-tarefa públicas tendem a ser mais conservadoras — geralmente com razão.</li>
+    <li><strong>Ignorar contexto local.</strong> Rastreamento adequado para população europeia pode ser inviável em PALOP por razões de prevalência, custo ou capacidade de seguimento.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — quem produz recomendações sobre rastreamento</li>
+    <li><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Testes diagnósticos</a> — propriedades dos testes usados em rastreamento</li>
+    <li><a href={withBase('/calculadoras/testes-diagnosticos/', base)}>Calculadora de testes diagnósticos</a> — para entender VPP em diferentes prevalências</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — especialmente importante para rastreamentos com benefício modesto</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde a recomendação encontra o paciente real</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — incluindo os vieses específicos de estudos de rastreamento</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Wilson JMG, Jungner G. <em>Principles and Practice of Screening for Disease</em>. Geneva: World Health Organization; 1968. Disponível em: <a href="https://iris.who.int/handle/10665/37650" rel="noopener noreferrer" target="_blank">iris.who.int/handle/10665/37650</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        UK National Screening Committee. <em>Criteria for a population screening programme</em>. 2022. Disponível em: <a href="https://www.gov.uk/government/publications/evidence-review-criteria-national-screening-programmes/criteria-for-appraising-the-viability-effectiveness-and-appropriateness-of-a-screening-programme" rel="noopener noreferrer" target="_blank">gov.uk/screening-criteria</a>.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Instituto Nacional de Câncer. <em>Diretrizes brasileiras para o rastreamento do câncer do colo do útero</em>. 2ª ed. Rio de Janeiro: INCA; 2016.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li>
+        World Health Organization. <em>Screening programmes: a short guide</em>. WHO Regional Office for Europe; 2020. Disponível em: <a href="https://iris.who.int/handle/10665/330829" rel="noopener noreferrer" target="_blank">iris.who.int/handle/10665/330829</a>.
+      </li>
+      <li>
+        Raffle AE, Mackie A, Gray JAM. <em>Screening: Evidence and Practice</em>. 2ª ed. Oxford: Oxford University Press; 2019.
+      </li>
+      <li>
+        McNeil JJ, Wolfe R, Woods RL, et al. Effect of aspirin on cardiovascular events and bleeding in the healthy elderly. <em>N Engl J Med</em> 2018;379:1509–18.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

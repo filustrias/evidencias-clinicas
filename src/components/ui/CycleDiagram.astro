@@ -1,0 +1,267 @@
+---
+/**
+ * Diagrama do ciclo dos 5 As — SVG circular em desktop, lista numerada em mobile.
+ *
+ * Os 5 estágios estão dispostos em pentágono regular ao redor de um círculo,
+ * com o primeiro (Ask) no topo e os demais em sentido horário. Setas conectam
+ * cada estágio ao próximo, fechando o ciclo.
+ *
+ * Quando `activeStep` é fornecido, apenas o nó correspondente e as duas setas
+ * adjacentes (chegando e saindo) recebem cor de acento; os demais ficam neutros.
+ * Sem `activeStep`, todos os elementos ficam em acento (visualização do ciclo
+ * completo, ideal para a página de visão geral).
+ */
+import { withBase } from '@/data/navigation';
+
+export interface Props {
+  activeStep?: 'ask' | 'acquire' | 'appraise' | 'apply' | 'assess';
+}
+
+const { activeStep } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const stages = [
+  { id: 'ask',      num: 1, pt: 'Perguntar', en: 'Ask',      href: '/cinco-as/perguntar/' },
+  { id: 'acquire',  num: 2, pt: 'Buscar',    en: 'Acquire',  href: '/cinco-as/buscar/' },
+  { id: 'appraise', num: 3, pt: 'Avaliar',   en: 'Appraise', href: '/cinco-as/avaliar/' },
+  { id: 'apply',    num: 4, pt: 'Aplicar',   en: 'Apply',    href: '/cinco-as/aplicar/' },
+  { id: 'assess',   num: 5, pt: 'Monitorar', en: 'Assess',   href: '/cinco-as/monitorar/' },
+] as const;
+
+const SVG_SIZE = 400;
+const CENTER = SVG_SIZE / 2;
+const RING_R = 130;
+const TRIM = 0.36;
+const STEP = (2 * Math.PI) / stages.length;
+const START = -Math.PI / 2;
+
+const nodes = stages.map((s, i) => {
+  const angle = START + i * STEP;
+  return {
+    ...s,
+    angle,
+    xPct: 50 + (RING_R / SVG_SIZE) * 100 * Math.cos(angle),
+    yPct: 50 + (RING_R / SVG_SIZE) * 100 * Math.sin(angle),
+    isActive: activeStep === s.id,
+  };
+});
+
+const arcs = nodes.map((n, i) => {
+  const next = nodes[(i + 1) % nodes.length]!;
+  const a1 = n.angle + TRIM;
+  const a2 = next.angle - TRIM;
+  return {
+    sx: CENTER + RING_R * Math.cos(a1),
+    sy: CENTER + RING_R * Math.sin(a1),
+    ex: CENTER + RING_R * Math.cos(a2),
+    ey: CENTER + RING_R * Math.sin(a2),
+    // Sem activeStep, todas as setas ativas. Com activeStep, só as setas que
+    // tocam o nó ativo (chegando ou saindo).
+    isActive: !activeStep || n.id === activeStep || next.id === activeStep,
+  };
+});
+---
+<div class="not-prose cycle">
+  <div class="cycle-graphic" role="group" aria-label="Ciclo dos 5 As da MBE">
+    <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} class="cycle-svg" aria-hidden="true">
+      <defs>
+        <marker id="cycle-arrow-active" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 12 6 L 0 12 L 3 6 Z" fill="var(--color-accent)" />
+        </marker>
+        <marker id="cycle-arrow-dim" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 0 L 12 6 L 0 12 L 3 6 Z" fill="var(--color-border-default)" />
+        </marker>
+      </defs>
+      {arcs.map((arc) => (
+        <path
+          d={`M ${arc.sx} ${arc.sy} A ${RING_R} ${RING_R} 0 0 1 ${arc.ex} ${arc.ey}`}
+          class:list={['cycle-arc', { 'is-active': arc.isActive }]}
+          marker-end={arc.isActive ? 'url(#cycle-arrow-active)' : 'url(#cycle-arrow-dim)'}
+          fill="none"
+        />
+      ))}
+    </svg>
+
+    {nodes.map((n) => (
+      <a
+        href={withBase(n.href, base)}
+        class:list={['cycle-node', { 'is-active': n.isActive, 'is-dim': activeStep && !n.isActive }]}
+        style={`--x:${n.xPct}%;--y:${n.yPct}%;`}
+        aria-label={`Etapa ${n.num}: ${n.pt} — ${n.en}`}
+      >
+        <span class="cycle-node-num" aria-hidden="true">{n.num}</span>
+        <span class="cycle-node-pt" aria-hidden="true">{n.pt}</span>
+        <span class="cycle-node-en" aria-hidden="true">{n.en}</span>
+      </a>
+    ))}
+  </div>
+
+  <ol class="cycle-list" aria-label="Os 5 As — versão lista">
+    {stages.map((s) => (
+      <li class:list={[{ 'is-active': activeStep === s.id }]}>
+        <a href={withBase(s.href, base)}>
+          <span class="cycle-list-num" aria-hidden="true">{s.num}</span>
+          <span class="cycle-list-text">
+            <strong>{s.pt}</strong>
+            <em>{s.en}</em>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .cycle {
+    margin: 2rem 0 2.5rem;
+  }
+
+  /* ---------- Mobile: lista vertical (default) ---------- */
+  .cycle-graphic { display: none; }
+
+  .cycle-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .cycle-list li + li { margin-top: 0.5rem; }
+  .cycle-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+  .cycle-list a:hover {
+    border-color: var(--color-accent);
+  }
+  .cycle-list .is-active a {
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft-bg);
+  }
+  .cycle-list-num {
+    flex: 0 0 auto;
+    width: 1.875rem;
+    height: 1.875rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+  .cycle-list-text strong {
+    font-weight: 500;
+    line-height: 1.3;
+    display: block;
+    color: var(--color-text-primary);
+  }
+  .cycle-list-text em {
+    color: var(--color-text-muted);
+    font-style: italic;
+    font-size: 0.8125rem;
+  }
+
+  /* ---------- Desktop: SVG circular ---------- */
+  @media (min-width: 640px) {
+    .cycle-graphic {
+      display: block;
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      aspect-ratio: 1 / 1;
+    }
+    .cycle-list { display: none; }
+  }
+
+  .cycle-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .cycle-arc {
+    stroke: var(--color-border-default);
+    stroke-width: 2.5;
+    fill: none;
+    transition: stroke 200ms ease;
+  }
+  .cycle-arc.is-active {
+    stroke: var(--color-accent);
+  }
+
+  .cycle-node {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    width: clamp(96px, 24%, 120px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent);
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.25rem;
+    line-height: 1.15;
+    transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+  .cycle-node:hover {
+    transform: translate(-50%, -50%) scale(1.04);
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.18);
+  }
+  :global([data-theme='dark']) .cycle-node:hover {
+    box-shadow: 0 6px 16px rgba(45, 212, 191, 0.22);
+  }
+  .cycle-node.is-active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #ffffff;
+  }
+  .cycle-node.is-dim {
+    border-color: var(--color-border-default);
+    color: var(--color-text-muted);
+  }
+
+  .cycle-node-num {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  .cycle-node.is-active .cycle-node-num {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .cycle-node.is-dim .cycle-node-num {
+    color: var(--color-text-muted);
+  }
+
+  .cycle-node-pt {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: 0.15rem;
+  }
+
+  .cycle-node-en {
+    font-size: 0.7rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-top: 0.1rem;
+  }
+  .cycle-node.is-active .cycle-node-en {
+    color: rgba(255, 255, 255, 0.85);
+  }
+</style>

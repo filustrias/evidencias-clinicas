@@ -1,14 +1,217 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Dúvidas clínicas"
-  description="Como reconhecer, classificar e priorizar as dúvidas que surgem na prática."
+<DocLayout
+  title="Dúvidas clínicas — onde tudo começa"
+  description="A inquietação do dia a dia clínico é o ponto de partida da MBE. Como reconhecer, classificar e transformar dúvidas em perguntas que valem a pena perseguir."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Dúvidas clínicas</h1>
-  <p class="text-lg text-text-secondary mb-6">Como reconhecer, classificar e priorizar as dúvidas que surgem na prática.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Dúvidas clínicas — onde tudo começa</h1>
+
+  <p>
+    A MBE começa antes do PubMed, antes do PICO, antes mesmo do primeiro A. Começa no consultório, quando o profissional pensa: <strong>"não sei o que devo fazer agora"</strong>. Essa inquietação — vaga, incômoda, frequentemente abafada pela rotina — é o ponto de partida de tudo o que vem depois.
+  </p>
+
+  <p>
+    Aprender MBE é, em parte, aprender a <strong>levar essas inquietações a sério</strong>. A reconhecê-las quando aparecem, a classificá-las pela importância, a separar as que merecem perseguição daquelas que podem esperar. Esta página é sobre isso.
+  </p>
+
+  <h2 id="duvida-materia-prima">A dúvida como matéria-prima</h2>
+
+  <p>
+    Toda decisão clínica nasce de uma dúvida. Algumas dúvidas o profissional resolve em segundos, com base em conhecimento estabelecido — qual antibiótico para uma celulite simples, que dose de captopril iniciar. Outras paralisam: aquela paciente realmente precisa de mamografia anual? esse antidepressivo funciona melhor que aquele? o paciente idoso ganha algo iniciando estatina aos 80 anos?
+  </p>
+
+  <p>
+    A diferença entre profissionais que praticam MBE e os que apenas seguem rotina não está no número de dúvidas. <strong>Está no que fazem com elas.</strong> Profissionais com prática rotineira deixam a dúvida passar — decidem por hábito, ou pela conduta do colega ao lado, ou pelo que a indústria farmacêutica anuncia. Profissionais que praticam MBE param, registram, e às vezes (não sempre) saem em busca de evidência.
+  </p>
+
+  <h2 id="foreground-background">Foreground vs. background</h2>
+
+  <p>Uma distinção útil, atribuída a David Sackett: nem toda dúvida é a mesma coisa.</p>
+
+  <p>
+    <strong>Dúvidas de background</strong> são perguntas amplas sobre uma condição, doença ou tratamento. Tipicamente surgem quando o profissional está aprendendo algo novo. "O que é doença de Chagas?" "Como funciona um SGLT2?" "Quais são os critérios diagnósticos para fibromialgia?". Para essas, <strong>livros-texto, sumários clínicos (UpToDate, BMJ Best Practice) e diretrizes</strong> são as fontes ideais.
+  </p>
+
+  <p>
+    <strong>Dúvidas de foreground</strong> são perguntas específicas sobre conduta para um paciente específico. "Para essa paciente com fibromialgia, duloxetina é mais eficaz que pregabalina?". "Para esse idoso de 80 anos sem evento cardiovascular, devo iniciar estatina?". Para essas, <strong>artigos primários e revisões sistemáticas</strong> são as fontes apropriadas — porque a pergunta exige comparação direta entre alternativas.
+  </p>
+
+  <p>
+    Profissionais em formação têm muitas dúvidas de background. Profissionais experientes têm muitas dúvidas de foreground. Os dois tipos coexistem ao longo da carreira, mas mudam de proporção com o tempo.
+  </p>
+
+  <p>
+    A MBE foi pensada principalmente para responder dúvidas de foreground. PICO, busca em bases biomédicas, leitura crítica de ensaios — tudo isso assume que a pergunta é específica, comparativa, e tem desfecho de interesse. Para dúvidas de background, esse aparato é exagerado.
+  </p>
+
+  <h2 id="quantas-duvidas">Quantas dúvidas surgem por dia?</h2>
+
+  <p>
+    Estudos clássicos em medicina de família mostram que profissionais geram, em média, <strong>uma dúvida clínica para cada dois ou três pacientes atendidos</strong><sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Em uma manhã com 12 pacientes, são 4 a 6 dúvidas. Em um mês, mais de 100.
+  </p>
+
+  <p>
+    Dessas, quantas são realmente perseguidas? Os mesmos estudos mostram que <strong>menos de 30% das dúvidas geradas no consultório são pesquisadas pelo profissional</strong><sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. As outras 70% morrem ali mesmo, esquecidas até o próximo paciente apresentar o mesmo problema.
+  </p>
+
+  <p>
+    Por quê? Tempo, cultura institucional, dificuldade de acesso a fontes, esquecimento. Mas também — e talvez principalmente — porque a maioria das dúvidas geradas no consultório são vagas demais para serem pesquisadas. "Será que tem algo melhor?". "Será que estou fazendo certo?". Essas dúvidas precisam ser <strong>transformadas</strong> antes de poderem ser respondidas.
+  </p>
+
+  <p>
+    É isso que o primeiro A — <a href={withBase('/cinco-as/perguntar/', base)}>Ask</a> — faz: pega inquietação vaga e transforma em pergunta estruturada. Sem esse passo, a dúvida fica em loop.
+  </p>
+
+  <h2 id="poems-vs-does">Classificando dúvidas pelo que importa</h2>
+
+  <p>
+    Nem toda dúvida merece o mesmo investimento. Uma classificação útil divide dúvidas clínicas em duas grandes naturezas:
+  </p>
+
+  <h3 id="poems">POEMs — Patient-Oriented Evidence that Matters</h3>
+
+  <p>
+    Dúvidas sobre desfechos que <strong>importam diretamente para a vida do paciente</strong>: mortalidade, qualidade de vida, sintomas, eventos clínicos relevantes. Pergunta-teste: <em>"se eu resolver essa dúvida, isso muda a conduta para o paciente?"</em> — se sim, é um POEM.
+  </p>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li>"Esse anti-hipertensivo previne AVC?"</li>
+    <li>"Essa intervenção alivia a dor crônica?"</li>
+    <li>"Esse rastreamento reduz mortalidade?"</li>
+  </ul>
+
+  <p>
+    POEMs merecem investimento. São dúvidas que mudam vidas, e respondê-las muda como você atende.
+  </p>
+
+  <h3 id="does">DOEs — Disease-Oriented Evidence</h3>
+
+  <p>
+    Dúvidas sobre <strong>mecanismos de doença, biomarcadores, fisiopatologia ou desfechos intermediários</strong>. Pergunta-teste: <em>"essa dúvida está mais relacionada ao mecanismo da doença do que à tomada de decisão clínica?"</em> — se sim, é um DOE.
+  </p>
+
+  <p>Exemplos:</p>
+
+  <ul>
+    <li>"Como esse fármaco atua no receptor X?"</li>
+    <li>"Esse marcador inflamatório aumenta na condição Y?"</li>
+    <li>"Qual a via metabólica responsável por Z?"</li>
+  </ul>
+
+  <p>
+    DOEs são intelectualmente interessantes, e às vezes têm utilidade clínica indireta. Mas frequentemente <strong>respondê-las não muda a conduta</strong> — só satisfaz a curiosidade. Em prática rotineira, POEMs vêm primeiro.
+  </p>
+
+  <p>
+    A distinção POEM/DOE foi proposta por Allen Shaughnessy e David Slawson na década de 1990<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>, e tornou-se parte do vocabulário básico da MBE moderna. A regra prática: <strong>se você tem 30 minutos para pesquisar uma dúvida, gaste-os com um POEM</strong>.
+  </p>
+
+  <h2 id="puns-dens">PUNs e DENs — duas naturezas de aprendizado</h2>
+
+  <p>
+    Outra classificação, complementar, vem do trabalho de Richard Eve em medicina de família britânica<sup><a id="fnref-4" href="#fn-4" class="footnote-ref">4</a></sup>:
+  </p>
+
+  <ul>
+    <li><strong>PUN</strong> <em>(Patient's Unmet Need)</em> — necessidade do paciente que não foi plenamente atendida na consulta. Algo que o paciente precisava saber, sentir ou receber, e que não foi suficientemente abordado.</li>
+    <li><strong>DEN</strong> <em>(Doctor's Educational Need)</em> — necessidade educacional do profissional. Lacuna de conhecimento que o caso revelou.</li>
+  </ul>
+
+  <p>
+    A diferença é importante: <strong>PUN aponta para mudança no serviço ou na rotina</strong>; <strong>DEN aponta para estudo individual</strong>. Casos clínicos bem discutidos geram os dois tipos, em equilíbrio.
+  </p>
+
+  <p>
+    Um exemplo: paciente jovem com dor lombar crônica. PUN — não recebeu orientação clara sobre exercício e expectativa de recuperação. DEN — o profissional não sabia que evidências mais recentes desencorajam imagem de rotina nesse cenário. Os dois precisam ser endereçados, mas exigem ações diferentes.
+  </p>
+
+  <h2 id="da-inquietacao-a-pergunta">Da inquietação à pergunta investigável</h2>
+
+  <p>
+    Reconhecer a dúvida é o primeiro passo. Levar a sério é o segundo. <strong>Transformar em pergunta investigável</strong> é o terceiro — e é o trabalho do primeiro A da MBE.
+  </p>
+
+  <p>Inquietação típica: <em>"será que essa idosa precisa mesmo da estatina?"</em></p>
+
+  <p>Mesma inquietação como pergunta investigável (PICO):</p>
+
+  <ul>
+    <li><strong>P:</strong> mulher de 78 anos, sem doença cardiovascular prévia, com colesterol total 240 mg/dL</li>
+    <li><strong>I:</strong> iniciar estatina em prevenção primária</li>
+    <li><strong>C:</strong> não iniciar estatina</li>
+    <li><strong>O:</strong> redução de eventos cardiovasculares maiores; mortalidade total; eventos adversos (mialgia, hepatotoxicidade)</li>
+  </ul>
+
+  <p>
+    A primeira frase é uma sensação. A segunda é uma pergunta que pode ser respondida com evidência. <strong>A transição entre as duas é o coração do primeiro A</strong>.
+  </p>
+
+  <p>
+    → Para a estrutura completa de transformar dúvida em pergunta investigável: <a href={withBase('/conceitos/smart/', base)}>SMART</a> e <a href={withBase('/conceitos/pico/', base)}>PICO</a>.
+  </p>
+
+  <h2 id="habitos">Hábitos que sustentam a prática</h2>
+
+  <p>
+    Profissionais que praticam MBE sustentavelmente têm alguns hábitos em comum:
+  </p>
+
+  <ul>
+    <li><strong>Anotam dúvidas durante as consultas</strong> — uma caderneta no bolso, uma nota no celular, um campo no prontuário eletrônico. O importante é capturar antes de esquecer.</li>
+    <li><strong>Reservam tempo regular para pesquisar</strong> — 10 minutos todos os dias é mais útil que quatro horas de estudo a cada dois meses.</li>
+    <li><strong>Compartilham dúvidas com colegas e buscam ajuda</strong> para (1) formular melhor suas dúvidas em perguntas possíveis de serem respondidas; e (2) não se envergonham de apresentar suas dúvidas aos colegas.</li>
+    <li><strong>Aceitam que nem toda dúvida será respondida de imediato</strong> — é parte do ofício. Às vezes nossas dúvidas carecem de pesquisa científica qualificada para respondê-las. Às vezes precisamos de um pouco mais de tempo para formulá-las um pouco melhor.</li>
+  </ul>
+
+  <h2 id="erros-comuns">Erros comuns ao lidar com dúvidas</h2>
+
+  <ul>
+    <li><strong>Tratar dúvida como sinal de despreparo.</strong> Profissionais que não têm dúvidas geralmente são os menos críticos da própria prática. Dúvida é sinal de pensamento ativo, não de fraqueza.</li>
+    <li><strong>Buscar resposta rápida em fontes não confiáveis.</strong> Google sem filtro, grupos sem moderação, fontes patrocinadas pela indústria — frequentemente respondem rápido, mas mal. Uma resposta errada pior que dúvida não-respondida.</li>
+    <li><strong>Confundir dúvida com indecisão.</strong> Indecisão é não saber qual de duas opções escolher quando se conhece bem ambas. Dúvida é não saber se as opções são as certas. São coisas diferentes.</li>
+    <li><strong>Não distinguir POEM de DOE.</strong> Investir tempo em curiosidade fisiopatológica que não muda conduta — repetidas vezes — é desperdiçar o pouco tempo que existe para estudo continuado.</li>
+    <li><strong>Esperar consulta perfeita para registrar dúvidas.</strong> A maioria das dúvidas surge no meio do atendimento, em paralelo a outras tarefas. Anote no que está à mão, organize depois.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/perguntar/', base)}>Ask (Perguntar)</a> — primeiro A, onde a dúvida vira pergunta investigável</li>
+    <li><a href={withBase('/conceitos/smart/', base)}>SMART</a> — critério para verificar se a pergunta tem qualidade</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — estrutura da pergunta clínica focada</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — onde a dúvida aparece, no fluxo do pensamento</li>
+    <li><a href={withBase('/cinco-as/', base)}>Visão geral dos 5As</a> — o ciclo do qual a dúvida é o ponto de partida</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Ely JW, Osheroff JA, Ebell MH, et al. Analysis of questions asked by family doctors regarding patient care. <em>BMJ</em> 1999;319(7206):358–61.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Del Fiol G, Workman TE, Gorman PN. Clinical questions raised by clinicians at the point of care: a systematic review. <em>JAMA Intern Med</em> 2014;174(5):710–8.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Shaughnessy AF, Slawson DC, Bennett JH. Becoming an information master: a guidebook to the medical information jungle. <em>J Fam Pract</em> 1994;39(5):489–99.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li id="fn-4">
+        Eve R. <em>PUNs and DENs: Discovering Learning Needs in General Practice</em>. Oxford: Radcliffe Publishing; 2003.
+        <a href="#fnref-4" class="footnote-back" aria-label="Voltar ao texto da nota 4">↩</a>
+      </li>
+      <li>
+        Sackett DL, Straus SE, Richardson WS, Rosenberg W, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 2ª ed. Edinburgh: Churchill Livingstone; 2000. Capítulo 1.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,15 +1,243 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+const authorPhoto = `${base}${'images/sobre/adelson-jantsch.jpg'.replace(/^\//, '')}`;
 ---
-<PageLayout
-  title="Sobre o curso"
-  description="Sobre evidências clínicas: propósito, audiência e abordagem editorial."
+<DocLayout
+  title="Sobre"
+  description="Sobre o projeto evidências clínicas, autoria, propósito, licença de uso e formas de contato."
 >
-  <h1 class="text-4xl font-medium mb-3">Sobre o curso</h1>
-  <p class="text-lg text-text-secondary mb-6">
-    Recurso educacional sobre Medicina Baseada em Evidências, voltado a médicos em Moçambique, Angola e países lusófonos.
+  <h1>Sobre</h1>
+
+  <h2 id="o-projeto">O projeto</h2>
+
+  <p>
+    <strong>evidências clínicas</strong> é um curso aberto de Medicina Baseada em Evidências, com foco
+    em decisões clínicas para profissionais de saúde de Moçambique, Angola e demais países da CPLP.
+    Foi desenvolvido a partir de materiais de sala de aula colecionados ao longo de anos e que decidi
+    apresentar com uma roupagem mais interativa e acessível para alunos e professores. Conceitos e
+    ferramentas foram integrados dentro da plataforma com hiperlinks que conectam termos e ideias. E
+    o texto foi escrito utilizando uma linguagem direta, sem jargões desnecessários. Em vez de
+    capítulos longos, optei por verbetes curtos, autocontidos, com hiperlinks entre si. Para que cada
+    profissional possa montar sua trajetória de leitura conforme a dúvida que tiver.
   </p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+
+  <p>
+    Exemplos que criei aqui tentam espelhar casos clínicos reais de países de baixa e média renda,
+    incluindo prevenção de malária na gestação, rastreamento de câncer de colo em país de baixa renda,
+    decisões em medicina intensiva com recursos limitados.
+  </p>
+
+  <h2 id="sobre-o-autor">Sobre o autor</h2>
+
+  <div class="not-prose my-8">
+    <div class="rounded-lg border border-border-subtle bg-surface p-6 grid gap-8 sm:grid-cols-[200px_1fr] items-start">
+      <div class="flex flex-col items-center sm:items-stretch gap-5">
+        <img
+          src={authorPhoto}
+          alt="Adelson Guaraci Jantsch"
+          width="200"
+          height="200"
+          class="w-[200px] h-[200px] rounded-full object-cover border border-border-subtle"
+          loading="lazy"
+        />
+        <ul class="flex flex-col gap-2.5 text-sm font-medium list-none p-0 w-[200px]">
+          <li>
+            <a href="https://www.family-medicine-impact.com/" rel="noopener" target="_blank"
+              class="flex items-center justify-center px-4 py-2.5 rounded-md border border-border-default bg-background text-text-primary hover:bg-elevated hover:border-accent transition-colors">
+              Visite meu website →
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              data-copy-email="adelson.guaracii@gmail.com"
+              class="flex items-center justify-center gap-2 px-3 py-2.5 w-full rounded-md border border-border-default bg-background text-text-primary hover:bg-elevated hover:border-accent transition-colors text-xs"
+              aria-label="Copiar e-mail adelson.guaracii@gmail.com"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-3.5 h-3.5 shrink-0"
+                aria-hidden="true"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+              </svg>
+              <span data-copy-label class="truncate">adelson.guaracii@gmail.com</span>
+            </button>
+          </li>
+          <li>
+            <a href="https://orcid.org/0000-0002-3012-5619" rel="noopener" target="_blank"
+              class="flex items-center justify-center px-4 py-2.5 rounded-md border border-border-default bg-background text-text-primary hover:bg-elevated hover:border-accent transition-colors">
+              ORCID
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/adelson-guaraci-jantsch-263639266/" rel="noopener"
+              target="_blank"
+              class="flex items-center justify-center px-4 py-2.5 rounded-md border border-border-default bg-background text-text-primary hover:bg-elevated hover:border-accent transition-colors">
+              LinkedIn
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="text-text-secondary text-[0.95rem] leading-relaxed space-y-5">
+        <p>
+          Me chamo <strong class="text-text-primary">Adelson Guaraci Jantsch</strong>, sou médico de
+          família, PhD em saúde pública e epidemiologia, pesquisador e consultor para o
+          desenvolvimento da Atenção Primária à Saúde.
+        </p>
+        <p>
+          Trabalho na interseção entre <strong>educação médica, fortalecimento de sistemas de saúde
+          e uso inteligente de dados</strong> para transformar evidências em prática e melhorar
+          desfechos.
+        </p>
+        <p>
+          Atuo no desenho e na implementação de soluções para problemas complexos, combinando
+          pesquisa participativa e aproximando pessoas e equipes para cocriar respostas adequadas a
+          cada contexto. Fiz meu mestrado e doutorado em Saúde Pública e Epidemiologia no Instituto
+          de Medicina Social da UERJ e hoje atuo no Brasil e em projetos de colaboração internacional
+          (Canadá, Angola, Moçambique) em projetos de fortalecimento de sistemas de saúde.
+        </p>
+        <p>
+          Além da medicina de família e da atenção primária à saúde, meus maiores interesses atuais
+          são <strong>Saúde Global, pesquisa com métodos mistos, pesquisa de implementação e o
+          engajamento de lideranças</strong> para desenvolver e implementar inovações em saúde.
+          Através destas ferramentas, busco fazer com que a APS seja de fato a ordenadora dos
+          sistemas de saúde, capaz de entregar um cuidado abrangente, contínuo e centrado nas
+          necessidades das pessoas.
+        </p>
+      </div>
+    </div>
   </div>
-</PageLayout>
+
+  <h2 id="principios-editoriais">Princípios editoriais</h2>
+
+  <p>Quatro princípios orientam o conteúdo do site:</p>
+
+  <p>
+    <strong>1. Honestidade epistêmica.</strong> Quando a evidência é incerta, dizemos. Quando há
+    controvérsia, apresentamos as posições. Não simplificamos a ponto de enganar.
+  </p>
+
+  <p>
+    <strong>2. Sensibilidade ao contexto.</strong> Decisões clínicas dependem de recursos disponíveis,
+    do paciente real, do sistema de saúde local. Diretrizes internacionais são ponto de partida, não
+    veredicto final.
+  </p>
+
+  <p>
+    <strong>3. Ferramenta a ferramenta, conceito a conceito.</strong> Em vez de capítulos longos,
+    optamos por verbetes curtos, autocontidos, com hiperlinks entre si. Para que cada profissional
+    possa montar sua trajetória de leitura conforme a dúvida que tiver.
+  </p>
+
+  <p>
+    <strong>4. Sem propaganda, sem rastreamento.</strong> Não há anúncios, parcerias comerciais ou
+    patrocínio de indústria. Não usamos cookies de rastreamento individual.
+  </p>
+
+  <h2 id="licenca-e-reuso">Licença e reuso</h2>
+
+  <p>
+    Todo o conteúdo (textos, casos, ilustrações originais) está licenciado em <strong>Creative Commons
+    Atribuição-CompartilhaIgual 4.0 Internacional (CC-BY-SA 4.0)</strong>. Isso significa que você
+    pode:
+  </p>
+
+  <ul>
+    <li><strong>Compartilhar</strong> — copiar e redistribuir o material em qualquer suporte ou formato</li>
+    <li>
+      <strong>Adaptar</strong> — remixar, transformar e criar a partir do material para qualquer fim,
+      mesmo comercial
+    </li>
+  </ul>
+
+  <p>Sob as seguintes condições:</p>
+
+  <ul>
+    <li><strong>Atribuição</strong> — citar a fonte original (este site, com link)</li>
+    <li>
+      <strong>Compartilhamento pela mesma licença</strong> — se transformar ou criar a partir do
+      material, distribuir a sua contribuição sob a mesma licença
+    </li>
+  </ul>
+
+  <p>
+    O <strong>código</strong> do site (Astro, componentes interativos) está separadamente licenciado em
+    <strong>MIT</strong>, no repositório público.
+  </p>
+
+  <p>
+    Material de referência foi consultado em ampla literatura, citada em cada página. As principais
+    fontes recorrentes incluem:
+  </p>
+
+  <ul>
+    <li>
+      <em>Evidence-Based Medicine: How to Practice and Teach EBM</em> (Straus, Glasziou, Richardson,
+      Haynes), 5ª edição, Elsevier, 2018
+    </li>
+    <li>
+      <em>Evidence-Based Medicine Toolkit</em> (Heneghan, Badenoch), 2ª edição, BMJ Books, 2006
+    </li>
+    <li><em>How to Read a Paper</em> (Trisha Greenhalgh), 6ª edição, Wiley-Blackwell, 2019</li>
+    <li>Recursos abertos da Cochrane, OMS/OPAS, USPSTF, CTFPHC, NICE, GRADE Working Group</li>
+    <li>
+      Material didático do curso <em>Medicina Baseada em Evidências</em> da UNA-SUS/Fiocruz (Brasil)
+    </li>
+  </ul>
+
+  <h2 id="como-contribuir">Como contribuir</h2>
+
+  <p>
+    Este site é projeto vivo. Se você encontrar erro, tiver sugestão de melhoria, quiser propor um
+    caso clínico, ou estiver interessado em colaborar com o desenvolvimento — entre em contato comigo
+    em <a href="mailto:adelson.guaracii@gmail.com">adelson.guaracii@gmail.com</a>.
+  </p>
+</DocLayout>
+
+<script is:inline>
+  document.querySelectorAll('[data-copy-email]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const email = btn.getAttribute('data-copy-email');
+      const label = btn.querySelector('[data-copy-label]');
+      if (!email || !label) return;
+      const original = label.textContent;
+
+      const showFeedback = () => {
+        label.textContent = 'Copiado!';
+        btn.classList.add('border-accent', 'text-accent');
+        setTimeout(() => {
+          label.textContent = original;
+          btn.classList.remove('border-accent', 'text-accent');
+        }, 1500);
+      };
+
+      try {
+        await navigator.clipboard.writeText(email);
+        showFeedback();
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = email;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showFeedback();
+        } catch {}
+        ta.remove();
+      }
+    });
+  });
+</script>

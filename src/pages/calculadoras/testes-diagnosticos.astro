@@ -1,16 +1,97 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import DiagnosticTestCalculator from '@components/calculadoras/DiagnosticTestCalculator.astro';
+import { withBase } from '@/data/navigation';
+import '@styles/prose.css';
+
+const base = import.meta.env.BASE_URL;
 ---
 <PageLayout
-  title="Testes diagnósticos — calculadora"
-  description="Cálculo de sensibilidade, especificidade, VPP, VPN e razões de verossimilhança a partir de uma tabela 2×2."
+  title="Calculadora — propriedades de testes diagnósticos"
+  description="Sensibilidade, especificidade, valores preditivos e razões de verossimilhança em tempo real."
   section="calculadoras"
+  wide
 >
-  <h1 class="text-4xl font-medium mb-3">Testes diagnósticos</h1>
-  <p class="text-lg text-text-secondary mb-6">
-    A partir da tabela 2×2 (resultado do teste vs. doença), obtenha sensibilidade, especificidade,
-    valores preditivos e razões de verossimilhança, com intervalos de confiança.
-  </p>
+  <div class="prose">
+    <h1>Calculadora — propriedades de testes diagnósticos</h1>
+
+    <p>
+      Quando um exame dá positivo num paciente, o que isso realmente significa? Depende do exame — e do paciente. <strong>Sensibilidade</strong> e <strong>especificidade</strong> descrevem o teste; <strong>valores preditivos</strong> e <strong>razões de verossimilhança</strong> descrevem o que o resultado significa para a pessoa específica que está sendo testada. Esta calculadora deixa você manipular essas relações em tempo real.
+    </p>
+
+    <p>
+      Para o aprofundamento conceitual de cada propriedade, veja <a href={withBase('/conceitos/testes-diagnosticos/', base)}>propriedades de testes diagnósticos</a>.
+    </p>
+
+    <h2 id="a-calculadora">A calculadora</h2>
+  </div>
+
   <DiagnosticTestCalculator />
+
+  <div class="prose">
+    <h2 id="como-ler-os-resultados">Como ler os resultados</h2>
+
+    <p>
+      A tabela 2×2 mostra como, em cada cenário, mil pessoas testadas se distribuem em quatro grupos:
+    </p>
+
+    <ul>
+      <li><strong>Verdadeiros positivos (VP)</strong> — doentes que o teste detectou. Em verde.</li>
+      <li><strong>Falsos positivos (FP)</strong> — não-doentes que o teste acusou. Em vermelho.</li>
+      <li><strong>Falsos negativos (FN)</strong> — doentes que o teste deixou passar. Em vermelho.</li>
+      <li><strong>Verdadeiros negativos (VN)</strong> — não-doentes corretamente liberados. Em verde.</li>
+    </ul>
+
+    <p>
+      A diagonal verde é onde o teste acertou. A diagonal vermelha é onde errou. Quanto menor o vermelho, melhor.
+    </p>
+
+    <p>
+      Os quatro indicadores à direita combinam essas células em medidas clinicamente úteis:
+    </p>
+
+    <ul>
+      <li><strong>VPP</strong> — probabilidade de que um paciente com teste positivo realmente tenha a doença</li>
+      <li><strong>VPN</strong> — probabilidade de que um paciente com teste negativo realmente não tenha a doença</li>
+      <li><strong>RV+</strong> — quanto um teste positivo aumenta a chance pré-teste de doença. Acima de 1, aumenta; quanto maior, mais.</li>
+      <li><strong>RV−</strong> — quanto um teste negativo reduz a chance pré-teste de doença. Abaixo de 1, reduz; quanto menor, mais.</li>
+    </ul>
+
+    <h2 id="cinco-coisas-para-experimentar">Cinco coisas para experimentar</h2>
+
+    <p>Algumas perguntas que a calculadora responde em segundos:</p>
+
+    <p><strong>1. Por que rastrear doença rara na população geral é problemático?</strong><br />
+    Coloque prevalência em 1%, sensibilidade em 95%, especificidade em 95%. Veja o VPP cair para cerca de 16% — ou seja, 84% dos positivos são falsos. Mesmo um teste muito bom, em prevalência muito baixa, não confirma diagnóstico.</p>
+
+    <p><strong>2. Quando um teste é bom para triagem?</strong><br />
+    Sensibilidade alta (≥ 95%) com especificidade moderada (~70%): pega quase todos os doentes (RV− muito baixo), com tolerância a falsos positivos que serão filtrados depois.</p>
+
+    <p><strong>3. Quando um teste é bom para confirmação?</strong><br />
+    Especificidade alta (≥ 95%) com sensibilidade moderada (~70%): poucos falsos positivos (RV+ alto), aceitando perder alguns doentes que serão pegos por outros meios.</p>
+
+    <p><strong>4. O efeito da probabilidade pré-teste.</strong><br />
+    Use o cenário "Troponina em dor torácica" e compare com "Mamografia em rastreio". O mesmo conceito de razão de verossimilhança opera em ambos, mas os valores preditivos são radicalmente diferentes — porque a prevalência (probabilidade pré-teste) muda tudo.</p>
+
+    <p><strong>5. RV+ e RV− independem da prevalência.</strong><br />
+    Mexa só na prevalência, mantendo sensibilidade e especificidade fixas. RV+ e RV− não mudam — são propriedades do teste. Mas VPP e VPN mudam dramaticamente. Esse é o ponto central que a calculadora ensina.</p>
+
+    <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+    <ul>
+      <li><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Propriedades de testes diagnósticos</a> — explicação aprofundada de cada medida</li>
+      <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — para perguntas de tratamento, não diagnóstico</li>
+      <li><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a> — onde os valores preditivos importam mais</li>
+      <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — onde estudos sobre testes se encaixam na hierarquia</li>
+    </ul>
+
+    <section class="footnotes" aria-label="Referências">
+      <h2 id="referencias">Referências</h2>
+      <ol>
+        <li>Akobeng AK. Understanding diagnostic tests 1: sensitivity, specificity and predictive values. <em>Acta Paediatr</em> 2007;96(3):338–41.</li>
+        <li>Akobeng AK. Understanding diagnostic tests 2: likelihood ratios, pre- and post-test probabilities and their use in clinical practice. <em>Acta Paediatr</em> 2007;96(4):487–91.</li>
+        <li>Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo sobre diagnóstico e rastreamento.</li>
+      </ol>
+    </section>
+  </div>
 </PageLayout>

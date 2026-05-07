@@ -1,15 +1,305 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
+<DocLayout
   title="Referências"
-  description="Bibliografia e fontes consultadas para o conteúdo deste site."
+  description="Bibliografia consolidada do site evidências clínicas. Livros, artigos, recursos online e diretrizes citados ao longo do conteúdo."
 >
-  <h1 class="text-4xl font-medium mb-3">Referências</h1>
-  <p class="text-lg text-text-secondary mb-6">
-    Bibliografia, diretrizes e fontes consultadas, organizadas por tema.
+  <h1>Referências</h1>
+
+  <p>
+    Bibliografia consolidada do site, organizada por tipo. Cada página individual mantém suas próprias
+    referências numeradas; esta lista reúne as fontes recorrentes e mais importantes.
   </p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+
+  <h2 id="livros-texto-fundamentais-de-mbe">Livros-texto fundamentais de MBE</h2>
+
+  <p>
+    Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and
+    Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018.
+  </p>
+
+  <p>
+    Heneghan C, Badenoch D. <em>Evidence-Based Medicine Toolkit</em>. 2ª ed. Oxford: BMJ Books /
+    Blackwell; 2006.
+  </p>
+
+  <p>
+    Greenhalgh T. <em>How to Read a Paper: The Basics of Evidence-Based Medicine and Healthcare</em>.
+    6ª ed. Hoboken: Wiley-Blackwell; 2019.
+  </p>
+
+  <p>
+    Guyatt G, Rennie D, Meade MO, Cook DJ. <em>Users' Guides to the Medical Literature: A Manual for
+    Evidence-Based Clinical Practice</em>. 3ª ed. New York: McGraw-Hill; 2014.
+  </p>
+
+  <p>
+    Sackett DL, Haynes RB, Guyatt GH, Tugwell P. <em>Clinical Epidemiology: A Basic Science for
+    Clinical Medicine</em>. 2ª ed. Boston: Little, Brown; 1991.
+  </p>
+
+  <h2 id="epidemiologia-e-metodos-de-pesquisa">Epidemiologia e métodos de pesquisa</h2>
+
+  <p>
+    Rothman KJ, Greenland S, Lash TL. <em>Modern Epidemiology</em>. 4ª ed. Philadelphia: Lippincott
+    Williams & Wilkins; 2021.
+  </p>
+
+  <p>Porta M, ed. <em>A Dictionary of Epidemiology</em>. 6ª ed. Oxford: Oxford University Press; 2014.</p>
+
+  <p>
+    Higgins JPT, Thomas J, Chandler J, et al, eds. <em>Cochrane Handbook for Systematic Reviews of
+    Interventions</em> version 6.4. Cochrane; 2023. Disponível em:
+    <a href="https://training.cochrane.org/handbook" rel="noopener" target="_blank">training.cochrane.org/handbook</a>
+  </p>
+
+  <h2 id="cognicao-clinica-e-comunicacao">Cognição clínica e comunicação</h2>
+
+  <p>
+    Kahneman D. <em>Rápido e Devagar: Duas Formas de Pensar</em>. Rio de Janeiro: Objetiva; 2012.
+    (<em>Thinking, Fast and Slow</em>. New York: Farrar, Straus and Giroux; 2011)
+  </p>
+
+  <p>
+    Schön DA. <em>The Reflective Practitioner: How Professionals Think in Action</em>. New York:
+    Basic Books; 1983.
+  </p>
+
+  <p>
+    Eve R. <em>PUNs and DENs: Discovering Learning Needs in General Practice</em>. Oxford: Radcliffe
+    Publishing; 2003.
+  </p>
+
+  <h2 id="rastreamento-e-prevencao">Rastreamento e prevenção</h2>
+
+  <p>
+    Wilson JMG, Jungner G. <em>Principles and Practice of Screening for Disease</em>. Geneva: World
+    Health Organization; 1968.
+    <a href="https://iris.who.int/handle/10665/37650" rel="noopener" target="_blank">iris.who.int/handle/10665/37650</a>
+  </p>
+
+  <p>
+    Raffle AE, Mackie A, Gray JAM. <em>Screening: Evidence and Practice</em>. 2ª ed. Oxford: Oxford
+    University Press; 2019.
+  </p>
+
+  <p>
+    UK National Screening Committee. <em>Criteria for a population screening programme</em>. 2022.
+    <a href="https://www.gov.uk/government/publications/evidence-review-criteria-national-screening-programmes" rel="noopener" target="_blank">gov.uk</a>
+  </p>
+
+  <p>
+    World Health Organization. <em>Screening programmes: a short guide</em>. WHO Regional Office for
+    Europe; 2020.
+    <a href="https://iris.who.int/handle/10665/330829" rel="noopener" target="_blank">iris.who.int/handle/10665/330829</a>
+  </p>
+
+  <h2 id="forcas-tarefa-e-diretrizes">Forças-tarefa e diretrizes</h2>
+
+  <p>
+    U.S. Preventive Services Task Force. <em>Procedure Manual</em>.
+    <a href="https://www.uspreventiveservicestaskforce.org/uspstf/about-uspstf/methods-and-processes/procedure-manual" rel="noopener" target="_blank">uspreventiveservicestaskforce.org</a>
+  </p>
+
+  <p>
+    Canadian Task Force on Preventive Health Care. <em>Methods</em>.
+    <a href="https://canadiantaskforce.ca/methods/" rel="noopener" target="_blank">canadiantaskforce.ca/methods</a>
+  </p>
+
+  <p>
+    National Institute for Health and Care Excellence. <em>Developing NICE guidelines: the manual</em>.
+    <a href="https://www.nice.org.uk/process/pmg20" rel="noopener" target="_blank">nice.org.uk/process/pmg20</a>
+  </p>
+
+  <p>
+    Brasil. Ministério da Saúde. <em>Diretrizes Metodológicas: Sistema GRADE</em>. Brasília:
+    Ministério da Saúde; 2014.
+    <a href="https://bvsms.saude.gov.br/bvs/publicacoes/diretrizes_metodologicas_sistema_grade.pdf" rel="noopener" target="_blank">bvsms.saude.gov.br (PDF)</a>
+  </p>
+
+  <h2 id="ferramentas-de-avaliacao-critica">Ferramentas de avaliação crítica</h2>
+
+  <p>
+    CASP UK. <em>Critical Appraisal Skills Programme</em>.
+    <a href="https://casp-uk.net" rel="noopener" target="_blank">casp-uk.net</a>
+  </p>
+
+  <p>
+    Sterne JAC, Savović J, Page MJ, et al. RoB 2: a revised tool for assessing risk of bias in
+    randomised trials. <em>BMJ</em> 2019;366:l4898.
+  </p>
+
+  <p>
+    Shea BJ, Reeves BC, Wells G, et al. AMSTAR 2: a critical appraisal tool for systematic reviews.
+    <em>BMJ</em> 2017;358:j4008.
+  </p>
+
+  <p>
+    Whiting PF, Rutjes AW, Westwood ME, et al. QUADAS-2: a revised tool for the quality assessment of
+    diagnostic accuracy studies. <em>Ann Intern Med</em> 2011;155(8):529–36.
+  </p>
+
+  <p>
+    GRADE Working Group. <em>GRADE Handbook</em>.
+    <a href="https://book.gradepro.org/" rel="noopener" target="_blank">book.gradepro.org</a>
+  </p>
+
+  <h2 id="artigos-seminais">Artigos seminais</h2>
+
+  <p>
+    Sackett DL, Rosenberg WMC, Gray JA, Haynes RB, Richardson WS. Evidence based medicine: what it is
+    and what it isn't. <em>BMJ</em> 1996;312(7023):71–2.
+  </p>
+
+  <p>
+    Richardson WS, Wilson MC, Nishikawa J, Hayward RS. The well-built clinical question: a key to
+    evidence-based decisions. <em>ACP J Club</em> 1995;123(3):A12–3.
+  </p>
+
+  <p>
+    Doran GT. There's a S.M.A.R.T. way to write management goals and objectives. <em>Management
+    Review</em> 1981;70(11):35–6.
+  </p>
+
+  <p>
+    Murad MH, Asi N, Alsawas M, Alahdab F. New evidence pyramid. <em>BMJ Evid Based Med</em>
+    2016;21(4):125–7.
+    <a href="https://ebm.bmj.com/content/21/4/125" rel="noopener" target="_blank">ebm.bmj.com/content/21/4/125</a>
+  </p>
+
+  <p>
+    DiCenso A, Bayley L, Haynes RB. Accessing pre-appraised evidence: fine-tuning the 5S model into a
+    6S model. <em>Evid Based Nurs</em> 2009;12(4):99–101.
+  </p>
+
+  <p>
+    Croskerry P. From mindless to mindful practice—cognitive bias and clinical decision making.
+    <em>N Engl J Med</em> 2013;368(26):2445–8.
+  </p>
+
+  <h2 id="estudos-clinicos-referenciados-nos-casos">Estudos clínicos referenciados nos casos</h2>
+
+  <p>
+    McNeil JJ, Wolfe R, Woods RL, et al. Effect of aspirin on cardiovascular events and bleeding in
+    the healthy elderly (ASPREE). <em>N Engl J Med</em> 2018;379:1509–18.
+  </p>
+
+  <p>
+    McMurray JJV, Solomon SD, Inzucchi SE, et al. Dapagliflozin in patients with heart failure and
+    reduced ejection fraction (DAPA-HF). <em>N Engl J Med</em> 2019;381:1995–2008.
+  </p>
+
+  <p>
+    Heerspink HJL, Stefánsson BV, Correa-Rotter R, et al. Dapagliflozin in patients with chronic
+    kidney disease (DAPA-CKD). <em>N Engl J Med</em> 2020;383:1436–46.
+  </p>
+
+  <p>
+    Hofmeyr GJ, Lawrie TA, Atallah ÁN, Torloni MR. Calcium supplementation during pregnancy for
+    preventing hypertensive disorders and related problems. <em>Cochrane Database Syst Rev</em>
+    2018;(10):CD001059.
+  </p>
+
+  <p>
+    Cluver C, Novikova N, Hofmeyr GJ, Lawrie TA. Calcium supplementation during pregnancy for
+    preventing hypertensive disorders and related problems. <em>Cochrane Database Syst Rev</em>
+    2025; (atualização que não confirma o efeito da revisão de 2018).
+  </p>
+
+  <p>
+    Koroki T, Kotani Y, Yaguchi T, et al. Ketamine versus etomidate as an induction agent for tracheal
+    intubation in critically ill adults: a Bayesian meta-analysis. <em>Crit Care</em> 2024;28(1):48.
+  </p>
+
+  <p>
+    Long B, Gottlieb M. Ketamine versus etomidate for induction of intubation in critically ill
+    patients. <em>Acad Emerg Med</em> 2024;31(9):937–8.
+  </p>
+
+  <p>
+    Radeva-Petrova D, Kayentao K, ter Kuile FO, Sinclair D, Garner P. Drugs for preventing malaria in
+    pregnant women in endemic areas. <em>Cochrane Database Syst Rev</em> 2014;(10):CD000169.
+  </p>
+
+  <p>
+    Kayentao K, Garner P, van Eijk AM, et al. Intermittent preventive therapy for malaria during
+    pregnancy using 2 vs 3 or more doses of sulfadoxine-pyrimethamine. <em>JAMA</em>
+    2013;309(6):594–604.
+  </p>
+
+  <p>
+    Koliopoulos G, Nyaga VN, Santesso N, et al. Cytology versus HPV testing for cervical cancer
+    screening in the general population. <em>Cochrane Database Syst Rev</em> 2017;(8):CD008587.
+  </p>
+
+  <h2 id="recursos-online-recorrentes">Recursos online recorrentes</h2>
+
+  <h3 id="bases-de-busca">Bases de busca</h3>
+
+  <ul>
+    <li>PubMed — <a href="https://pubmed.ncbi.nlm.nih.gov" rel="noopener" target="_blank">pubmed.ncbi.nlm.nih.gov</a></li>
+    <li>Cochrane Library — <a href="https://www.cochranelibrary.com" rel="noopener" target="_blank">cochranelibrary.com</a></li>
+    <li>TRIP Database — <a href="https://www.tripdatabase.com" rel="noopener" target="_blank">tripdatabase.com</a></li>
+    <li>Epistemonikos — <a href="https://www.epistemonikos.org" rel="noopener" target="_blank">epistemonikos.org</a></li>
+    <li>BVS / BIREME — <a href="https://bvsalud.org" rel="noopener" target="_blank">bvsalud.org</a></li>
+  </ul>
+
+  <h3 id="acesso-a-literatura">Acesso a literatura</h3>
+
+  <ul>
+    <li>Research4Life / Hinari — <a href="https://www.research4life.org" rel="noopener" target="_blank">research4life.org</a></li>
+    <li>DOAJ (Directory of Open Access Journals) — <a href="https://doaj.org" rel="noopener" target="_blank">doaj.org</a></li>
+    <li>PubMed Central — <a href="https://www.ncbi.nlm.nih.gov/pmc" rel="noopener" target="_blank">ncbi.nlm.nih.gov/pmc</a></li>
+  </ul>
+
+  <h3 id="vocabulario-controlado">Vocabulário controlado</h3>
+
+  <ul>
+    <li>DeCS / MeSH — <a href="https://decs.bvsalud.org" rel="noopener" target="_blank">decs.bvsalud.org</a></li>
+  </ul>
+
+  <h3 id="diretrizes">Diretrizes</h3>
+
+  <ul>
+    <li>WHO IRIS — <a href="https://iris.who.int" rel="noopener" target="_blank">iris.who.int</a></li>
+    <li>USPSTF — <a href="https://www.uspreventiveservicestaskforce.org" rel="noopener" target="_blank">uspreventiveservicestaskforce.org</a></li>
+    <li>NICE — <a href="https://www.nice.org.uk" rel="noopener" target="_blank">nice.org.uk</a></li>
+    <li>Canadian Task Force — <a href="https://canadiantaskforce.ca" rel="noopener" target="_blank">canadiantaskforce.ca</a></li>
+    <li>Cochrane — <a href="https://www.cochrane.org" rel="noopener" target="_blank">cochrane.org</a></li>
+  </ul>
+
+  <h3 id="educacao-aberta-em-mbe">Educação aberta em MBE</h3>
+
+  <ul>
+    <li>Centre for Evidence-Based Medicine (Oxford) — <a href="https://www.cebm.ox.ac.uk" rel="noopener" target="_blank">cebm.ox.ac.uk</a></li>
+    <li>BMJ Best Practice — <a href="https://bestpractice.bmj.com" rel="noopener" target="_blank">bestpractice.bmj.com</a></li>
+    <li>BMJ Evidence-Based Medicine — <a href="https://ebm.bmj.com" rel="noopener" target="_blank">ebm.bmj.com</a></li>
+    <li>TheNNT — <a href="https://thennt.com" rel="noopener" target="_blank">thennt.com</a></li>
+    <li>Catalogue of Bias — <a href="https://catalogofbias.org" rel="noopener" target="_blank">catalogofbias.org</a></li>
+  </ul>
+
+  <h3 id="material-em-portugues">Material em português</h3>
+
+  <ul>
+    <li>Curso <em>Medicina Baseada em Evidências</em> — UNA-SUS / Fiocruz — <a href="https://www.unasus.gov.br" rel="noopener" target="_blank">unasus.gov.br</a></li>
+    <li>Diretrizes do INCA — <a href="https://www.gov.br/inca" rel="noopener" target="_blank">gov.br/inca</a></li>
+    <li>ConsultaRemédios (informação ao paciente) — <a href="https://consultaremedios.com.br" rel="noopener" target="_blank">consultaremedios.com.br</a></li>
+  </ul>
+
+  <h2 id="como-citar-este-site">Como citar este site</h2>
+
+  <p>Se você usar conteúdo deste site em seu trabalho:</p>
+
+  <blockquote class="featured-quote">
+    Jantsch AG. evidências clínicas — curso aberto de Medicina Baseada em Evidências. Acessado em
+    [data]. Disponível em: [URL].
+  </blockquote>
+
+  <p>
+    Por favor, mantenha atribuição. → <a href={withBase('/sobre/', base)}>Sobre — licença</a>
+  </p>
+</DocLayout>

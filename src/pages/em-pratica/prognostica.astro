@@ -1,0 +1,339 @@
+---
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+---
+<DocLayout
+  title="Em prática — pergunta prognóstica"
+  description="Curso natural da doença e fatores que o modificam. Caso de paciente com insuficiência cardíaca e doença renal crônica — DAPA-HF, DAPA-CKD, e a complexidade das comorbidades."
+  section="em-pratica"
+>
+  <h1>Em prática — pergunta prognóstica</h1>
+
+  <p>
+    Perguntas prognósticas são sobre <strong>trajetória da doença</strong> — qual a história natural? que fatores aceleram ou retardam o curso? como comunicar incerteza ao paciente? Têm em comum com perguntas terapêuticas o uso de medidas como hazard ratio e NNT, mas o desenho típico <strong>não é ECR</strong> — é estudo de coorte. Esta página percorre um caso de cardiologia onde duas patologias se entrelaçam.
+  </p>
+
+  <h2 id="cenario">O cenário</h2>
+
+  <p>
+    Sr. José, 62 anos, paciente em acompanhamento ambulatorial. Diagnóstico de <strong>insuficiência cardíaca com fração de ejeção reduzida</strong> (FE 32%) há 3 anos, em uso de IECA (enalapril 20 mg/dia), beta-bloqueador (carvedilol 25 mg 12/12h) e espironolactona (25 mg/dia). Tratamento bem ajustado.
+  </p>
+
+  <p>
+    Há 8 meses começou a apresentar <strong>deterioração da função renal</strong> — creatinina passou de 1,2 para 1,7 mg/dL; eGFR caiu de 65 para 42 mL/min/1,73m²; relação albumina-creatinina urinária 350 mg/g (proteinúria moderada). Sem outra causa óbvia para DRC.
+  </p>
+
+  <p>Dr. Felipe, cardiologista, recebe o paciente com algumas perguntas:</p>
+
+  <ol>
+    <li><strong>Qual o prognóstico</strong> desse paciente, dadas as duas comorbidades?</li>
+    <li><strong>A dapagliflozina</strong> está indicada? Para insuficiência cardíaca? Para DRC? Para os dois?</li>
+    <li><strong>Como conversar com o paciente</strong> sobre essa trajetória de duas doenças?</li>
+  </ol>
+
+  <h2 id="ask">Ask — formular as perguntas</h2>
+
+  <p>Pergunta prognóstica:</p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Adulto com IC com FE reduzida + DRC com proteinúria moderada</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>E</strong> <em>(exposição/fator prognóstico)</em></th>
+          <td>DRC concomitante com IC</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Mortalidade total; hospitalização por IC; progressão para doença renal terminal</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Note o <strong>PEO</strong> (em vez de PICO) — perguntas prognósticas raramente têm comparador estruturado. → Ver <a href={withBase('/conceitos/pico/', base)}>variações do PICO</a>.
+  </p>
+
+  <p>Pergunta terapêutica complementar (esta sim em PICO):</p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Adulto com IC com FE reduzida + DRC com proteinúria</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>I</strong></th>
+          <td>Dapagliflozina 10 mg/dia</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>C</strong></th>
+          <td>Tratamento padrão sem SGLT2</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Mortalidade; hospitalização por IC; progressão renal</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="acquire">Acquire — buscar evidência</h2>
+
+  <p>
+    Para questão prognóstica, prioridade é <strong>estudos de coorte prospectivos</strong>. Para a questão terapêutica, ECRs.
+  </p>
+
+  <p>Fontes consultadas:</p>
+
+  <ol>
+    <li><strong>PubMed</strong> — <em>"heart failure chronic kidney disease prognosis cohort"</em>. Encontram-se grandes coortes (Framingham, ARIC, CHARM)</li>
+    <li><strong>Cochrane</strong> — revisão sobre SGLT2 em insuficiência cardíaca</li>
+    <li><strong>Estudos individuais relevantes</strong>:
+      <ul>
+        <li><strong>DAPA-HF</strong> (McMurray et al, 2019) — dapagliflozina em IC FE reduzida</li>
+        <li><strong>DAPA-CKD</strong> (Heerspink et al, 2020) — dapagliflozina em DRC</li>
+        <li>Análises de subgrupo cruzando IC e DRC</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2 id="appraise">Appraise — avaliar a evidência</h2>
+
+  <h3 id="prognostico">Sobre o prognóstico</h3>
+
+  <p>
+    A literatura é consistente: <strong>DRC concomitante piora significativamente o prognóstico de IC</strong>, e vice-versa. Em coortes de pacientes com IC e FE reduzida<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>:
+  </p>
+
+  <ul>
+    <li>DRC moderada (eGFR 30-60) está associada a aproximadamente <strong>2× a mortalidade</strong> de pacientes com função renal preservada</li>
+    <li>A combinação acelera ambas as doenças — IC piora função renal pelo baixo débito; DRC piora IC por sobrecarga volêmica e disfunção endotelial</li>
+  </ul>
+
+  <p>
+    A relação é <strong>bidirecional e self-reinforcing</strong> — a literatura chama de <strong>síndrome cardiorrenal</strong>. Para o paciente, isso significa: trajetória mais rápida, hospitalizações mais frequentes, sobrevida reduzida.
+  </p>
+
+  <h3 id="dapagliflozina">Sobre a dapagliflozina</h3>
+
+  <p><strong>DAPA-HF</strong> (n = 4.744, seguimento mediano 18,2 meses):</p>
+
+  <ul>
+    <li>Desfecho composto (piora de IC ou morte cardiovascular): RR 0,74 (IC 95%: 0,65–0,85)</li>
+    <li><strong>NNT ~21</strong> para evitar 1 desfecho composto em ~18 meses</li>
+    <li>Benefício consistente em pacientes com e sem diabetes</li>
+  </ul>
+
+  <p><strong>DAPA-CKD</strong> (n = 4.304, seguimento mediano 2,4 anos, <strong>interrompido precocemente</strong> por benefício):</p>
+
+  <ul>
+    <li>Desfecho composto renal/cardiovascular (queda ≥50% do eGFR, doença renal terminal, morte renal ou cardiovascular): HR 0,61 (IC 95%: 0,51–0,72)</li>
+    <li><strong>NNT ~19</strong> para evitar 1 desfecho primário em 2,4 anos</li>
+    <li>Mortalidade total: HR 0,69 (IC 95%: 0,53–0,88), NNT ~48</li>
+    <li>Benefício consistente em pacientes com e sem diabetes</li>
+  </ul>
+
+  <p>
+    <strong>Avaliação pelo <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a></strong>: ambos são ECRs bem desenhados, com cegamento adequado, baixa perda de seguimento, análise por intenção de tratar. Risco de viés baixo.
+  </p>
+
+  <p>
+    → Use a <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>calculadora de medidas de efeito</a> com os números do DAPA-HF (preset disponível) para visualizar.
+  </p>
+
+  <h2 id="aplicacao">Aplicando ao Sr. José</h2>
+
+  <p>
+    O paciente cabe simultaneamente em <strong>dois cenários estudados</strong> — IC com FE reduzida (DAPA-HF) e DRC com proteinúria (DAPA-CKD).
+  </p>
+
+  <p><strong>Os números absolutos para sua situação:</strong></p>
+
+  <ul>
+    <li>Risco de mortalidade em 2 anos sem dapagliflozina (estimado por coortes para esse perfil): ~18-25%</li>
+    <li>Com dapagliflozina, considerando o efeito do DAPA-CKD: redução de risco relativa de ~30% para mortalidade total</li>
+    <li>Em termos absolutos: ~5 a 7 pontos percentuais a menos em 2 anos</li>
+    <li><strong>NNT individual estimado</strong>: ~15 a 20 pacientes tratados para 1 morte evitada em 2 anos</li>
+  </ul>
+
+  <p>
+    Estes são <strong>dos NNTs mais baixos</strong> que se vê em medicina cardiovascular. Comparados aos NNTs dos exemplos típicos de prevenção primária (250+), são muito mais favoráveis.
+  </p>
+
+  <p><strong>Considerações práticas:</strong></p>
+
+  <ul>
+    <li>eGFR de 42 está dentro da faixa estudada nos dois ensaios (DAPA-CKD incluiu eGFR 25-75)</li>
+    <li>Não há diabetes (irrelevante — efeito demonstrado independentemente)</li>
+    <li>Risco de hipovolemia inicial (importante monitorar PA nas primeiras semanas, ajustar diurético se necessário)</li>
+    <li>Custo: dapagliflozina ainda é cara em alguns contextos; considerar disponibilidade</li>
+  </ul>
+
+  <p>
+    <strong>Decisão</strong>: iniciar dapagliflozina 10 mg/dia, com retorno em 4 semanas para avaliar tolerância (PA, função renal, sintomas). Manter demais medicações.
+  </p>
+
+  <h2 id="decisao-compartilhada">Decisão compartilhada — sobre prognóstico</h2>
+
+  <p>Conversa com Sr. José precisa abordar duas dimensões:</p>
+
+  <h3 id="prognostico-geral">O prognóstico geral</h3>
+
+  <p>
+    A combinação IC + DRC tem trajetória mais rápida que IC isolada. Sr. José merece saber. Mas o "merece saber" não é "deve receber prognóstico bruto em probabilidades de sobrevida". É <strong>conversa estruturada, em linguagem natural, com espaço para perguntas</strong>.
+  </p>
+
+  <p>Linguagem possível:</p>
+
+  <blockquote class="featured-quote">
+    <p>"Sr. José, vou explicar o que está acontecendo. O senhor tem duas condições crônicas que estão conectadas — o coração mais cansado e os rins não filtrando como antes. Cada uma sozinha já seria desafio; juntas, elas pioram uma à outra. É importante o senhor saber para entendermos como cuidar disso."</p>
+  </blockquote>
+
+  <blockquote class="featured-quote">
+    <p>"Temos boas opções. Há um remédio relativamente novo, chamado dapagliflozina, que estudos recentes mostraram ser benéfico tanto para o coração quanto para os rins. Quero discutir com o senhor se faz sentido começar."</p>
+  </blockquote>
+
+  <p>Não é "boa notícia" forçada nem catastrofismo. É <strong>honestidade sensível ao paciente</strong>.</p>
+
+  <p>→ <a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a>.</p>
+
+  <h3 id="sobre-dapa">Sobre a dapagliflozina</h3>
+
+  <p>Discussão estruturada inclui:</p>
+
+  <ul>
+    <li>O que o medicamento faz</li>
+    <li>A magnitude do benefício esperado (NNT entre 15 e 20 para morte evitada em 2 anos é informação concreta)</li>
+    <li>Os efeitos adversos possíveis (hipovolemia inicial, infecção genital, raramente cetoacidose euglicêmica)</li>
+    <li>O custo e a sustentabilidade do uso continuado</li>
+  </ul>
+
+  <p>
+    Sr. José pergunta sobre garantias. Dr. Felipe responde com honestidade: <em>"o remédio melhora as chances; não garante. Para cada 15-20 pacientes como o senhor, 1 evita um desfecho ruim que aconteceria sem ele. As outras 14-19 pessoas têm a mesma evolução com ou sem o remédio. Não tenho como saber em qual grupo o senhor vai estar — mas o balanço é claramente favorável."</em>
+  </p>
+
+  <p>
+    → <a href={withBase('/conceitos/medidas-de-efeito/', base)}>Visualização do NNT</a> que torna isso concreto.
+  </p>
+
+  <h2 id="assess">Assess — após 6 meses</h2>
+
+  <p>Sr. José é reavaliado:</p>
+
+  <ul>
+    <li>Tolerou bem a dapagliflozina; sem hipotensão sintomática nem infecção</li>
+    <li>eGFR estabilizou em 40 (queda inicial esperada nas primeiras semanas, depois estável)</li>
+    <li>Proteinúria reduziu para 220 mg/g (de 350 inicial)</li>
+    <li>Sintomas de IC: melhora da NYHA II para NYHA I-II</li>
+    <li>Sem hospitalizações</li>
+    <li>Adesão referida como "muito boa"</li>
+  </ul>
+
+  <p>Aprendizados para Dr. Felipe:</p>
+
+  <ul>
+    <li>A queda inicial de eGFR é importante explicar de antemão (caso contrário, paciente ou colega pode descontinuar acreditando que está piorando — quando é o efeito esperado e benéfico)</li>
+    <li>Reavaliação cedo (4-6 semanas) é crucial para tolerância e adesão</li>
+    <li>Comunicação clara sobre prognóstico e magnitude do benefício gerou adesão real</li>
+  </ul>
+
+  <p>
+    → <a href={withBase('/cinco-as/monitorar/', base)}>Assess</a> — auditoria que refinará a conduta para próximos pacientes similares.
+  </p>
+
+  <h2 id="desafio-epistemico">Sobre o desafio epistêmico do prognóstico</h2>
+
+  <p>
+    Em perguntas prognósticas, <strong>a incerteza é parte da resposta</strong> — não falha do conhecimento. Estudos de coorte fornecem probabilidades médias, não certezas individuais. Pacientes querem saber "quanto tempo eu tenho", e a resposta honesta sempre vai ser: <em>"em média, pessoas com seu perfil têm tal trajetória; mas você é uma pessoa, não uma média"</em>.
+  </p>
+
+  <p>
+    Comunicar essa incerteza sem catastrofismo nem otimismo forçado é uma das competências mais difíceis em medicina — e uma das mais valorizadas pelos pacientes quando bem feita.
+  </p>
+
+  <h2 id="o-que-integra">O que esta página integra</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Conceito</th>
+          <th scope="col">Como aparece</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href={withBase('/conceitos/pico/', base)}>PICO/PEO</a></td>
+          <td>Variação para pergunta prognóstica</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a></td>
+          <td>Coorte prospectiva como desenho ideal</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a></td>
+          <td>Hazard ratio e NNT em IC + DRC</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a></td>
+          <td>Preset DAPA-HF para visualizar</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Visualização do NNT</a></td>
+          <td>Quem realmente se beneficia</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a></td>
+          <td>Avaliação dos ECRs</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a></td>
+          <td>Conversa sobre prognóstico</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — coorte prospectiva e suas peculiaridades</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — interpretação de hazard ratio</li>
+    <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — preset DAPA-HF disponível</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — em coortes: confundimento, perda de seguimento</li>
+    <li><a href={withBase('/em-pratica/terapeutica/', base)}>Em prática — terapêutica</a> — outro caso de decisão de tratamento</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Damman K, Valente MA, Voors AA, et al. Renal impairment, worsening renal function, and outcome in patients with heart failure: an updated meta-analysis. <em>Eur Heart J</em> 2014;35(7):455–69.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        McMurray JJV, Solomon SD, Inzucchi SE, et al. Dapagliflozin in patients with heart failure and reduced ejection fraction. <em>N Engl J Med</em> 2019;381:1995–2008.
+      </li>
+      <li>
+        Heerspink HJL, Stefánsson BV, Correa-Rotter R, et al. Dapagliflozin in patients with chronic kidney disease. <em>N Engl J Med</em> 2020;383:1436–46.
+      </li>
+      <li>
+        Wheeler DC, Stefansson BV, Jongs N, et al. Effects of dapagliflozin on major adverse kidney and cardiovascular events in patients with diabetic and non-diabetic chronic kidney disease: a prespecified analysis from the DAPA-CKD trial. <em>Lancet Diabetes Endocrinol</em> 2021;9(1):22–31.
+      </li>
+      <li>
+        Heidenreich PA, Bozkurt B, Aguilar D, et al. 2022 AHA/ACC/HFSA Guideline for the Management of Heart Failure. <em>J Am Coll Cardiol</em> 2022;79(17):e263–e421.
+      </li>
+      <li>
+        Hayward RA, Krumholz HM. Three reasons to abandon low-density lipoprotein targets: an open letter to the Adult Treatment Panel IV of the National Institutes of Health. <em>Circ Cardiovasc Qual Outcomes</em> 2012;5(1):2–5.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

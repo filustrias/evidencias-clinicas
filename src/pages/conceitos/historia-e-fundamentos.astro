@@ -1,14 +1,169 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import PioneerGallery from '@components/ui/PioneerGallery.astro';
+import BookCard from '@components/ui/BookCard.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+const img = (path: string) => `${base}${path.startsWith('/') ? path.slice(1) : path}`;
+
+const pioneers = [
+  {
+    name: 'David Sackett',
+    image: img('images/conceitos/david-sackett.jpg'),
+    width: 1125,
+    height: 1280,
+    caption:
+      'Clínico-epidemiologista da McMaster University (1934–2015). Definiu a MBE no editorial do BMJ em 1996, no que se tornou o texto canônico da disciplina.',
+  },
+  {
+    name: 'Gordon Guyatt',
+    image: img('images/conceitos/gordon-guyatt.jpg'),
+    width: 259,
+    height: 194,
+    caption:
+      'Médico e professor da McMaster University. Cunhou o termo "Evidence-Based Medicine" em 1991, em editorial do ACP Journal Club.',
+  },
+  {
+    name: 'Brian Haynes',
+    image: img('images/conceitos/brian-haynes.jpg'),
+    width: 576,
+    height: 860,
+    caption:
+      'Clínico-epidemiologista da McMaster University. Coautor do livro fundador da disciplina e referência em informática clínica e síntese de evidências.',
+  },
+];
 ---
-<PageLayout
-  title="História e fundamentos"
-  description="Origens da MBE, principais figuras e a evolução do paradigma de evidências."
+<DocLayout
+  title="História e fundamentos da MBE"
+  description="De onde veio a Medicina Baseada em Evidências, quem a fundou e por que ela existe."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">História e fundamentos</h1>
-  <p class="text-lg text-text-secondary mb-6">Origens da MBE, principais figuras e a evolução do paradigma de evidências.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>História e fundamentos da MBE</h1>
+
+  <p>
+    A Medicina Baseada em Evidências tem um lugar de origem, datas precisas, fundadores com nomes — e um problema concreto que motivou sua invenção. Saber essa história ajuda a entender por que a MBE existe e o que ela tenta resolver. Não é teoria abstrata: é resposta a uma frustração real que, em larga medida, ainda persiste no consultório.
+  </p>
+
+  <h2 id="o-problema-que-motivou-a-mbe">O problema que motivou a MBE</h2>
+
+  <p>
+    Em 1972, o epidemiologista britânico Archie Cochrane publicou <em>Effectiveness and Efficiency: Random Reflections on Health Services</em>, livro hoje considerado fundacional da disciplina. Sua tese era simples e desconfortável: muito do que se fazia em medicina não tinha base em evidências confiáveis. As decisões clínicas eram tomadas com base na opinião de especialistas, na tradição da escola médica que formou o profissional, na experiência pessoal acumulada — ou, nos casos piores, em puro tentativa-e-erro<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>.
+  </p>
+
+  <p>
+    Cochrane apontava uma lacuna que viria a ser repetidamente confirmada: o conhecimento gerado pela pesquisa clínica de qualidade — aquele oriundo de revisões sistemáticas e ensaios bem desenhados — chegava lentamente, ou simplesmente não chegava, à prática cotidiana. Médicos, ocupados e sobrecarregados, não tinham tempo para acompanhar a torrente de publicações. E quando tinham, faltavam-lhes as ferramentas para avaliar criticamente a qualidade do que liam.
+  </p>
+
+  <p>
+    Essa lacuna entre pesquisa e prática persistia. Persiste ainda. É o que a MBE foi criada para enfrentar.
+  </p>
+
+  <h2 id="a-virada-da-mcmaster">A virada da McMaster</h2>
+
+  <p>
+    No fim dos anos 1980, um grupo de pesquisadores da McMaster University, no Canadá, começou a sistematizar uma resposta. Liderados por <strong>David Sackett</strong>, <strong>Gordon Guyatt</strong> e <strong>Brian Haynes</strong>, propuseram que o raciocínio clínico precisava incorporar três elementos que vinham sendo subutilizados pela medicina tradicional: a epidemiologia clínica, a bioestatística e a leitura crítica de artigos científicos.
+  </p>
+
+  <p>
+    A proposta era pragmática. Não bastava saber que existem evidências; era preciso ensinar profissionais a encontrá-las, a avaliá-las e a aplicá-las no paciente real.
+  </p>
+
+  <PioneerGallery pioneers={pioneers} />
+
+  <h2 id="os-marcos-1991-e-1996">Os marcos: 1991 e 1996</h2>
+
+  <p>Dois momentos consolidam a disciplina.</p>
+
+  <p>
+    Em <strong>1991</strong>, Gordon Guyatt cunha o termo <em>Evidence-Based Medicine</em> num editorial do <em>American College of Physicians Journal Club</em><sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. É a primeira vez que a expressão aparece formalmente na literatura.
+  </p>
+
+  <p>
+    Em <strong>1996</strong>, David Sackett e colaboradores publicam no <em>British Medical Journal</em> o editorial fundador, "Evidence based medicine: what it is and what it isn't"<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>. Ali está a definição que se tornaria canônica:
+  </p>
+
+  <blockquote>
+    <em>"O uso consciente, explícito e criterioso da melhor evidência atual na tomada de decisões sobre o cuidado de pacientes individuais."</em>
+  </blockquote>
+
+  <p>Três palavras dessa definição importam tanto quanto "evidência":</p>
+
+  <ul>
+    <li><strong>Consciente</strong> — a decisão é deliberada, não automática nem inercial</li>
+    <li><strong>Explícito</strong> — o raciocínio pode ser apresentado, examinado, questionado</li>
+    <li><strong>Criterioso</strong> — nem toda evidência tem o mesmo peso, e cabe ao clínico julgar</li>
+  </ul>
+
+  <p>
+    Mais tarde, a definição foi expandida para incorporar a experiência clínica do profissional e os valores e preferências do paciente. A MBE passa a ser entendida como <strong>a integração da melhor evidência científica disponível com a experiência clínica e os valores do paciente</strong>. É essa tríade — evidência, experiência, valores — que sustenta a prática até hoje.
+  </p>
+
+  <h2 id="os-principios-fundamentais">Os princípios fundamentais</h2>
+
+  <p>Sackett, Haynes e colaboradores condensaram a proposta em quatro princípios que continuam atuais:</p>
+
+  <ol>
+    <li><strong>Reconhecer as incertezas</strong> no conhecimento clínico — assumir que não saber é estado normal, não fracasso</li>
+    <li><strong>Usar pesquisa empírica</strong> para reduzir essas incertezas — buscar dados antes de decidir</li>
+    <li><strong>Discriminar evidência forte de evidência fraca</strong> — nem todo estudo tem o mesmo peso</li>
+    <li><strong>Quantificar e comunicar incertezas em probabilidades</strong> — em vez de linguagem vaga ("provável", "raro", "pode ser")</li>
+  </ol>
+
+  <p>
+    Os <a href={withBase('/cinco-as/', base)}>5 As</a> são a operacionalização desses princípios — o passo a passo que transforma a filosofia em prática clínica.
+  </p>
+
+  <h2 id="o-livro-fundador">O livro fundador</h2>
+
+  <BookCard
+    cover={img('images/conceitos/ebm-book.webp')}
+    coverAlt="Capa do livro Evidence-Based Medicine: How to Practice and Teach EBM"
+    coverWidth={600}
+    coverHeight={800}
+  >
+    <p>
+      Em 1997, Sackett, Richardson, Rosenberg e Haynes publicaram <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. O livro, hoje na 5ª edição (2018) com Sharon Straus à frente da autoria, continua sendo a referência didática central da disciplina, cobrindo desde a formulação da pergunta clínica até a aplicação da evidência ao paciente individual<sup><a id="fnref-4" href="#fn-4" class="footnote-ref">4</a></sup>.
+    </p>
+  </BookCard>
+
+  <h2 id="por-que-a-mbe-ainda-importa">Por que a MBE ainda importa</h2>
+
+  <p>
+    Quase 30 anos depois do editorial de Sackett, a lacuna que motivou a MBE continua aberta. A produção científica em saúde cresce em ritmo que torna humanamente impossível para qualquer médico — particularmente para o médico de família, que atende todas as áreas — acompanhar tudo o que é publicado. Dúvidas surgem em cada consulta, mas o tempo para registrá-las, transformá-las em pergunta estruturada e buscar resposta é escasso. Por isso, a prática baseada em evidências segue sendo, em larga medida, mais ideal do que cotidiano.
+  </p>
+
+  <p>
+    A MBE não é receita pronta. É um conjunto de hábitos e ferramentas que tornam essa prática possível, mesmo sob restrições reais de tempo e recursos. Os 5 As, as estratégias de busca, as ferramentas de avaliação crítica, as calculadoras de risco — tudo neste site existe para tornar o ideal um pouco menos distante do cotidiano.
+  </p>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/', base)}>Os 5 As da MBE</a> — a operacionalização da disciplina</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — o que a MBE complementa, não substitui</li>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas comuns</a> — o ponto de partida na prática</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Cochrane AL. <em>Effectiveness and Efficiency: Random Reflections on Health Services</em>. London: Nuffield Provincial Hospitals Trust; 1972.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Guyatt GH. Evidence-based medicine. <em>ACP J Club</em> 1991;114(2):A16.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Sackett DL, Rosenberg WMC, Gray JAM, Haynes RB, Richardson WS. Evidence based medicine: what it is and what it isn't. <em>BMJ</em> 1996;312(7023):71–2. Disponível em: <a href="https://www.bmj.com/content/312/7023/71" rel="noopener noreferrer" target="_blank">bmj.com/content/312/7023/71</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li id="fn-4">
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018.
+        <a href="#fnref-4" class="footnote-back" aria-label="Voltar ao texto da nota 4">↩</a>
+      </li>
+    </ol>
+  </section>
+</DocLayout>

@@ -1,14 +1,275 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import EvidencePyramid from '@components/ui/EvidencePyramid.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Pirâmide de evidências"
-  description="Hierarquia clássica e suas atualizações: do estudo individual à síntese."
+<DocLayout
+  title="Pirâmide de evidências — hierarquia dos desenhos de estudo"
+  description="A representação clássica da força da evidência por desenho de estudo. Pirâmide tradicional, atualizações recentes, e por que ela é útil mas insuficiente."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Pirâmide de evidências</h1>
-  <p class="text-lg text-text-secondary mb-6">Hierarquia clássica e suas atualizações: do estudo individual à síntese.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Pirâmide de evidências — hierarquia dos desenhos de estudo</h1>
+
+  <p>
+    A pirâmide de evidências é uma representação visual que <strong>hierarquiza desenhos de estudo pela força da evidência que produzem</strong>. Na base, opiniões e relatos de caso. No topo, revisões sistemáticas e meta-análises. É uma das imagens mais difundidas da MBE — e também uma das mais simplificadoras.
+  </p>
+
+  <p>
+    Conhecer a pirâmide é ponto de partida. Conhecer suas limitações é ponto de partida da prática crítica madura.
+  </p>
+
+  <h2 id="piramide-classica">A pirâmide clássica</h2>
+
+  <p>
+    A versão tradicional, ensinada em escolas médicas no mundo inteiro, organiza desenhos em seis níveis:
+  </p>
+
+  <EvidencePyramid />
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Nível</th>
+          <th scope="col">Desenho</th>
+          <th scope="col">O que produz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>6</strong></td>
+          <td>Revisões sistemáticas e meta-análises</td>
+          <td>Síntese crítica de múltiplos estudos primários</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Ensaios clínicos randomizados (ECRs)</td>
+          <td>Comparação direta entre intervenção e controle, com aleatorização</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Estudos de coorte</td>
+          <td>Acompanhamento prospectivo de exposição a desfecho</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Estudos caso-controle</td>
+          <td>Comparação retrospectiva de casos com controles</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>Estudos transversais e séries de casos</td>
+          <td>Observação em ponto único no tempo</td>
+        </tr>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Opinião de especialistas, relatos de caso</td>
+          <td>Experiência individual sem estrutura comparativa</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A lógica: <strong>quanto mais alto na pirâmide, melhor o controle de viés, e maior a confiança no efeito estimado</strong>. Revisões sistemáticas combinam múltiplos estudos; ECRs minimizam confundimento por aleatorização; observacionais são vulneráveis a confundimento residual; opinião não tem comparador estruturado.
+  </p>
+
+  <p>
+    Essa hierarquia é útil para uma decisão rápida ao olhar um artigo: <em>"esse estudo é de que tipo?"</em> já antecipa o quão confiável tende a ser a evidência.
+  </p>
+
+  <h2 id="por-que-util">Por que a pirâmide é útil</h2>
+
+  <p>Três funções práticas:</p>
+
+  <p>
+    <strong>1. Atalho cognitivo na busca.</strong> Diante de muitas opções na lista de resultados do PubMed, a pirâmide ajuda a priorizar leitura — começar pelas revisões sistemáticas e meta-análises antes de descer para estudos primários.
+  </p>
+
+  <p>
+    <strong>2. Critério rápido de confiabilidade.</strong> Estudo isolado sobre tema controverso? Provavelmente uma revisão sistemática já existe. Sintetizou múltiplos estudos.
+  </p>
+
+  <p>
+    <strong>3. Linguagem comum.</strong> Falar em "evidência nível 1B" ou "topo da pirâmide" comunica entre profissionais que conhecem o vocabulário.
+  </p>
+
+  <h2 id="por-que-engana">Por que a pirâmide engana</h2>
+
+  <p>Cinco limitações sérias:</p>
+
+  <h3 id="ecr-vs-coorte">1. Nem todo ECR é melhor que toda coorte</h3>
+
+  <p>
+    Um ECR pequeno, mal cegado, com perdas grandes, pode ter menos validade que uma coorte prospectiva grande, bem desenhada. <strong>A qualidade individual do estudo importa mais que o desenho nominal.</strong>
+  </p>
+
+  <p>
+    A pirâmide assume que cada nível é homogêneo internamente — não é. Há ECRs ruins e coortes excelentes. Por isso ferramentas como <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a>, <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> e <a href={withBase('/ferramentas/grade/', base)}>GRADE</a> avaliam <strong>cada estudo específico</strong>, não apenas seu desenho.
+  </p>
+
+  <h3 id="rs-nao-confiaveis">2. Revisões sistemáticas não são automaticamente confiáveis</h3>
+
+  <p>
+    Uma meta-análise ruim, baseada em estudos primários frágeis, pode dar a falsa impressão de robustez por "ser revisão sistemática". GRADE e AMSTAR-2 existem justamente para avaliar a qualidade da síntese — não a posição na pirâmide.
+  </p>
+
+  <h3 id="ecr-impossivel">3. Para algumas perguntas, ECR é impossível ou inadequado</h3>
+
+  <p>
+    Pergunta sobre prognóstico de doença rara? Coorte é o desenho apropriado. Pergunta sobre exposição ambiental? ECR não é factível. Pergunta sobre acurácia diagnóstica? Estudo de teste diagnóstico, não ECR.
+  </p>
+
+  <p>
+    A pirâmide implica que ECR é sempre superior. Não é. <strong>O melhor desenho depende da pergunta</strong>.
+  </p>
+
+  <h3 id="qualitativos">4. Estudos qualitativos não cabem na hierarquia</h3>
+
+  <p>
+    Pesquisa sobre experiência de adoecimento, barreiras à adesão, percepção de risco — perguntas qualitativas — produzem evidência valiosa que não encaixa na pirâmide. Tratar "qualitativo" como base da pirâmide é desconhecer sua função distinta.
+  </p>
+
+  <h3 id="ignora-contexto">5. A pirâmide ignora o contexto</h3>
+
+  <p>
+    ECR conduzido em centros terciários da Europa pode ter resultados que não se aplicam à atenção primária em Cabinda. Validade externa não é capturada pela pirâmide — exige julgamento clínico (parte do quarto A: <a href={withBase('/cinco-as/aplicar/', base)}>Apply</a>).
+  </p>
+
+  <h2 id="piramide-murad">A pirâmide nova de Murad (2016)</h2>
+
+  <p>
+    Reconhecendo essas limitações, <strong>Mohammad Murad e colaboradores</strong> propuseram em 2016 uma pirâmide atualizada<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Três modificações principais:
+  </p>
+
+  <p>
+    <strong>1. Linhas onduladas em vez de horizontais.</strong> Mostra que a fronteira entre níveis é fluida — um ECR mal feito pode "descer" para o nível das observacionais; uma coorte excepcionalmente bem feita pode "subir" para o nível dos ECRs.
+  </p>
+
+  <p>
+    <strong>2. Revisões sistemáticas removidas do topo.</strong> Em vez disso, são representadas como uma <strong>lente</strong> através da qual se examinam os outros níveis. Uma revisão é tão boa quanto os estudos que sintetiza — e tão má quanto sua metodologia permite.
+  </p>
+
+  <p>
+    <strong>3. Reconhecimento explícito da heterogeneidade interna.</strong> Cada nível inclui estudos de qualidade muito variável.
+  </p>
+
+  <p>
+    A pirâmide nova é mais honesta. Mas é também mais difícil de ensinar e de usar como atalho. <strong>A clássica continua útil para iniciantes; a nova, para quem já entende as armadilhas.</strong>
+  </p>
+
+  <h2 id="onde-cada-desenho">Onde cada desenho se encaixa</h2>
+
+  <p>Para diferentes tipos de pergunta, o desenho ótimo varia:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Pergunta</th>
+          <th scope="col">Desenho ideal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Tratamento funciona?</strong></td>
+          <td>ECR ou revisão sistemática de ECRs</td>
+        </tr>
+        <tr>
+          <td><strong>Prognóstico de uma doença?</strong></td>
+          <td>Coorte prospectiva (com seguimento longo)</td>
+        </tr>
+        <tr>
+          <td><strong>Causa de uma doença?</strong></td>
+          <td>Caso-controle (para doenças raras) ou coorte (para exposições raras)</td>
+        </tr>
+        <tr>
+          <td><strong>Acurácia de um teste diagnóstico?</strong></td>
+          <td>Estudo de teste diagnóstico com padrão-ouro</td>
+        </tr>
+        <tr>
+          <td><strong>Frequência de uma condição?</strong></td>
+          <td>Estudo transversal</td>
+        </tr>
+        <tr>
+          <td><strong>Experiência de pacientes?</strong></td>
+          <td>Estudos qualitativos (não cabem na pirâmide)</td>
+        </tr>
+        <tr>
+          <td><strong>Recomendação clínica formal?</strong></td>
+          <td>Diretriz baseada em revisão sistemática + GRADE</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    → Aprofunde-se em <a href={withBase('/conceitos/desenhos-de-estudo/', base)}>desenhos de estudo</a>.
+  </p>
+
+  <h2 id="como-usar">Como usar a pirâmide na prática</h2>
+
+  <p>Recomendações pragmáticas:</p>
+
+  <p>
+    <strong>1. Use como atalho de priorização, não como critério único.</strong> Ao localizar resultados, comece pelo nível mais alto disponível — mas avalie cada estudo com <a href={withBase('/ferramentas/', base)}>ferramentas formais</a> antes de confiar nele.
+  </p>
+
+  <p>
+    <strong>2. Não despreze observacionais.</strong> Para muitas perguntas, são o melhor que existe. Boas coortes informam decisão clínica em áreas onde ECR não é factível.
+  </p>
+
+  <p>
+    <strong>3. Cuidado com revisões sistemáticas frágeis.</strong> Aplique <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> antes de confiar.
+  </p>
+
+  <p>
+    <strong>4. Combine pirâmide com <a href={withBase('/cinco-as/buscar/', base)}>estratégia 6S de Haynes</a>.</strong> A 6S organiza fontes; a pirâmide organiza desenhos. As duas se complementam.
+  </p>
+
+  <p>
+    <strong>5. Lembre que o topo da pirâmide ainda exige aplicação ao paciente.</strong> Mesmo a melhor revisão sistemática não substitui o julgamento clínico no Apply.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Tratar a pirâmide como hierarquia rígida.</strong> "É ECR, então é confiável" — ignora qualidade do estudo individual.</li>
+    <li><strong>Despreciar caso-controle ou transversal por princípio.</strong> Para muitas perguntas, são apropriados e não há melhor.</li>
+    <li><strong>Confundir "topo da pirâmide" com "verdade".</strong> Topo é melhor controle de viés, não certeza absoluta.</li>
+    <li><strong>Aplicar pirâmide a perguntas qualitativas.</strong> Não cabe — perguntas qualitativas precisam de outros critérios de qualidade.</li>
+    <li><strong>Ignorar a aplicabilidade.</strong> Validade externa não está na pirâmide; é trabalho do julgamento clínico no Apply.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — cada nível da pirâmide em detalhe</li>
+    <li><a href={withBase('/cinco-as/buscar/', base)}>Acquire (Buscar)</a> — onde a pirâmide guia priorização de leitura</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — controle de viés é o que justifica a hierarquia</li>
+    <li><a href={withBase('/ferramentas/grade/', base)}>GRADE</a> — avaliação que vai além da pirâmide</li>
+    <li><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> — qualidade dentro do nível "ECR"</li>
+    <li><a href={withBase('/ferramentas/amstar/', base)}>AMSTAR-2</a> — qualidade dentro do nível "revisão sistemática"</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Murad MH, Asi N, Alsawas M, Alahdab F. New evidence pyramid. <em>BMJ Evid Based Med</em> 2016;21(4):125–7. Disponível em: <a href="https://ebm.bmj.com/content/21/4/125" rel="noopener noreferrer" target="_blank">ebm.bmj.com/content/21/4/125</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Guyatt G, Rennie D, Meade MO, Cook DJ. <em>Users' Guides to the Medical Literature: A Manual for Evidence-Based Clinical Practice</em>. 3ª ed. New York: McGraw-Hill; 2014.
+      </li>
+      <li>
+        DiCenso A, Bayley L, Haynes RB. Accessing pre-appraised evidence: fine-tuning the 5S model into a 6S model. <em>Evid Based Nurs</em> 2009;12(4):99–101.
+      </li>
+      <li>
+        Greenhalgh T. <em>How to Read a Paper: The Basics of Evidence-Based Medicine and Healthcare</em>. 6ª ed. Hoboken: Wiley-Blackwell; 2019.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

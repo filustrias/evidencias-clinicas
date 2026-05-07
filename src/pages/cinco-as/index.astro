@@ -1,24 +1,139 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
-import ConceptCard from '@components/ui/ConceptCard.astro';
-import { getSectionNav, withBase } from '@/data/navigation';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const items = getSectionNav('cinco-as')?.filter((it) => it.href !== '/cinco-as/') ?? [];
 ---
-<PageLayout
-  title="Os 5As"
-  description="Ask, Acquire, Appraise, Apply, Assess — o ciclo da MBE aplicado à decisão clínica."
+<DocLayout
+  title="Os 5 As da Medicina Baseada em Evidências"
+  description="Os cinco passos pragmáticos que organizam a MBE — do consultório à decisão informada."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Os 5As</h1>
-  <p class="text-lg text-text-secondary mb-8">
-    Cinco etapas que transformam uma dúvida clínica em decisão informada e auditável.
-    Da formulação da pergunta à avaliação do impacto, passando por busca, leitura crítica e aplicação.
+  <h1>Os 5 As da Medicina Baseada em Evidências</h1>
+
+  <p>
+    Toda decisão clínica que se quer baseada em evidências percorre o mesmo caminho. Não é intuitivo nem rápido: é um ciclo deliberado, com cinco etapas, criado pelos pioneiros da MBE no fim dos anos 1980 para tornar prático aquilo que parecia teórico.
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {items.map((it) => (
-      <ConceptCard href={withBase(it.href, base)} title={it.label} />
-    ))}
-  </div>
-</PageLayout>
+
+  <p>
+    São os 5 As. Cada A é um verbo. Cada verbo é um passo. Juntos, formam um ciclo que começa com uma dúvida real do consultório e termina com uma decisão informada — e com um aprendizado que melhora a próxima decisão.
+  </p>
+
+  <h2 id="o-ciclo">O ciclo</h2>
+
+  <CycleDiagram />
+
+  <ol>
+    <li><strong>Ask</strong> <em>(Perguntar)</em> — transformar a inquietação clínica em pergunta respondível</li>
+    <li><strong>Acquire</strong> <em>(Buscar)</em> — encontrar a melhor evidência disponível</li>
+    <li><strong>Appraise</strong> <em>(Avaliar)</em> — julgar a qualidade e a relevância dessa evidência</li>
+    <li><strong>Apply</strong> <em>(Aplicar)</em> — integrar a evidência ao paciente real</li>
+    <li><strong>Assess</strong> <em>(Monitorar)</em> — verificar o resultado e reavaliar o processo</li>
+  </ol>
+
+  <p>
+    Cada etapa tem técnicas próprias, ferramentas próprias e armadilhas próprias. As próximas cinco páginas exploram cada uma delas em detalhe.
+  </p>
+
+  <h2 id="onde-tudo-comeca">Onde tudo começa</h2>
+
+  <p>
+    Antes mesmo do primeiro A existe a dúvida — vaga, mal formulada, vinda do meio do atendimento. É dela que tudo parte. Sem dúvida real, os 5 As são um exercício acadêmico. Com dúvida real, viram um instrumento clínico.
+  </p>
+
+  <a class="next-step" href={withBase('/conceitos/duvidas-clinicas/', base)}>
+    <span>Comece pelas dúvidas clínicas comuns</span>
+  </a>
+
+  <h2 id="de-onde-vem-os-5-as">De onde vêm os 5 As</h2>
+
+  <p>
+    Os 5 As nasceram na McMaster University, no Canadá, no fim dos anos 1980. O grupo formado por David Sackett, Gordon Guyatt, Brian Haynes e outros pesquisadores estava inquieto com uma constatação simples: o conhecimento gerado pela pesquisa clínica de qualidade demorava demais — ou nunca — chegar à prática médica cotidiana. Médicos continuavam prescrevendo com base na autoridade do especialista, na tradição da escola ou na experiência pessoal, mesmo quando havia evidências sólidas apontando em outra direção.
+  </p>
+
+  <p>
+    A proposta foi pragmática: criar uma sequência de ações que qualquer médico, em qualquer lugar, pudesse seguir para fundamentar decisões na melhor evidência disponível. Em 1991, Gordon Guyatt cunhou o termo <em>Evidence-Based Medicine</em>. Em 1996, David Sackett publicou no <em>British Medical Journal</em> o editorial fundador, definindo MBE como "o uso consciente, explícito e criterioso da melhor evidência atual na tomada de decisões sobre o cuidado de pacientes individuais"<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>.
+  </p>
+
+  <p>
+    Os 5 As são a operacionalização dessa definição.
+  </p>
+
+  <h2 id="os-cinco-passos-em-detalhe">Os cinco passos, em mais detalhe</h2>
+
+  <h3 id="ask">1. Ask (Perguntar)</h3>
+  <p>
+    Toda dúvida clínica precisa virar pergunta antes de virar busca. E nem toda dúvida é uma pergunta respondível. Esta etapa ensina a afiar a dúvida usando dois acrônimos complementares — <a href={withBase('/conceitos/smart/', base)}>SMART</a> e <a href={withBase('/conceitos/pico/', base)}>PICO</a> — para chegar a uma pergunta clara, específica e útil para o paciente que está na sua frente.
+  </p>
+  <p>
+    → <a href={withBase('/cinco-as/perguntar/', base)}>Aprofunde-se em Ask (Perguntar)</a>
+  </p>
+
+  <h3 id="acquire">2. Acquire (Buscar)</h3>
+  <p>
+    Com a pergunta pronta, é hora de procurar resposta. Não em qualquer lugar — nas fontes certas, do jeito certo. Esta etapa apresenta a <a href={withBase('/conceitos/piramide-evidencias/', base)}>pirâmide de evidências</a>, as bases de dados que importam (Cochrane, PubMed, BMJ Best Practice, OMS) e as estratégias de busca que poupam horas.
+  </p>
+  <p>
+    → <a href={withBase('/cinco-as/buscar/', base)}>Aprofunde-se em Acquire (Buscar)</a>
+  </p>
+
+  <h3 id="appraise">3. Appraise (Avaliar)</h3>
+  <p>
+    Encontrar não basta. A evidência encontrada precisa passar por três crivos: é metodologicamente sólida? Tem importância clínica relevante? Aplica-se ao paciente que está na minha frente? Esta etapa apresenta as ferramentas formais de avaliação — <a href={withBase('/ferramentas/casp/', base)}>CASP</a>, <a href={withBase('/ferramentas/grade/', base)}>GRADE</a>, <a href={withBase('/ferramentas/rob/', base)}>RoB</a>, <a href={withBase('/ferramentas/amstar/', base)}>AMSTAR</a> — e as <a href={withBase('/conceitos/medidas-de-efeito/', base)}>medidas de efeito</a> que separam achados estatisticamente significativos de achados clinicamente úteis.
+  </p>
+  <p>
+    → <a href={withBase('/cinco-as/avaliar/', base)}>Aprofunde-se em Appraise (Avaliar)</a>
+  </p>
+
+  <h3 id="apply">4. Apply (Aplicar)</h3>
+  <p>
+    Aqui a ciência encontra a pessoa. Aplicar uma evidência exige integrar três dimensões: o que a literatura mostra, a experiência clínica do profissional e os valores do paciente. É também onde a realidade do contexto local — o que está disponível, o que cabe no orçamento da família, o que faz sentido culturalmente — entra na conta. A <a href={withBase('/conceitos/decisao-compartilhada/', base)}>tomada de decisão compartilhada</a> é o instrumento central deste passo.
+  </p>
+  <p>
+    → <a href={withBase('/cinco-as/aplicar/', base)}>Aprofunde-se em Apply (Aplicar)</a>
+  </p>
+
+  <h3 id="assess">5. Assess (Monitorar)</h3>
+  <p>
+    O ciclo fecha-se com a avaliação do resultado e do processo. O paciente melhorou? A decisão foi acertada? A pergunta inicial estava bem formulada? A busca foi eficiente? A interpretação foi correta? Esta etapa transforma cada decisão clínica em fonte de aprendizado para a próxima — individualmente e em equipe.
+  </p>
+  <p>
+    → <a href={withBase('/cinco-as/monitorar/', base)}>Aprofunde-se em Assess (Monitorar)</a>
+  </p>
+
+  <h2 id="como-percorrer-este-site">Como percorrer este site</h2>
+
+  <p>
+    Você pode ler as cinco páginas em ordem, do primeiro ao quinto A, como um curso. Ou pode pular direto para a etapa que precisa hoje — qualquer página funciona como ponto de entrada. Em cada uma, links levam aos conceitos de fundo, às ferramentas e às calculadoras que ela utiliza.
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/perguntar/', base)}>
+    <span>Comece pelo primeiro A: Ask (Perguntar)</span>
+  </a>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas comuns</a> — onde tudo começa</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — o que a MBE complementa, não substitui</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Tomada de decisão compartilhada</a> — instrumento central do quarto A</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — referência para o segundo A</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Sackett DL, Rosenberg WMC, Gray JAM, Haynes RB, Richardson WS. Evidence based medicine: what it is and what it isn't. <em>BMJ</em> 1996;312(7023):71–2. Disponível em: <a href="https://www.bmj.com/content/312/7023/71" rel="noopener noreferrer" target="_blank">bmj.com/content/312/7023/71</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018.
+      </li>
+      <li>
+        Guyatt G, Cairns J, Churchill D, et al. Evidence-Based Medicine: A New Approach to Teaching the Practice of Medicine. <em>JAMA</em> 1992;268(17):2420–5.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

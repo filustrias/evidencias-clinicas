@@ -1,14 +1,260 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Vieses"
-  description="Seleção, aferição, confusão e perda de seguimento — como identificar e mitigar."
+<DocLayout
+  title="Vieses e fontes de erro em estudos clínicos"
+  description="Os erros sistemáticos que distorcem resultados — seleção, aferição, perda, publicação, confundimento — e como reconhecê-los."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Vieses</h1>
-  <p class="text-lg text-text-secondary mb-6">Seleção, aferição, confusão e perda de seguimento — como identificar e mitigar.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Vieses e fontes de erro em estudos clínicos</h1>
+
+  <p>
+    Um estudo bem feito é, em última instância, um esforço para <strong>manter a verdade visível</strong> apesar de inúmeras formas pelas quais ela pode se distorcer. Essas distorções têm nome — chamam-se <strong>vieses</strong>. Reconhecê-los é o que separa leitor crítico de leitor passivo.
+  </p>
+
+  <p>
+    Esta página cobre os vieses mais frequentes em estudos clínicos. Para cada um: o que é, onde aparece, e como os estudos bons o controlam.
+  </p>
+
+  <h2 id="vies-vs-erro-aleatorio">Viés ≠ erro aleatório</h2>
+
+  <p>Antes de começar, uma distinção importante:</p>
+
+  <ul>
+    <li><strong>Erro aleatório</strong> é o "ruído" estatístico — variação por acaso, que pode ser para cima ou para baixo. Aumenta a incerteza (alarga o IC95%), mas não enviesa a estimativa numa direção. Se você roda o estudo de novo com nova amostra, a estimativa varia.</li>
+    <li><strong>Viés</strong> é erro <strong>sistemático</strong> — empurra a estimativa numa direção específica. Mesmo se você refizer o estudo dez vezes, todas as estimativas estarão deslocadas para o mesmo lado. Não desaparece com mais sujeitos.</li>
+  </ul>
+
+  <p>
+    Aumentar a amostra reduz erro aleatório. <strong>Não reduz viés.</strong> Por isso um ECR pequeno bem feito pode ser mais confiável do que um ECR enorme mal feito.
+  </p>
+
+  <h2 id="principais-tipos">Os principais tipos de viés</h2>
+
+  <h3 id="vies-selecao">1. Viés de seleção</h3>
+
+  <p>
+    <strong>O que é:</strong> a maneira como os participantes foram selecionados produz um grupo que <strong>não é representativo</strong> da população de interesse — ou produz grupos de comparação <strong>diferentes em algum aspecto importante</strong> já no início do estudo.
+  </p>
+
+  <p><strong>Onde aparece:</strong></p>
+
+  <ul>
+    <li>Estudos de caso-controle onde controles vêm de uma fonte muito diferente dos casos</li>
+    <li>Coortes onde a inclusão depende de variáveis associadas ao desfecho</li>
+    <li>Ensaios clínicos com <strong>alocação não aleatória</strong> ou onde a alocação aleatória <strong>não foi oculta</strong> (e o investigador conscientemente ou não dirigiu pacientes para um grupo)</li>
+    <li>Estudos de teste diagnóstico onde o "padrão-ouro" só é aplicado em quem testou positivo</li>
+  </ul>
+
+  <p>
+    <strong>Como os estudos bons controlam:</strong> randomização (em ECRs), com <strong>alocação oculta</strong> (envelopes selados ou sistemas centralizados); critérios de inclusão e exclusão claros e aplicados de forma uniforme; descrição transparente do fluxo de participantes (diagrama CONSORT).
+  </p>
+
+  <h3 id="vies-afericao">2. Viés de aferição (ou de medição)</h3>
+
+  <p>
+    <strong>O que é:</strong> a forma como o desfecho é medido <strong>difere sistematicamente</strong> entre os grupos. Se um avaliador sabe quem está no grupo intervenção, ele pode (mesmo inconscientemente) registrar desfechos de forma diferente entre os grupos.
+  </p>
+
+  <p><strong>Onde aparece:</strong></p>
+
+  <ul>
+    <li>Ensaios sem cegamento de avaliadores</li>
+    <li>Desfechos subjetivos (dor relatada, qualidade de vida, melhora clínica) — mais sensíveis ao problema</li>
+    <li>Estudos onde o paciente sabe qual grupo recebe e isso muda como ele relata sintomas</li>
+  </ul>
+
+  <p>
+    <strong>Como os estudos bons controlam:</strong> <strong>cegamento</strong> de pacientes, profissionais e avaliadores sempre que possível; uso de <strong>desfechos objetivos</strong> (mortalidade, troponina, valor laboratorial); avaliadores cegos para alocação; comitês independentes para classificação de desfechos.
+  </p>
+
+  <h3 id="desfechos-compostos">3. Viés de aferição em desfechos compostos</h3>
+
+  <p>
+    <strong>Um caso especial.</strong> Desfechos compostos (ex.: "morte ou hospitalização") parecem objetivos, mas frequentemente um dos componentes é mais subjetivo que o outro (mortalidade é objetiva; "hospitalização por insuficiência cardíaca" requer julgamento). Quando o componente subjetivo domina o desfecho, o viés de aferição volta pela porta dos fundos. Bons estudos relatam <strong>cada componente separadamente</strong> além do composto.
+  </p>
+
+  <h3 id="vies-perda">4. Viés de perda (attrition bias)</h3>
+
+  <p>
+    <strong>O que é:</strong> participantes que saem do estudo são <strong>diferentes</strong> dos que ficam, e essa diferença distorce o resultado. Se quem teve efeito adverso desistiu mais que quem não teve, e os desistentes não entram na análise, o efeito adverso fica subestimado.
+  </p>
+
+  <p><strong>Onde aparece:</strong></p>
+
+  <ul>
+    <li>Estudos de longa duração (oncologia, doenças crônicas)</li>
+    <li>Quando perdas são desbalanceadas entre grupos (mais perdas no grupo controle, por exemplo)</li>
+    <li>Quando perdas têm relação com o desfecho</li>
+  </ul>
+
+  <p>
+    <strong>Como os estudos bons controlam:</strong> <strong>análise por intenção de tratar</strong> (todos os randomizados são analisados no grupo original, mesmo se não completaram o tratamento); descrição transparente das perdas e suas razões; análises de sensibilidade que testam diferentes pressuposições sobre os perdidos; uso de métodos estatísticos para dados ausentes (imputação múltipla).
+  </p>
+
+  <p>
+    Como regra prática: <strong>perdas &gt; 20%</strong> ou <strong>perdas desbalanceadas entre grupos</strong> levantam preocupação séria.
+  </p>
+
+  <h3 id="vies-publicacao">5. Viés de publicação</h3>
+
+  <p>
+    <strong>O que é:</strong> estudos com resultados <strong>estatisticamente significativos</strong> ou <strong>na direção esperada</strong> têm mais chance de serem publicados. Estudos negativos ficam em gavetas. Resultado: a literatura pública é <strong>distorcida em favor do efeito</strong> que se buscava demonstrar.
+  </p>
+
+  <p><strong>Onde aparece:</strong></p>
+
+  <ul>
+    <li>Em qualquer revisão sistemática que dependa só de literatura publicada</li>
+    <li>Em áreas com financiamento da indústria (efeito mais marcado)</li>
+    <li>Em estudos de intervenções alternativas (acupuntura, suplementos), onde estudos negativos circulam menos</li>
+  </ul>
+
+  <p>
+    <strong>Como os estudos bons (e revisões sistemáticas) controlam:</strong> registro prévio do protocolo (ClinicalTrials.gov, PROSPERO, OSF); busca em registros de ensaios não publicados; contato com autores; análise gráfica (funnel plot) e testes estatísticos para detectar assimetria. Cochrane exige busca em literatura cinzenta para todas as suas revisões.
+  </p>
+
+  <h3 id="confundimento">6. Viés de confundimento</h3>
+
+  <p>
+    <strong>O que é:</strong> uma terceira variável está associada <strong>tanto ao tratamento quanto ao desfecho</strong>, e cria uma associação aparente entre os dois que não é causal.
+  </p>
+
+  <p>
+    <strong>Exemplo clássico:</strong> estudo observacional descobre que pessoas que tomam vitaminas têm menos câncer. Conclui-se que vitaminas previnem câncer. Mas pessoas que tomam vitaminas também tendem a fumar menos, fazer mais exercício, ter mais acesso a serviços de saúde. <strong>O fator de confundimento</strong> (estilo de vida em geral) explica a associação melhor que as vitaminas.
+  </p>
+
+  <p><strong>Onde aparece:</strong></p>
+
+  <ul>
+    <li>Em <strong>todos</strong> os estudos observacionais (coorte, caso-controle, transversal)</li>
+    <li>Em ensaios clínicos não randomizados ou mal randomizados</li>
+    <li>Quando características de base (idade, sexo, comorbidades, severidade da doença) diferem entre grupos</li>
+  </ul>
+
+  <p><strong>Como os estudos bons controlam:</strong></p>
+
+  <ul>
+    <li><strong>Em ECRs:</strong> <strong>randomização adequada</strong> distribui os fatores de confundimento (conhecidos e desconhecidos) igualmente entre os grupos. Esse é o grande poder do desenho randomizado.</li>
+    <li><strong>Em estudos observacionais:</strong> restrição (incluir só certo tipo de paciente), pareamento (matching), estratificação na análise, regressão multivariada, escores de propensão. Todas têm limites — só ajustam para o que foi medido. Confundimento por variáveis não medidas permanece.</li>
+  </ul>
+
+  <h3 id="immortal-time">7. Viés de imortal time</h3>
+
+  <p>
+    <strong>Caso mais sutil</strong>, particularmente em estudos observacionais farmacológicos. Pacientes classificados como "expostos" só podem ser classificados assim depois de iniciarem o medicamento — o que significa que sobreviveram até esse ponto. Eles têm um período "imortal" embutido na classificação. Comparar com pacientes não expostos sem ajustar para isso superestima o benefício do medicamento.
+  </p>
+
+  <p>
+    <strong>Como os estudos bons controlam:</strong> análise por tempo desde a randomização (em ECRs, automaticamente); modelos com exposição variável no tempo; análise sensível ao tempo de imortal.
+  </p>
+
+  <h3 id="reporting-bias">8. Viés de seleção de desfechos relatados (reporting bias)</h3>
+
+  <p>
+    <strong>O que é:</strong> dos múltiplos desfechos previstos no protocolo, o estudo relata apenas os que ficaram bonitos na análise. Desfechos que falharam viram nota de rodapé, ou somem.
+  </p>
+
+  <p>
+    <strong>Como os estudos bons controlam:</strong> registro pré-especificado de desfechos primários e secundários; relato completo de todos os desfechos previstos; ferramenta <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> tem domínio específico para isso.
+  </p>
+
+  <h2 id="hierarquia-controle">Hierarquia de controle de viés por desenho</h2>
+
+  <p>
+    Cada <a href={withBase('/conceitos/desenhos-de-estudo/', base)}>desenho de estudo</a> controla diferentes tipos de viés com diferentes graus de eficácia:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Desenho</th>
+          <th scope="col">Controla bem</th>
+          <th scope="col">Vulnerável a</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ECR</strong> com cegamento e alocação oculta</td>
+          <td>Confundimento, seleção, aferição</td>
+          <td>Viés de perda (se mal conduzido); reporting bias</td>
+        </tr>
+        <tr>
+          <td><strong>Coorte prospectiva</strong></td>
+          <td>Aferição (se padronizada)</td>
+          <td>Confundimento, seleção, perda</td>
+        </tr>
+        <tr>
+          <td><strong>Caso-controle</strong></td>
+          <td>Pode estudar desfechos raros</td>
+          <td>Confundimento, seleção, recordação</td>
+        </tr>
+        <tr>
+          <td><strong>Transversal</strong></td>
+          <td>Útil para prevalência</td>
+          <td>Não estabelece causalidade</td>
+        </tr>
+        <tr>
+          <td><strong>Série de casos</strong></td>
+          <td>Hipóteses</td>
+          <td>Praticamente todos</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    Por isso a <a href={withBase('/conceitos/piramide-evidencias/', base)}>pirâmide de evidências</a> coloca ECRs bem feitos perto do topo. <strong>Mas atenção:</strong> um ECR mal feito perde os benefícios do desenho. A ferramenta <a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> avalia justamente o <strong>risco residual de viés</strong> num ECR específico.
+  </p>
+
+  <h2 id="reconhecendo-pratica">Reconhecendo viés na prática</h2>
+
+  <p>Cinco perguntas que ajudam a expor vieses ao ler um estudo:</p>
+
+  <ol>
+    <li><strong>Os participantes foram selecionados de forma representativa?</strong> Diagrama de fluxo. Critérios de inclusão. Quem foi excluído e por quê.</li>
+    <li><strong>Os grupos eram comparáveis no início?</strong> Tabela 1 do artigo. Diferenças importantes em idade, severidade, comorbidades?</li>
+    <li><strong>Houve cegamento adequado?</strong> De quem (paciente, profissional, avaliador)? Para todos os desfechos ou só alguns?</li>
+    <li><strong>As perdas foram pequenas e balanceadas?</strong> % de perda em cada grupo. Razões. Foi feita análise por intenção de tratar?</li>
+    <li><strong>Os desfechos relatados batem com o protocolo registrado?</strong> O artigo cita o registro? Os desfechos primários são os pré-especificados ou foram trocados?</li>
+  </ol>
+
+  <p>
+    Se um estudo tem problema sério em qualquer dessas perguntas, suspeite — independentemente do tamanho amostral ou do prestígio da revista.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns ao discutir viés</h2>
+
+  <ul>
+    <li><strong>Confundir viés com fraude.</strong> Viés geralmente é não intencional; vem de escolhas metodológicas que distorcem o resultado.</li>
+    <li><strong>Tratar "associação" como "causa".</strong> Estudo observacional que encontra associação raramente prova causalidade — confundimento residual quase sempre é alternativa.</li>
+    <li><strong>Achar que tamanho amostral resolve.</strong> Ele resolve erro aleatório, não viés.</li>
+    <li><strong>Aceitar acriticamente análises de subgrupo.</strong> Subgrupos sofrem de problemas estatísticos sérios (múltiplas comparações) e devem ser tratados como gerador de hipóteses, não como conclusão.</li>
+    <li><strong>Ignorar viés de publicação em revisões sistemáticas.</strong> Sempre olhe se a revisão usou registros, não apenas literatura publicada.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde detectar vieses é parte central do trabalho</li>
+    <li><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> — ferramenta formal para avaliar risco de viés em ECRs</li>
+    <li><a href={withBase('/conceitos/desenhos-de-estudo/', base)}>Desenhos de estudo</a> — como cada desenho lida com diferentes vieses</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — onde o controle de viés determina o nível na pirâmide</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — números que podem estar enviesados sem que o leitor perceba</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Sackett DL. Bias in analytic research. <em>J Chronic Dis</em> 1979;32(1-2):51–63.</li>
+      <li>Higgins JPT, Thomas J, Chandler J, et al, eds. <em>Cochrane Handbook for Systematic Reviews of Interventions</em> version 6.4. Cochrane; 2023. Capítulo 8: Assessing risk of bias. Disponível em: <a href="https://training.cochrane.org/handbook" rel="noopener noreferrer" target="_blank">training.cochrane.org/handbook</a>.</li>
+      <li>Sterne JAC, Savović J, Page MJ, et al. RoB 2: a revised tool for assessing risk of bias in randomised trials. <em>BMJ</em> 2019;366:l4898.</li>
+      <li>Pannucci CJ, Wilkins EG. Identifying and avoiding bias in research. <em>Plast Reconstr Surg</em> 2010;126(2):619–25.</li>
+      <li>Catalogue of Bias Collaboration. <em>Catalogue of Biases</em>. Disponível em: <a href="https://catalogofbias.org" rel="noopener noreferrer" target="_blank">catalogofbias.org</a> — recurso aberto com mais de 60 vieses descritos em detalhe.</li>
+    </ol>
+  </section>
+</DocLayout>

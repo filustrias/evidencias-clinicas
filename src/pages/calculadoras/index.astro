@@ -1,24 +1,121 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
-import ConceptCard from '@components/ui/ConceptCard.astro';
-import { getSectionNav, withBase } from '@/data/navigation';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const items = getSectionNav('calculadoras')?.filter((it) => it.href !== '/calculadoras/') ?? [];
+const link = (href: string) => withBase(href, base);
 ---
-<PageLayout
+<DocLayout
   title="Calculadoras"
-  description="Cálculos interativos para testes diagnósticos e medidas de efeito — direto no navegador."
+  description="Ferramentas interativas para apoiar decisões clínicas em tempo real. Testes diagnósticos e medidas de efeito."
   section="calculadoras"
 >
-  <h1 class="text-4xl font-medium mb-3">Calculadoras</h1>
-  <p class="text-lg text-text-secondary mb-8">
-    Ferramentas interativas para inserir tabelas 2×2 e obter sensibilidade, especificidade,
-    razões de verossimilhança, RR, OR, NNT e mais — com intervalos de confiança.
+  <h1>Calculadoras</h1>
+
+  <p>
+    Esta seção reúne <strong>calculadoras interativas</strong> que apoiam decisões clínicas em tempo
+    real. Não são apenas demonstrações pedagógicas — são instrumentos para usar na hora da decisão.
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {items.map((it) => (
-      <ConceptCard href={withBase(it.href, base)} title={it.label} badge="Interativo" />
-    ))}
-  </div>
-</PageLayout>
+
+  <p>
+    Cada calculadora roda no seu navegador, sem envio de dados. Você pode usar offline, depois da
+    primeira visita.
+  </p>
+
+  <h2 id="calculadoras-disponiveis">Calculadoras disponíveis</h2>
+
+  <h3 id="testes-diagnosticos"><a href={link('/calculadoras/testes-diagnosticos/')}>Testes diagnósticos</a></h3>
+
+  <p>
+    Calcule <strong>sensibilidade, especificidade, valores preditivos (VPP, VPN) e razões de
+    verossimilhança (RV+, RV−)</strong> a partir de uma tabela 2×2. Veja como a <strong>prevalência
+    muda os valores preditivos</strong>, com cinco cenários pré-definidos: HIV, câncer de mama
+    (mamografia), troponina (síndrome coronariana aguda) e outros.
+  </p>
+
+  <p><strong>Quando usar:</strong></p>
+
+  <ul>
+    <li>Antes de pedir um exame, para entender o que cada resultado significará no contexto do paciente</li>
+    <li>Ao interpretar resultado de teste em situação atípica (paciente fora da população do estudo de validação)</li>
+    <li>Para ensinar a alunos como prevalência muda interpretação de testes</li>
+  </ul>
+
+  <p>
+    <a class="next-step" href={link('/calculadoras/testes-diagnosticos/')}>Abra a calculadora</a>
+    &nbsp;·&nbsp;
+    <a href={link('/conceitos/testes-diagnosticos/')}>Conceito relacionado</a>
+  </p>
+
+  <h3 id="medidas-de-efeito"><a href={link('/calculadoras/medidas-de-efeito/')}>Medidas de efeito</a></h3>
+
+  <p>
+    A partir de uma tabela 2×2 de ECR ou estudo observacional, calcule <strong>risco absoluto (RA),
+    risco relativo (RR), odds ratio (OR), redução absoluta de risco (RAR), redução relativa (RRR),
+    NNT e NNH</strong> — todos com <strong>intervalo de confiança 95%</strong>.
+  </p>
+
+  <p>
+    A calculadora <strong>não exibe NNT enganoso quando o IC do RAR cruza zero</strong> — em vez
+    disso, indica explicitamente que o valor não é calculável quando o resultado não é estatisticamente
+    significativo. Inclui presets de estudos clínicos reais: ASPREE (aspirina em prevenção primária),
+    DAPA-HF (dapagliflozina em IC), Cálcio (Hofmeyr Cochrane).
+  </p>
+
+  <p><strong>Quando usar:</strong></p>
+
+  <ul>
+    <li>Para traduzir resultado relativo (RR) em magnitude clínica (NNT)</li>
+    <li>Para descobrir se uma "redução de 50%" significa muito ou pouco em pontos percentuais absolutos</li>
+    <li>Para conversa com paciente sobre benefício esperado</li>
+    <li>Para verificar se IC do efeito é estreito ou largo</li>
+  </ul>
+
+  <p>
+    <a class="next-step" href={link('/calculadoras/medidas-de-efeito/')}>Abra a calculadora</a>
+    &nbsp;·&nbsp;
+    <a href={link('/conceitos/medidas-de-efeito/')}>Conceito relacionado</a>
+  </p>
+
+  <h2 id="principios-de-uso">Princípios de uso</h2>
+
+  <p>
+    <strong>Cuidado com extrapolação.</strong> Calculadoras dependem de inputs corretos. Aplicar VPP
+    de uma calculadora a uma população muito diferente (com prevalência muito menor, por exemplo)
+    pode dar resultado enganoso.
+  </p>
+
+  <p>
+    <strong>Não substituem julgamento clínico.</strong> São apoio à decisão — não substituto. O
+    contexto do paciente, suas preferências, recursos do serviço, todos pesam além dos números.
+  </p>
+
+  <p>
+    <strong>Aproveite os presets.</strong> Cada calculadora tem cenários pré-configurados baseados em
+    estudos reais. São bons pontos de partida para entender ordens de grandeza.
+  </p>
+
+  <h2 id="para-aprofundar">Para aprofundar</h2>
+
+  <p>
+    Cada calculadora tem <strong>conceito-base</strong> que explica em detalhe os termos usados.
+    Recomendamos ler junto:
+  </p>
+
+  <ul>
+    <li><a href={link('/conceitos/testes-diagnosticos/')}>Testes diagnósticos</a> — fundamentos da calculadora 1</li>
+    <li><a href={link('/conceitos/medidas-de-efeito/')}>Medidas de efeito</a> — fundamentos da calculadora 2</li>
+    <li><a href={link('/conceitos/medidas-de-frequencia/')}>Medidas de frequência</a> — base de prevalência e incidência</li>
+  </ul>
+
+  <p>
+    E para ver as calculadoras aplicadas a casos reais: <a href={link('/em-pratica/')}>Em prática</a>.
+  </p>
+
+  <h2 id="sobre-o-desenvolvimento">Sobre o desenvolvimento</h2>
+
+  <p>
+    As calculadoras são código aberto, em JavaScript puro, sem dependência de servidor externo. Se
+    você encontrar erro ou tiver sugestão, <a href={link('/sobre/')}>entre em contato</a>.
+  </p>
+</DocLayout>

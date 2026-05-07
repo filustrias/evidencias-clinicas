@@ -1,21 +1,489 @@
 ---
 /**
- * Placeholder. Especificação detalhada virá em documento separado.
- * Quando implementada, esta calculadora deve oferecer cálculos a partir
- * de tabela 2x2: sensibilidade, especificidade, VPP, VPN, LR+, LR−, e
- * gráficos de probabilidade pré/pós-teste.
+ * DiagnosticTestCalculator.astro
+ *
+ * Calculadora de propriedades de testes diagnósticos.
+ *
+ * Inputs (sliders): prevalência, sensibilidade, especificidade
+ * Outputs: tabela 2×2, VPP, VPN, RV+, RV−, e texto explicativo dinâmico
+ *
+ * Cenários pré-definidos: HIV em doadores, mamografia em rastreio, troponina em dor torácica.
+ *
+ * Componente standalone — pode ser importado em qualquer página.
+ * Usa as CSS variables definidas em src/styles/global.css (cores e fontes do design system).
+ *
+ * Localização sugerida: src/components/calculadoras/DiagnosticTestCalculator.astro
+ *
+ * Uso:
+ *   import DiagnosticTestCalculator from '@/components/calculadoras/DiagnosticTestCalculator.astro';
+ *   ...
+ *   <DiagnosticTestCalculator />
  */
 ---
-<div data-pagefind-ignore class="rounded-lg border border-dashed border-border-default bg-surface p-8 text-center my-8">
-  <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent-soft-bg mb-4">
-    <svg viewBox="0 0 24 24" class="h-6 w-6 text-accent-soft-text" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-      <rect x="4" y="4" width="16" height="16" rx="2" />
-      <path d="M8 12h8M12 8v8" stroke-linecap="round" />
-    </svg>
+
+<section class="dt-calc" aria-labelledby="dt-calc-title">
+  <header class="dt-calc__header">
+    <h2 id="dt-calc-title">Calculadora interativa</h2>
+    <p>Mova os controles e veja como cada propriedade muda em tempo real.</p>
+  </header>
+
+  <div class="dt-calc__presets" role="toolbar" aria-label="Cenários de exemplo">
+    <span class="dt-calc__preset-label">Cenários:</span>
+    <button type="button" class="dt-calc__preset" data-preset="hiv">HIV em doadores</button>
+    <button type="button" class="dt-calc__preset" data-preset="mamografia">Mamografia (rastreio)</button>
+    <button type="button" class="dt-calc__preset" data-preset="troponina">Troponina (dor torácica)</button>
+    <button type="button" class="dt-calc__preset dt-calc__preset--ghost" data-preset="reset">Reiniciar</button>
   </div>
-  <h3 class="text-lg font-medium text-text-primary mb-1">Calculadora em construção</h3>
-  <p class="text-sm text-text-secondary max-w-md mx-auto">
-    Calculadora de testes diagnósticos: sensibilidade, especificidade, VPP, VPN e razões de verossimilhança.
-    Especificação técnica e implementação em documento subsequente.
-  </p>
-</div>
+
+  <div class="dt-calc__grid">
+    <div class="dt-calc__inputs">
+
+      <div class="dt-calc__slider">
+        <div class="dt-calc__slider-row">
+          <label for="dt-prev">Prevalência</label>
+          <output for="dt-prev" id="dt-prev-out">10%</output>
+        </div>
+        <input type="range" id="dt-prev" min="1" max="50" value="10" step="1"
+               aria-describedby="dt-prev-desc" />
+        <p id="dt-prev-desc" class="dt-calc__hint">Frequência da doença na população testada</p>
+      </div>
+
+      <div class="dt-calc__slider">
+        <div class="dt-calc__slider-row">
+          <label for="dt-sens">Sensibilidade</label>
+          <output for="dt-sens" id="dt-sens-out">87%</output>
+        </div>
+        <input type="range" id="dt-sens" min="50" max="99" value="87" step="1"
+               aria-describedby="dt-sens-desc" />
+        <p id="dt-sens-desc" class="dt-calc__hint">% dos doentes que o teste detecta</p>
+      </div>
+
+      <div class="dt-calc__slider">
+        <div class="dt-calc__slider-row">
+          <label for="dt-spec">Especificidade</label>
+          <output for="dt-spec" id="dt-spec-out">96%</output>
+        </div>
+        <input type="range" id="dt-spec" min="50" max="99" value="96" step="1"
+               aria-describedby="dt-spec-desc" />
+        <p id="dt-spec-desc" class="dt-calc__hint">% dos não-doentes que o teste exclui</p>
+      </div>
+
+      <div class="dt-calc__table-wrap">
+        <p class="dt-calc__table-cap">Em <strong>1000</strong> pessoas testadas:</p>
+        <table class="dt-calc__table" aria-label="Tabela 2 por 2 de resultados do teste">
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col">Doente</th>
+              <th scope="col">Não doente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Teste +</th>
+              <td class="dt-calc__cell dt-calc__cell--good">
+                <span class="dt-calc__cell-value" id="dt-tp">87</span>
+                <span class="dt-calc__cell-label">VP</span>
+              </td>
+              <td class="dt-calc__cell dt-calc__cell--bad">
+                <span class="dt-calc__cell-value" id="dt-fp">36</span>
+                <span class="dt-calc__cell-label">FP</span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Teste −</th>
+              <td class="dt-calc__cell dt-calc__cell--bad">
+                <span class="dt-calc__cell-value" id="dt-fn">13</span>
+                <span class="dt-calc__cell-label">FN</span>
+              </td>
+              <td class="dt-calc__cell dt-calc__cell--good">
+                <span class="dt-calc__cell-value" id="dt-tn">864</span>
+                <span class="dt-calc__cell-label">VN</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dt-calc__outputs">
+
+      <div class="dt-calc__output">
+        <span class="dt-calc__output-label">Valor preditivo positivo</span>
+        <span class="dt-calc__output-value" id="dt-vpp">71%</span>
+        <span class="dt-calc__output-note">Probabilidade de ter a doença <em>quando</em> o teste é positivo</span>
+      </div>
+
+      <div class="dt-calc__output">
+        <span class="dt-calc__output-label">Valor preditivo negativo</span>
+        <span class="dt-calc__output-value" id="dt-vpn">99%</span>
+        <span class="dt-calc__output-note">Probabilidade de não ter a doença <em>quando</em> o teste é negativo</span>
+      </div>
+
+      <div class="dt-calc__output">
+        <span class="dt-calc__output-label">Razão de verossimilhança +</span>
+        <span class="dt-calc__output-value" id="dt-lrp">21,8</span>
+        <span class="dt-calc__output-note" id="dt-lrp-note">Resultado positivo aumenta fortemente a chance de doença</span>
+      </div>
+
+      <div class="dt-calc__output">
+        <span class="dt-calc__output-label">Razão de verossimilhança −</span>
+        <span class="dt-calc__output-value" id="dt-lrn">0,14</span>
+        <span class="dt-calc__output-note" id="dt-lrn-note">Resultado negativo reduz fortemente a chance de doença</span>
+      </div>
+
+      <div class="dt-calc__insight" role="status" aria-live="polite">
+        <p id="dt-insight">Com prevalência de 10%, mesmo um teste com especificidade de 96% gera cerca de 30% de falsos positivos entre os resultados positivos. Reduza a prevalência ainda mais — para 1% ou 2% — e veja o VPP despencar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dt-calc {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-family: var(--font-sans);
+  }
+
+  .dt-calc__header h2 {
+    margin: 0 0 0.375rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .dt-calc__header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .dt-calc__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .dt-calc__preset-label {
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.25rem;
+  }
+
+  .dt-calc__preset {
+    background: transparent;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: border-color 150ms ease-out, color 150ms ease-out, background-color 150ms ease-out;
+    font-family: inherit;
+  }
+
+  .dt-calc__preset:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+    border-color: var(--color-accent);
+  }
+
+  .dt-calc__preset:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .dt-calc__preset--ghost {
+    color: var(--color-text-secondary);
+    border-color: transparent;
+  }
+
+  .dt-calc__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .dt-calc__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .dt-calc__slider {
+    margin-bottom: 1.5rem;
+  }
+
+  .dt-calc__slider-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.375rem;
+  }
+
+  .dt-calc__slider label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .dt-calc__slider output {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+
+  .dt-calc__slider input[type="range"] {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--color-accent);
+  }
+
+  .dt-calc__hint {
+    margin: 0.375rem 0 0;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .dt-calc__table-wrap {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .dt-calc__table-cap {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  .dt-calc__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+  }
+
+  .dt-calc__table th {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.25rem;
+  }
+
+  .dt-calc__table tbody th {
+    text-align: left;
+    padding-right: 0.5rem;
+  }
+
+  .dt-calc__cell {
+    text-align: center;
+    padding: 0.625rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .dt-calc__cell-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .dt-calc__cell-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .dt-calc__cell--good {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+  }
+
+  .dt-calc__cell--bad {
+    background: var(--color-danger-bg);
+    color: var(--color-danger-text);
+  }
+
+  .dt-calc__output {
+    margin-bottom: 1.25rem;
+  }
+
+  .dt-calc__output-label {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .dt-calc__output-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 1.875rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    line-height: 1.1;
+  }
+
+  .dt-calc__output-note {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .dt-calc__insight {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .dt-calc__insight p {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dt-calc__preset {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type Preset = { prev: number; sens: number; spec: number };
+
+  const PRESETS: Record<string, Preset> = {
+    hiv:        { prev: 1,  sens: 99, spec: 99 },
+    mamografia: { prev: 1,  sens: 80, spec: 90 },
+    troponina:  { prev: 30, sens: 95, spec: 95 },
+    reset:      { prev: 10, sens: 87, spec: 96 },
+  };
+
+  function calculate(prev: number, sens: number, spec: number) {
+    const total = 1000;
+    const p = prev / 100;
+    const sn = sens / 100;
+    const sp = spec / 100;
+
+    const sick = Math.round(total * p);
+    const healthy = total - sick;
+    const tp = Math.round(sick * sn);
+    const fn = sick - tp;
+    const tn = Math.round(healthy * sp);
+    const fp = healthy - tn;
+
+    const ppv = (tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0;
+    const npv = (tn + fn) > 0 ? (tn / (tn + fn)) * 100 : 0;
+    const lrp = sp < 1 ? sn / (1 - sp) : 999;
+    const lrn = sn < 1 ? (1 - sn) / sp : 0;
+
+    return { tp, fp, fn, tn, ppv, npv, lrp, lrn };
+  }
+
+  function lrPositiveNote(lr: number): string {
+    if (lr >= 10) return "Resultado positivo aumenta fortemente a chance de doença";
+    if (lr >= 5)  return "Resultado positivo aumenta moderadamente a chance de doença";
+    if (lr >= 2)  return "Resultado positivo aumenta levemente a chance de doença";
+    return "Resultado positivo muda pouco a chance de doença";
+  }
+
+  function lrNegativeNote(lr: number): string {
+    if (lr <= 0.1) return "Resultado negativo reduz fortemente a chance de doença";
+    if (lr <= 0.2) return "Resultado negativo reduz moderadamente a chance de doença";
+    if (lr <= 0.5) return "Resultado negativo reduz levemente a chance de doença";
+    return "Resultado negativo muda pouco a chance de doença";
+  }
+
+  function formatBR(n: number, decimals: number): string {
+    return n.toFixed(decimals).replace('.', ',');
+  }
+
+  function generateInsight(prev: number, sens: number, spec: number, ppv: number, npv: number, lrp: number, lrn: number): string {
+    if (prev <= 3) {
+      return `Com prevalência muito baixa (${prev}%), mesmo um teste excelente gera muitos falsos positivos. Aqui o VPP é ${Math.round(ppv)}% — dos resultados positivos, ${Math.round(100 - ppv)}% são falsos. É por isso que rastrear doenças raras na população geral pode causar mais ansiedade, exames e tratamentos do que benefício.`;
+    }
+    if (prev >= 40) {
+      return `Com prevalência alta (${prev}%), o VPP fica robusto (${Math.round(ppv)}%) mas o VPN começa a cair. Em pacientes com alta probabilidade pré-teste, um resultado negativo já não tranquiliza tanto: ainda há ${Math.round(100 - npv)}% de chance da doença estar lá.`;
+    }
+    if (sens >= 95 && spec <= 70) {
+      return `Teste muito sensível (${sens}%) e pouco específico (${spec}%): perfil de triagem. Quase não deixa passar doentes (RV− = ${formatBR(lrn, 2)}), mas gera muitos falsos positivos que precisarão de teste confirmatório.`;
+    }
+    if (spec >= 95 && sens <= 70) {
+      return `Teste muito específico (${spec}%) e pouco sensível (${sens}%): perfil de confirmação. Quem testa positivo provavelmente tem a doença (RV+ = ${formatBR(lrp, 1)}), mas muitos casos passam despercebidos.`;
+    }
+    return `Repare como a prevalência muda o VPP sem alterar o teste em si — esse é o conceito que mais surpreende quem aprende. Movimente o slider de prevalência mantendo sensibilidade e especificidade fixas e observe o impacto.`;
+  }
+
+  function setText(id: string, value: string) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function getValue(id: string): number {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    return el ? parseInt(el.value, 10) : 0;
+  }
+
+  function setValue(id: string, v: number) {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    if (el) el.value = String(v);
+  }
+
+  function update() {
+    const prev = getValue('dt-prev');
+    const sens = getValue('dt-sens');
+    const spec = getValue('dt-spec');
+
+    const r = calculate(prev, sens, spec);
+
+    setText('dt-prev-out', `${prev}%`);
+    setText('dt-sens-out', `${sens}%`);
+    setText('dt-spec-out', `${spec}%`);
+    setText('dt-tp', String(r.tp));
+    setText('dt-fp', String(r.fp));
+    setText('dt-fn', String(r.fn));
+    setText('dt-tn', String(r.tn));
+    setText('dt-vpp', `${Math.round(r.ppv)}%`);
+    setText('dt-vpn', `${Math.round(r.npv)}%`);
+    setText('dt-lrp', formatBR(r.lrp, 1));
+    setText('dt-lrn', formatBR(r.lrn, 2));
+    setText('dt-lrp-note', lrPositiveNote(r.lrp));
+    setText('dt-lrn-note', lrNegativeNote(r.lrn));
+    setText('dt-insight', generateInsight(prev, sens, spec, r.ppv, r.npv, r.lrp, r.lrn));
+  }
+
+  ['dt-prev', 'dt-sens', 'dt-spec'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', update);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.preset;
+      if (!key || !(key in PRESETS)) return;
+      const preset = PRESETS[key];
+      setValue('dt-prev', preset.prev);
+      setValue('dt-sens', preset.sens);
+      setValue('dt-spec', preset.spec);
+      update();
+    });
+  });
+
+  update();
+</script>

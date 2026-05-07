@@ -1,14 +1,282 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import ComparisonGraphic from '@components/ui/ComparisonGraphic.astro';
+import { BookOpen, Search } from '@lucide/astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
+
+const backgroundItems = [
+  '<strong>Sobre o quê:</strong> O que é uma doença, como funciona, fisiopatologia, mecanismo de ação',
+  '<strong>Exemplo:</strong> "Como age a metformina?"',
+  '<strong>Exemplo:</strong> "O que causa pré-eclâmpsia?"',
+  '<strong>Fonte ideal:</strong> Livro-texto, sumário clínico (UpToDate, BMJ Best Practice, DynaMed)',
+];
+const foregroundItems = [
+  '<strong>Sobre o quê:</strong> Qual a melhor decisão para um paciente específico',
+  '<strong>Exemplo:</strong> "A metformina reduz mortalidade em diabéticos sem doença renal?"',
+  '<strong>Exemplo:</strong> "Aspirina em baixa dose previne pré-eclâmpsia em gestantes de alto risco?"',
+  '<strong>Fonte ideal:</strong> Pesquisa primária, revisão sistemática, diretriz baseada em evidência',
+];
 ---
-<PageLayout
-  title="Perguntar (Ask)"
-  description="A primeira etapa dos 5As: traduzir a dúvida clínica em pergunta estruturada e respondível."
+<DocLayout
+  title="Ask (Perguntar) — o primeiro A"
+  description="O passo onde a inquietação clínica vira pergunta respondível. SMART para escrutinar, PICO para decompor."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Perguntar (Ask)</h1>
-  <p class="text-lg text-text-secondary mb-6">A primeira etapa dos 5As: traduzir a dúvida clínica em pergunta estruturada e respondível.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Ask (Perguntar) — o primeiro A</h1>
+
+  <p>
+    Tudo começa com uma dúvida no meio de um atendimento. Sem dúvida, não há MBE — apenas protocolo. Mas dúvida bruta também não basta: do jeito que aparece na cabeça, ela é vaga, ampla demais, sem ângulo claro de busca. O primeiro A — Ask, perguntar — é sobre <strong>transformar a inquietação em pergunta</strong>: específica, mensurável, possível de responder, relevante para este paciente e oportuna para o momento.
+  </p>
+
+  <p>
+    Quando isso é bem feito, todas as etapas seguintes ficam mais fáceis. Quando é mal feito, a busca traz lixo, a avaliação se perde, e a decisão volta a ser baseada em hábito ou autoridade.
+  </p>
+
+  <CycleDiagram activeStep="ask" />
+
+  <h2 id="uma-duvida-no-consultorio">Uma dúvida no consultório</h2>
+
+  <p>
+    Dra. Amélia atende, num centro de saúde, o Sr. António — 70 anos, hipertensão controlada com losartana, diabetes tipo 2 com hemoglobina glicada em 6,8%, sem evento cardiovascular prévio. Ele ouviu de um vizinho que "todo idoso devia tomar uma aspirina por dia para evitar infarto" e pergunta se pode começar.
+  </p>
+
+  <p>A frase que surge na cabeça da Dra. Amélia é mais ou menos esta:</p>
+
+  <blockquote class="featured-quote">
+    <p>Será que devo prescrever aspirina para o Sr. António?</p>
+  </blockquote>
+
+  <p>
+    Isto ainda não é uma pergunta de MBE. É muito mais uma <strong>inquietação</strong> da Dra. Amélia do que uma pergunta científica passível de ser respondida — o desconforto íntimo do clínico diante da incerteza, o ponto onde ele percebe que não sabe e precisaria saber. É de onde tudo parte, sim, mas é só de onde parte. Falta especificidade, falta o que exatamente comparar, falta o desfecho que importa. O primeiro A é justamente sobre tirar a dúvida desse estado vago e levá-la para um formato que possa ser perseguido.
+  </p>
+
+  <h2 id="duvidas-de-fundo-e-de-primeiro-plano">Antes de SMART e PICO: dúvidas de fundo e de primeiro plano</h2>
+
+  <p>Nem toda dúvida clínica é igual. Existem dois tipos, e eles pedem buscas diferentes:</p>
+
+  <ComparisonGraphic
+    leftIcon={BookOpen}
+    leftEyebrow="Background"
+    leftTitle="Dúvidas de fundo"
+    leftItems={backgroundItems}
+    rightIcon={Search}
+    rightEyebrow="Foreground"
+    rightTitle="Dúvidas de primeiro plano"
+    rightItems={foregroundItems}
+  />
+
+  <p>A pergunta da Dra. Amélia é claramente de primeiro plano. Vamos afiá-la.</p>
+
+  <h2 id="seja-smart">Seja SMART</h2>
+
+  <p>
+    O SMART não nasceu na medicina. Foi proposto em 1981 pelo consultor de gestão George T. Doran, num artigo da <em>Management Review</em> intitulado "There's a S.M.A.R.T. way to write management's goals and objectives"<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Era originalmente uma ferramenta para ajudar gestores a escreverem objetivos viáveis para suas equipes. Mas a lógica é universal — projetos, perguntas e propósitos têm chance muito maior de chegarem à conclusão se forem específicos, mensuráveis, atingíveis, relevantes e oportunos. Os que não passam no SMART raramente saem do papel.
+  </p>
+
+  <p>
+    A MBE adotou o acrônimo porque o problema da formulação de perguntas clínicas é o mesmo problema da formulação de objetivos. Uma pergunta vaga, imensurável, irrealista ou intempestiva produz, no máximo, frustração — independentemente de quão sofisticada seja a base de dados onde ela é levada.
+  </p>
+
+  <p>
+    <a href={withBase('/conceitos/smart/', base)}>SMART</a> tem cinco critérios:
+  </p>
+
+  <ul>
+    <li><strong>S — Specific (Específica)</strong>: claramente delimitada, sem termos vagos como "melhor" ou "mais seguro"</li>
+    <li><strong>M — Measurable (Mensurável)</strong>: com desfechos objetivos e quantificáveis</li>
+    <li><strong>A — Achievable (Atingível, <em>answerable</em>)</strong>: passível de resposta com base em estudos disponíveis</li>
+    <li><strong>R — Relevant (Relevante)</strong>: útil para a decisão clínica em jogo</li>
+    <li><strong>T — Timely (Temporal)</strong>: pertinente ao momento e com prazo factível para resposta</li>
+  </ul>
+
+  <p>Voltando à inquietação da Dra. Amélia, vejamos onde ela passa e onde falha:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Critério</th>
+        <th>A pergunta atende?</th>
+        <th>O que falta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Specific</td>
+        <td>Não. "Devo prescrever?" não delimita população nem comparador.</td>
+        <td>Definir perfil (idoso, sem doença cardiovascular prévia)</td>
+      </tr>
+      <tr>
+        <td>Measurable</td>
+        <td>Não. Que desfecho? Infarto? Morte? Sangramento?</td>
+        <td>Escolher desfechos clinicamente relevantes</td>
+      </tr>
+      <tr>
+        <td>Achievable</td>
+        <td>Sim, há literatura abundante sobre o tema.</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Relevant</td>
+        <td>Sim, decide a conduta agora.</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Timely</td>
+        <td>Sim, paciente está na frente. Prazo: hoje.</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>A pergunta original falha nos dois primeiros critérios. Reformulando:</p>
+
+  <blockquote class="featured-quote">
+    <p>Em idosos sem doença cardiovascular estabelecida, a aspirina em baixa dose previne eventos cardiovasculares maiores em comparação com o não uso, sem aumentar significativamente o risco de sangramento maior?</p>
+  </blockquote>
+
+  <p>Agora atende aos cinco. Hora de levar essa pergunta para a próxima estrutura.</p>
+
+  <h2 id="decompondo-com-pico">Decompondo a pergunta com PICO</h2>
+
+  <p>
+    Se SMART avalia se a pergunta vale a pena ser perseguida, <a href={withBase('/conceitos/pico/', base)}>PICO</a> decompõe a pergunta para a busca. Diferente do SMART, PICO nasceu dentro da própria MBE: foi formalizado em 1995 por Richardson, Wilson e colaboradores num editorial do <em>ACP Journal Club</em><sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup> que apresentava o conceito de "pergunta clínica bem formulada" como base para buscas eficazes em bases de dados biomédicas. Foi consolidado depois por trabalhos como o de Schardt e colaboradores<sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>, que mostraram empiricamente como o framework melhora a precisão de buscas no PubMed.
+  </p>
+
+  <p>Quatro letras, cada uma um componente lógico:</p>
+
+  <ul>
+    <li><strong>P — Patient / Population / Problem</strong> (Paciente, População ou Problema)</li>
+    <li><strong>I — Intervention</strong> (Intervenção, exposição ou teste diagnóstico)</li>
+    <li><strong>C — Comparator</strong> (Comparador)</li>
+    <li><strong>O — Outcome</strong> (Desfecho)</li>
+  </ul>
+
+  <p>
+    Partindo da inquietação inicial da Dra. Amélia, passando pela pergunta SMART que afinamos juntos, agora podemos aplicar essa nossa dúvida à abordagem PICO:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th scope="col" class="sr-only">Letra</th>
+        <th scope="col">Componente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row"><strong>P</strong></th>
+        <td>Idosos (≥ 65 anos) sem doença cardiovascular estabelecida</td>
+      </tr>
+      <tr>
+        <th scope="row"><strong>I</strong></th>
+        <td>Aspirina em baixa dose (75–100 mg/dia)</td>
+      </tr>
+      <tr>
+        <th scope="row"><strong>C</strong></th>
+        <td>Placebo ou ausência de tratamento</td>
+      </tr>
+      <tr>
+        <th scope="row"><strong>O</strong></th>
+        <td>Eventos cardiovasculares maiores (infarto, AVC, morte cardiovascular) e sangramento maior</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Com esta tabela em mãos, a busca em base de dados deixa de ser um tatear no escuro. Os termos P, I, C e O viram palavras-chave (e descritores MeSH/DeCS) combinados com operadores booleanos. É exatamente o que veremos no próximo A.
+  </p>
+
+  <h2 id="quando-pico-nao-ajuda">Quando PICO não ajuda — e SMART continua valendo</h2>
+
+  <p>
+    Antes de seguir, uma ressalva importante. PICO foi desenhado com um propósito específico: estruturar perguntas sobre <strong>eficácia ou efetividade de intervenções em saúde</strong>. A presença obrigatória do C (comparador) não é acidente — é justamente o que faz o framework funcionar para perguntas do tipo "esta intervenção é melhor que aquela?".
+  </p>
+
+  <p>
+    Mas muitas dúvidas clínicas não são sobre intervenções terapêuticas. São sobre fisiologia, farmacologia, processo diagnóstico, semiologia, história natural da doença. Por exemplo:
+  </p>
+
+  <ul>
+    <li><em>Por que a hiponatremia causa confusão mental?</em></li>
+    <li><em>Como a furosemida age no túbulo distal?</em></li>
+    <li><em>Que sinais semiológicos diferenciam derrame pleural transudativo de exsudativo?</em></li>
+    <li><em>Qual a história natural do hipotireoidismo subclínico não tratado?</em></li>
+  </ul>
+
+  <p>
+    Para perguntas como essas, PICO não ajuda — o C não tem onde caber, e forçar um comparador seria distorcer a pergunta. Mas SMART continua valendo: cada uma delas pode (e deve) ser específica, mensurável (sim, mesmo perguntas conceituais admitem o critério "saberei que entendi quando..."), atingível, relevante e oportuna.
+  </p>
+
+  <p>
+    A regra prática: <strong>toda pergunta clínica passa por SMART. Só perguntas sobre intervenções passam também por PICO.</strong>
+  </p>
+
+  <h2 id="por-que-smart-e-pico-sao-complementares">Por que SMART e PICO são complementares</h2>
+
+  <p>São ferramentas com propósitos distintos.</p>
+
+  <p>
+    <strong>SMART avalia a qualidade da pergunta como projeto de estudo dirigido.</strong> Funciona como filtro de viabilidade: vale a pena perseguir esta pergunta? Tem chance real de ser respondida no tempo disponível? Pense num exemplo cotidiano. No fim de semana você decide: <em>"vou ler todo o capítulo do Harrison sobre lúpus eritematoso sistêmico"</em>. Soa como projeto de estudo, mas não é SMART — é vago (o que exatamente quero aprender?), não tem desfecho mensurável (como saberei se aprendi?), provavelmente não é atingível num fim de semana (são páginas e páginas), e a relevância depende: você atendeu algum paciente com lúpus essa semana, ou é estudo aleatório? Resultado típico: na segunda-feira, você não saberá o que fazer com um paciente que aparecer com a doença. O mesmo se aplica à pergunta clínica — sem os critérios SMART, ela vira tema, e tema não se responde, se discute.
+  </p>
+
+  <p>
+    <strong>PICO decompõe e organiza a estrutura da dúvida em quatro componentes lógicos.</strong> Funciona como uma ponte: como traduzo esta pergunta em termos que uma base de dados entende? Cada componente vira palavra-chave ou descritor, combinados com operadores booleanos durante a busca.
+  </p>
+
+  <p>
+    Usadas juntas — quando a pergunta é sobre uma intervenção —, levam o profissional do <em>"o que será que devo fazer com este paciente?"</em> para uma pergunta estruturada, pesquisável e clinicamente útil.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns no primeiro A</h2>
+
+  <ul>
+    <li><strong>Pergunta vaga demais.</strong> "Qual o melhor tratamento para depressão?" não é pergunta — é tema de palestra. Falta população, comparador e desfecho.</li>
+    <li><strong>Desfecho substituto disfarçado de desfecho clínico.</strong> Perguntar pelo efeito de uma droga sobre LDL é diferente de perguntar pelo efeito sobre mortalidade cardiovascular. O primeiro é marcador, o segundo é o que importa para o paciente.</li>
+    <li><strong>Pergunta inviável de responder.</strong> Algumas inquietações envolvem juízo moral, valores ou preferências individuais e não cabem em PICO. Não é falha de método — é o tipo errado de pergunta para a MBE. Vão para a <a href={withBase('/conceitos/decisao-compartilhada/', base)}>decisão compartilhada</a>.</li>
+    <li><strong>Esquecer o comparador.</strong> Sem C, não há como avaliar efeito relativo. "A vitamina D ajuda?" precisa de "comparada a quê" — placebo, dose menor, nada?</li>
+    <li><strong>Pergunta tarde demais.</strong> Uma pergunta brilhante respondida três dias depois do paciente sair do consultório não muda a decisão. O T do SMART é o que mais falha na prática.</li>
+  </ul>
+
+  <h2 id="proximo-a-acquire">Próximo A: Acquire (Buscar)</h2>
+
+  <p>
+    Com a pergunta PICO pronta, a etapa seguinte é encontrar a melhor evidência disponível para respondê-la. As fontes são muitas, e a hierarquia entre elas importa: nem todo estudo tem o mesmo peso para responder à mesma pergunta.
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/buscar/', base)}>
+    <span>Continue para Acquire (Buscar)</span>
+  </a>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/duvidas-clinicas/', base)}>Dúvidas clínicas comuns</a> — como a inquietação aparece no consultório</li>
+    <li><a href={withBase('/conceitos/smart/', base)}>SMART</a> — os cinco critérios em detalhe, com mais exemplos</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — os quatro componentes em profundidade</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Tomada de decisão compartilhada</a> — para quando a pergunta envolve valores, não só evidência</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Doran GT. There's a S.M.A.R.T. way to write management's goals and objectives. <em>Management Review</em> 1981;70(11):35–6.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Richardson WS, Wilson MC, Nishikawa J, Hayward RS. The well-built clinical question: a key to evidence-based decisions. <em>ACP J Club</em> 1995;123(3):A12–3.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Schardt C, Adams MB, Owens T, Keitz S, Fontelo P. Utilization of the PICO framework to improve searching PubMed for clinical questions. <em>BMC Med Inform Decis Mak</em> 2007;7:16. Disponível em: <a href="https://doi.org/10.1186/1472-6947-7-16" rel="noopener noreferrer" target="_blank">doi.org/10.1186/1472-6947-7-16</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 2: Asking answerable clinical questions.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

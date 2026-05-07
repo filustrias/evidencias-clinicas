@@ -1,14 +1,410 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import NNTVisualization from '@components/conceitos/NNTVisualization.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Medidas de efeito"
-  description="RR, OR, redução absoluta de risco, NNT — magnitude do efeito clinicamente útil."
+<DocLayout
+  title="Medidas de efeito — RR, RAR, NNT e os números que importam"
+  description="Como interpretar o efeito de uma intervenção. Risco absoluto, risco relativo, OR, redução absoluta e relativa, NNT, NNH, intervalo de confiança."
   section="conceitos"
 >
-  <h1 class="text-4xl font-medium mb-3">Medidas de efeito</h1>
-  <p class="text-lg text-text-secondary mb-6">RR, OR, redução absoluta de risco, NNT — magnitude do efeito clinicamente útil.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Medidas de efeito — RR, RAR, NNT e os números que importam</h1>
+
+  <p>
+    Quando um artigo diz que um tratamento "reduz em 50% o risco de infarto", o que isso significa para o seu paciente? Pode significar que de 100 pacientes tratados, 50 terão um infarto evitado. Pode significar que de 1000 pacientes tratados, 1 terá. <strong>Os dois cenários são compatíveis com "redução de 50%".</strong>
+  </p>
+
+  <p>
+    A diferença está nas medidas: a redução de 50% é um <strong>número relativo</strong>. Para saber o que muda na vida do paciente, é preciso o <strong>número absoluto</strong>. Esta página explica todas as medidas de efeito relevantes, como calculá-las e — mais importante — como interpretá-las.
+  </p>
+
+  <h2 id="tabela-2x2">A tabela 2×2 que sustenta tudo</h2>
+
+  <p>
+    Praticamente toda medida de efeito sai de uma <strong>tabela 2×2</strong> que cruza dois eixos: o grupo (intervenção vs. controle) e o desfecho (ocorreu vs. não ocorreu).
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Desfecho ocorreu</th>
+          <th scope="col">Desfecho não ocorreu</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Grupo intervenção</th>
+          <td><em>a</em></td>
+          <td><em>b</em></td>
+          <td><em>a+b</em></td>
+        </tr>
+        <tr>
+          <th scope="row">Grupo controle</th>
+          <td><em>c</em></td>
+          <td><em>d</em></td>
+          <td><em>c+d</em></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A partir dessa tabela, calculam-se todas as outras medidas. Exemplo concreto: um ensaio com 1000 pacientes, 500 em cada grupo. No grupo intervenção, 25 desenvolveram o desfecho; no controle, 50.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Infarto</th>
+          <th scope="col">Sem infarto</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Tratamento</th>
+          <td>25 <em>(a)</em></td>
+          <td>475 <em>(b)</em></td>
+          <td>500</td>
+        </tr>
+        <tr>
+          <th scope="row">Placebo</th>
+          <td>50 <em>(c)</em></td>
+          <td>450 <em>(d)</em></td>
+          <td>500</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Mantenha esses números em mente — são eles que serão usados nos cálculos a seguir.</p>
+
+  <h2 id="risco-absoluto">Risco absoluto (RA)</h2>
+
+  <p>
+    <strong>Definição:</strong> probabilidade ou incidência de um evento ocorrer num determinado grupo. É a <a href={withBase('/conceitos/medidas-de-frequencia/', base)}>incidência</a> do desfecho dentro do grupo.
+  </p>
+
+  <code class="formula">RA<sub>intervenção</sub> = a / (a + b)        RA<sub>controle</sub> = c / (c + d)</code>
+
+  <p>No exemplo: RA(tratamento) = 25/500 = <strong>5%</strong>; RA(placebo) = 50/500 = <strong>10%</strong>.</p>
+
+  <p>
+    O risco absoluto fornece a <strong>magnitude real</strong> do desfecho naquele grupo específico. É o ponto de partida — sem ele, todas as outras medidas (relativas) ficam abstratas.
+  </p>
+
+  <h2 id="risco-relativo">Risco relativo (RR) — também chamado razão de risco</h2>
+
+  <p>
+    <strong>Definição:</strong> razão entre os riscos absolutos dos dois grupos. Diz quantas vezes mais (ou menos) provável é o desfecho no grupo intervenção, <strong>comparativamente</strong> ao controle.
+  </p>
+
+  <code class="formula">RR = RA<sub>intervenção</sub> / RA<sub>controle</sub></code>
+
+  <p>No exemplo: RR = 5% / 10% = <strong>0,5</strong>.</p>
+
+  <p>Como interpretar:</p>
+
+  <ul>
+    <li><strong>RR = 1</strong> → risco igual nos dois grupos. Sem efeito.</li>
+    <li><strong>RR &lt; 1</strong> → risco menor no grupo intervenção. Tratamento parece proteger.</li>
+    <li><strong>RR &gt; 1</strong> → risco maior no grupo intervenção. Tratamento parece causar dano.</li>
+    <li><strong>RR = 0,5</strong> → risco no grupo tratado é metade do controle. "Redução relativa de 50%".</li>
+    <li><strong>RR = 2,0</strong> → risco no grupo tratado é o dobro do controle. "Aumento relativo de 100%".</li>
+  </ul>
+
+  <p>
+    O RR é a medida mais reportada em ensaios clínicos porque tem propriedades estatísticas convenientes. <strong>Mas isolado, ele engana</strong> — porque um RR de 0,5 com risco-base de 1% (RA 0,5%) é clinicamente trivial, enquanto o mesmo RR de 0,5 com risco-base de 40% (RA 20%) é dramático.
+  </p>
+
+  <h2 id="odds-ratio">Odds Ratio (OR) — razão de chances</h2>
+
+  <p>
+    <strong>Definição:</strong> razão entre as <strong>chances</strong> (não os riscos) do desfecho nos dois grupos. Chance é razão entre probabilidade de ocorrer e probabilidade de não ocorrer.
+  </p>
+
+  <code class="formula">OR = (a/b) / (c/d) = (a × d) / (b × c)</code>
+
+  <p>No exemplo: OR = (25 × 450) / (475 × 50) = 11250/23750 = <strong>0,47</strong>.</p>
+
+  <p>
+    Como interpretar: <strong>semelhante ao RR</strong> — OR &gt; 1 sugere associação positiva, OR &lt; 1 sugere associação protetora, OR = 1 indica ausência de associação.
+  </p>
+
+  <p>Quando usar OR vs. RR:</p>
+
+  <ul>
+    <li><strong>OR é obrigatório em estudos de caso-controle</strong> (não há como calcular incidência num desenho retrospectivo)</li>
+    <li><strong>RR é preferível em ECRs e coortes</strong> (é mais intuitivo)</li>
+    <li><strong>Quando o desfecho é raro (&lt; 10%), OR ≈ RR</strong>. Se o desfecho é comum, OR superestima o RR.</li>
+  </ul>
+
+  <p>
+    Por isso ler "OR" sem checar a frequência do desfecho pode levar a interpretação inflada do efeito.
+  </p>
+
+  <h2 id="rar">Redução absoluta de risco (RAR) — também chamada <em>risk difference</em></h2>
+
+  <p>
+    <strong>Definição:</strong> diferença entre os riscos absolutos. Diz quantos pontos percentuais o tratamento subtraiu do risco do controle.
+  </p>
+
+  <code class="formula">RAR = RA<sub>controle</sub> − RA<sub>intervenção</sub></code>
+
+  <p>
+    No exemplo: RAR = 10% − 5% = <strong>5 pontos percentuais</strong> (ou 0,05 em proporção).
+  </p>
+
+  <p>
+    A RAR é fundamental para a clínica porque traz a magnitude <strong>na escala em que pessoas pensam</strong>. Dizer "evitamos 5 desfechos a cada 100 pacientes tratados" é compreensível. Dizer "reduzimos o risco em 50%" é abstrato.
+  </p>
+
+  <p>
+    Quando o tratamento causa dano em vez de proteger, a RAR fica negativa — ou se inverte e vira <strong>aumento absoluto de risco</strong> (AAR), com sinal positivo. Mesmo cálculo, interpretação oposta.
+  </p>
+
+  <h2 id="rrr">Redução relativa de risco (RRR)</h2>
+
+  <p>
+    <strong>Definição:</strong> proporção do risco-base que o tratamento eliminou. É a forma mais comum de reportar resultados em mídia leiga e — infelizmente — muitas vezes em manchetes científicas.
+  </p>
+
+  <code class="formula">RRR = (RA<sub>controle</sub> − RA<sub>intervenção</sub>) / RA<sub>controle</sub> = 1 − RR</code>
+
+  <p>No exemplo: RRR = (10% − 5%) / 10% = <strong>50%</strong>.</p>
+
+  <p>
+    O problema da RRR é que ela é <strong>insensível à magnitude absoluta</strong>. Os cenários abaixo têm a mesma RRR (50%), mas significados clínicos radicalmente diferentes:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Cenário</th>
+          <th scope="col">RA controle</th>
+          <th scope="col">RA intervenção</th>
+          <th scope="col">RRR</th>
+          <th scope="col">RAR</th>
+          <th scope="col">NNT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A — desfecho comum</td>
+          <td>40%</td>
+          <td>20%</td>
+          <td>50%</td>
+          <td>20 pp</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td>B — desfecho raro</td>
+          <td>1%</td>
+          <td>0,5%</td>
+          <td>50%</td>
+          <td>0,5 pp</td>
+          <td>200</td>
+        </tr>
+        <tr>
+          <td>C — desfecho rarissimo</td>
+          <td>0,01%</td>
+          <td>0,005%</td>
+          <td>50%</td>
+          <td>0,005 pp</td>
+          <td>20.000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>A RRR de 50% sozinha não distingue. RAR e NNT, sim.</p>
+
+  <h2 id="nnt">NNT — Número necessário a tratar</h2>
+
+  <p>
+    <strong>Definição:</strong> número de pacientes que precisam ser tratados para evitar <strong>um</strong> desfecho. É o inverso da RAR.
+  </p>
+
+  <code class="formula">NNT = 1 / RAR</code>
+
+  <p>
+    No exemplo: NNT = 1 / 0,05 = <strong>20</strong>. Tratam-se 20 pacientes para evitar 1 infarto.
+  </p>
+
+  <p>
+    NNT é, provavelmente, <strong>a medida mais útil para conversa com o paciente</strong>. Em vez de "redução de 50%" (relativa, abstrata), você diz "para cada 20 pacientes que tomam isso, 1 evita um infarto que aconteceria sem o tratamento".
+  </p>
+
+  <p>Como interpretar NNT:</p>
+
+  <ul>
+    <li><strong>NNT baixo</strong> → tratamento eficiente (poucos pacientes para benefício real)</li>
+    <li><strong>NNT alto</strong> → tratamento de baixa eficiência prática (muitos pacientes para 1 benefício)</li>
+    <li><strong>Não existe NNT "bom" universal</strong> — depende do desfecho. Tratar antibiótico para meningite com NNT 5 é excelente; tratar com NNT 5 para um sintoma leve é pior, porque há 4 pessoas com efeito adverso para 1 com benefício.</li>
+  </ul>
+
+  <h3 id="visualizando-nnt">Visualizando o NNT — quem realmente se beneficia</h3>
+
+  <p>
+    O NNT esconde uma verdade desconfortável: <strong>a maioria das pessoas tratadas não tem benefício real do tratamento</strong>. Algumas porque não teriam o desfecho de qualquer forma; outras porque têm o desfecho mesmo tratadas. Apenas uma fração — exatamente proporcional à RAR — é genuinamente poupada pelo tratamento.
+  </p>
+
+  <p>
+    Considere o caso da TARV (terapia antirretroviral) em prevenção de transmissão vertical do HIV. Sem tratamento, cerca de 25 em cada 100 mulheres com HIV transmitem o vírus durante a amamentação. Com TARV, esse número cai para cerca de 5 em 100. NNT = 1 / (0,25 − 0,05) = <strong>5</strong> — para cada 5 mulheres tratadas, 1 transmissão é evitada.
+  </p>
+
+  <p>Mas o que acontece com as outras 4? A visualização abaixo decompõe.</p>
+
+  <NNTVisualization />
+
+  <p>
+    A leitura é direta. <strong>75% das mulheres do grupo controle (sem tratamento) não transmitiram o vírus de qualquer forma</strong> — para elas, o tratamento seria irrelevante. <strong>5% transmitem mesmo com tratamento</strong> — para elas, o tratamento falhou. Apenas as <strong>20% restantes</strong> (a faixa verde) representam o benefício real do tratamento: pessoas que teriam transmitido sem TARV e foram poupadas com TARV.
+  </p>
+
+  <p>Esta decomposição força perguntas que a leitura superficial do NNT esconde:</p>
+
+  <ul>
+    <li>Quantas pessoas em risco genuíno?</li>
+    <li>Quantas foram tratadas?</li>
+    <li>Quantas tiveram o desfecho mesmo assim?</li>
+    <li>Quantas tomaram tratamento sem necessidade real?</li>
+  </ul>
+
+  <p>
+    Em decisões clínicas, a última pergunta importa especialmente para tratamentos com dano potencial (NNH baixo) ou custo alto. NNT 5 numa intervenção segura e barata como TARV é excelente; NNT 5 numa intervenção com efeitos adversos sérios merece reflexão sobre se aquelas 4 pessoas tratadas em vão são "custo aceitável".
+  </p>
+
+  <h2 id="nnh">NNH — Número necessário para causar dano</h2>
+
+  <p>
+    <strong>Definição:</strong> número de pacientes tratados para que <strong>um</strong> desenvolva um efeito adverso. Mesma fórmula do NNT, aplicada ao dano em vez do benefício.
+  </p>
+
+  <code class="formula">NNH = 1 / AAR de dano</code>
+
+  <p>
+    Onde AAR de dano = (incidência de dano no grupo intervenção) − (incidência de dano no grupo controle).
+  </p>
+
+  <p>
+    NNH é o <strong>outro lado da moeda do NNT</strong>. Toda decisão clínica baseada em evidências pesa NNT contra NNH:
+  </p>
+
+  <ul>
+    <li>NNT = 100 (benefício) e NNH = 200 (dano) → tratar 100 para 1 benefício, mas só 50 para 1 dano. Ruim.</li>
+    <li>NNT = 20 (benefício) e NNH = 200 (dano) → tratar 20 para 1 benefício, 200 para 1 dano. Bom.</li>
+  </ul>
+
+  <p>
+    A meta-análise sobre aspirina em prevenção primária no idoso, citada na página de <a href={withBase('/cinco-as/aplicar/', base)}>Apply</a>, tem NNT ≈ 265 (eventos cardiovasculares) e NNH ≈ 210 (sangramento maior) — perfil desfavorável, daí a recomendação atual de <strong>não iniciar</strong> aspirina nesse cenário.
+  </p>
+
+  <h2 id="ic95">Intervalo de confiança 95% (IC95%)</h2>
+
+  <p>
+    Toda medida de efeito calculada a partir de uma amostra é estimativa — o valor verdadeiro na população pode ser diferente. O <strong>IC95%</strong> é uma faixa que tem 95% de probabilidade de conter o valor verdadeiro<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>.
+  </p>
+
+  <p>Como ler:</p>
+
+  <ul>
+    <li><strong>RR = 0,80, IC95% 0,70 a 0,90</strong> → estimativa pontual sugere redução de 20%; o efeito verdadeiro está provavelmente entre redução de 30% e 10%. Resultado consistente, com efeito robusto.</li>
+    <li><strong>RR = 0,80, IC95% 0,40 a 1,60</strong> → estimativa pontual sugere redução de 20%, <strong>mas o efeito verdadeiro pode ir de redução de 60% até aumento de 60%</strong>. Resultado de baixa confiança, pode ser dano e ainda assim compatível com os dados.</li>
+    <li><strong>IC95% que cruza o 1</strong> (em RR ou OR) → não há diferença estatisticamente significativa entre os grupos a 95% de confiança.</li>
+  </ul>
+
+  <p>
+    <strong>Regra prática crucial:</strong> sempre olhe o IC95%, não só a estimativa pontual. ICs largos podem indicar amostra pequena ou efeito heterogêneo, e mudam a interpretação.
+  </p>
+
+  <h2 id="caso-amelia">Aplicando ao caso da Dra. Amélia</h2>
+
+  <p>
+    De volta à pergunta sobre aspirina em prevenção primária no idoso (caso que percorre as páginas dos 5As):
+  </p>
+
+  <p>
+    A meta-análise de 2019 publicada no JAMA, sintetizando os ensaios ASPREE, ARRIVE e ASCEND, encontrou:
+  </p>
+
+  <p><strong>Eventos cardiovasculares maiores (benefício):</strong></p>
+
+  <ul>
+    <li>RA placebo ≈ 4% em 5 anos</li>
+    <li>RA aspirina ≈ 3,6% em 5 anos</li>
+    <li><strong>RAR ≈ 0,4 pontos percentuais</strong></li>
+    <li>RRR ≈ 10%</li>
+    <li><strong>NNT ≈ 250</strong> (com IC95% amplo, indo de 150 a infinito em algumas análises)</li>
+  </ul>
+
+  <p><strong>Sangramento maior (dano):</strong></p>
+
+  <ul>
+    <li>RA placebo ≈ 1%</li>
+    <li>RA aspirina ≈ 1,5%</li>
+    <li>AAR ≈ 0,5 pontos percentuais</li>
+    <li><strong>NNH ≈ 200</strong></li>
+  </ul>
+
+  <p>Olhando RR: "redução de 10% em eventos cardiovasculares" — soa modesto mas favorável.<br />
+  Olhando RAR e NNT: "0,4 pontos percentuais; preciso tratar 250 para evitar 1" — instantâneamente fica menos atraente.<br />
+  Olhando NNH ao lado: "para cada 200 tratados, 1 sangramento sério" — <strong>o dano absoluto é maior que o benefício absoluto</strong>.</p>
+
+  <p>
+    A mesma evidência, três interpretações. Sem RAR/NNT/NNH, fica tentador prescrever. Com elas, fica óbvio que o balanço é desfavorável.
+  </p>
+
+  <h2 id="onde-calcular">Onde calcular</h2>
+
+  <p>
+    A <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>calculadora de medidas de efeito</a> deste site faz todos os cálculos automaticamente a partir de uma tabela 2×2. Insira os números do estudo e obtenha RA, RR, OR, RAR, RRR, NNT, NNH e IC95%.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns</h2>
+
+  <ul>
+    <li><strong>Reportar só RR (ou só RRR)</strong> sem RAR ou NNT. É erro tão comum em mídia que vale considerar deliberado em alguns casos. Sem o absoluto, a magnitude verdadeira fica oculta.</li>
+    <li><strong>Confundir OR com RR</strong> quando o desfecho é comum. OR superestima o efeito quando RA &gt; 10%.</li>
+    <li><strong>Ignorar o IC95%</strong> e tratar a estimativa pontual como verdade.</li>
+    <li><strong>Calcular NNT sem checar significância estatística.</strong> Se o IC95% do RR cruza 1, o NNT pode ser inválido.</li>
+    <li><strong>Aplicar NNT de uma população em outra muito diferente.</strong> O NNT depende do risco-base — em populações com risco-base muito menor, o mesmo RR produz NNT muito maior.</li>
+    <li><strong>Tratar desfecho substituto como se fosse desfecho clínico.</strong> NNT calculado em LDL não diz NNT em mortalidade.</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/medidas-de-frequencia/', base)}>Medidas de frequência</a> — prevalência e incidência, base das medidas de efeito</li>
+    <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — para calcular tudo a partir de uma tabela 2×2</li>
+    <li><a href={withBase('/conceitos/vieses/', base)}>Vieses</a> — quando os números não dizem o que parecem dizer</li>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde estas medidas determinam importância clínica</li>
+    <li><a href={withBase('/cinco-as/aplicar/', base)}>Apply (Aplicar)</a> — onde elas são traduzidas para o paciente</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Altman DG, Bland JM. Confidence intervals for the number needed to treat. <em>BMJ</em> 1998;317(7168):1309–12.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li>
+        Greenhalgh T. <em>How to Read a Paper: The Basics of Evidence-Based Medicine and Healthcare</em>. 6ª ed. Hoboken: Wiley-Blackwell; 2019. Capítulo 5: Statistics for the non-statistician.
+      </li>
+      <li>
+        Sackett DL, Deeks JJ, Altman DG. Down with odds ratios! <em>Evid Based Med</em> 1996;1:164–6. Disponível em: <a href="https://ebm.bmj.com/content/1/6/164" rel="noopener noreferrer" target="_blank">ebm.bmj.com/content/1/6/164</a>.
+      </li>
+      <li>
+        McMaster Health Forum. <em>Communicating Effects of Interventions</em>. Disponível em: <a href="https://www.mcmasterforum.org" rel="noopener noreferrer" target="_blank">mcmasterforum.org</a>.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

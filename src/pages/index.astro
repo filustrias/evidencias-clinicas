@@ -5,51 +5,78 @@ import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
 
-const sections = [
+const entryPoints = [
   {
     title: 'Os 5As',
-    description: 'Da pergunta clínica à avaliação do impacto: o ciclo de Ask, Acquire, Appraise, Apply, Assess aplicado à prática.',
+    description:
+      'O ciclo da prática baseada em evidências: Ask, Acquire, Appraise, Apply, Assess. A espinha dorsal do site.',
     href: '/cinco-as/',
-    badge: 'Fundamento',
-  },
-  {
-    title: 'Conceitos',
-    description: 'Pirâmide de evidências, desenhos de estudo, medidas de efeito, vieses, decisão compartilhada e mais.',
-    href: '/conceitos/',
-    badge: 'Referência',
-  },
-  {
-    title: 'Ferramentas',
-    description: 'CASP, GRADE, RoB, AMSTAR — instrumentos para leitura crítica de artigos e síntese de evidências.',
-    href: '/ferramentas/',
-    badge: 'Instrumentos',
-  },
-  {
-    title: 'Calculadoras',
-    description: 'Testes diagnósticos (sensibilidade, VPP, LR) e medidas de efeito (RR, OR, NNT) — interativas no navegador.',
-    href: '/calculadoras/',
-    badge: 'Interativo',
+    badge: 'Comece aqui',
   },
   {
     title: 'Em prática',
-    description: 'Aplicações por tipo de questão clínica: diagnóstica, terapêutica, preventiva e prognóstica.',
+    description:
+      'Quatro casos clínicos completos: rastreamento de câncer de colo, sedação para intubação, profilaxia de malária na gestação, prognóstico em IC + DRC.',
     href: '/em-pratica/',
     badge: 'Casos',
   },
+  {
+    title: 'Calculadoras',
+    description:
+      'Para os momentos em que precisar de números na hora — interpretar resultado de teste diagnóstico, calcular NNT a partir de uma tabela 2×2.',
+    href: '/calculadoras/',
+    badge: 'Interativo',
+  },
+];
+
+const sections = [
+  {
+    label: '5As',
+    href: '/cinco-as/',
+    summary: 'Os cinco passos do ciclo: perguntar, buscar, avaliar, aplicar, monitorar.',
+  },
+  {
+    label: 'Conceitos',
+    href: '/conceitos/',
+    summary:
+      '16 verbetes sobre os fundamentos: PICO, SMART, vieses, medidas de efeito, raciocínio clínico, decisão compartilhada.',
+  },
+  {
+    label: 'Ferramentas',
+    href: '/ferramentas/',
+    summary: 'CASP, GRADE, RoB 2.0, AMSTAR-2 — para avaliar criticamente diferentes tipos de estudo.',
+  },
+  {
+    label: 'Calculadoras',
+    href: '/calculadoras/',
+    summary: 'Testes diagnósticos e medidas de efeito, com cenários reais.',
+  },
+  {
+    label: 'Em prática',
+    href: '/em-pratica/',
+    summary: 'Quatro casos clínicos completos: diagnóstica, terapêutica, preventiva, prognóstica.',
+  },
 ];
 ---
-<BaseLayout title="Início" description="Recursos de Medicina Baseada em Evidências para decisões clínicas — voltado a médicos de Moçambique e Angola.">
+<BaseLayout
+  title="Início"
+  description="evidências clínicas — um curso aberto de Medicina Baseada em Evidências para profissionais de saúde de PALOP. Conceitos, ferramentas, calculadoras e casos reais."
+>
   <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pt-12 lg:pt-20 pb-12">
     <div class="max-w-3xl">
       <p class="text-sm text-accent font-medium mb-4 tracking-wide uppercase">
         Medicina Baseada em Evidências
       </p>
       <h1 class="text-4xl lg:text-6xl font-medium tracking-tight text-text-primary leading-[1.05]">
-        Decisões clínicas com base em evidência, no contexto certo.
+        Plataforma aberta para ensino e aprendizado da MBE
       </h1>
       <p class="mt-6 text-lg lg:text-xl text-text-secondary leading-relaxed">
-        Recursos práticos para médicos em Moçambique, Angola e além — do raciocínio à pergunta bem formulada,
-        da leitura crítica à decisão compartilhada com o paciente.
+        Um curso aberto de Medicina Baseada em Evidências para a prática clínica — voltado a
+        profissionais e estudantes de saúde de Moçambique, Angola e demais países da CPLP.
+      </p>
+      <p class="mt-4 text-base lg:text-lg text-text-secondary leading-relaxed">
+        Não é um livro-texto. Não é um curso fechado. É <strong>material de referência prática</strong> —
+        feito para ser consultado quando a dúvida aparece no consultório, na enfermaria, no centro de saúde.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a
@@ -59,19 +86,23 @@ const sections = [
           Começar pelos 5As
         </a>
         <a
-          href={withBase('/conceitos/duvidas-clinicas/', base)}
+          href={withBase('/em-pratica/', base)}
           class="inline-flex h-11 items-center px-5 rounded-md border border-border-default text-text-primary font-medium hover:bg-elevated transition-colors"
         >
-          Dúvidas clínicas →
+          Ver casos clínicos →
         </a>
       </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-20">
-    <h2 class="text-2xl font-medium mb-6">Explorar o conteúdo</h2>
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-12">
+    <h2 class="text-2xl font-medium mb-2">Por onde começar</h2>
+    <p class="text-text-secondary mb-6 max-w-2xl">
+      Se está conhecendo o site agora, três entradas naturais — escolha a que faz mais sentido para a
+      sua dúvida de hoje.
+    </p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {sections.map((s) => (
+      {entryPoints.map((s) => (
         <ConceptCard
           href={withBase(s.href, base)}
           title={s.title}
@@ -79,6 +110,78 @@ const sections = [
           badge={s.badge}
         />
       ))}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-12">
+    <h2 class="text-2xl font-medium mb-6">O que você encontra aqui</h2>
+    <div class="overflow-x-auto rounded-lg border border-border-subtle">
+      <table class="w-full text-sm">
+        <thead class="bg-elevated">
+          <tr class="text-left">
+            <th class="px-4 py-3 font-medium text-text-primary w-40">Seção</th>
+            <th class="px-4 py-3 font-medium text-text-primary">O que tem</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sections.map((s, i) => (
+            <tr class={i < sections.length - 1 ? 'border-t border-border-subtle' : 'border-t border-border-subtle'}>
+              <td class="px-4 py-3 align-top">
+                <a
+                  href={withBase(s.href, base)}
+                  class="text-accent font-medium hover:underline"
+                >
+                  {s.label}
+                </a>
+              </td>
+              <td class="px-4 py-3 text-text-secondary">{s.summary}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="rounded-lg border border-border-subtle bg-surface p-6">
+        <h3 class="text-lg font-medium mb-2">Para quem é este site</h3>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          Estudantes de medicina, médicos em formação, médicos em atividade, residentes,
+          enfermeiros, professores e pesquisadores. Não é necessário background em estatística
+          avançada — os conceitos são apresentados de forma prática, com exemplos clínicos.
+        </p>
+        <p class="text-sm text-text-secondary leading-relaxed mt-3">
+          Em português brasileiro, mas pensado com sensibilidade ao português de Angola e
+          Moçambique. Casos clínicos frequentemente situados em contexto de PALOP.
+        </p>
+      </div>
+      <div class="rounded-lg border border-border-subtle bg-surface p-6">
+        <h3 class="text-lg font-medium mb-2">Acesso aberto, gratuito, sem login</h3>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          O conteúdo é integralmente gratuito e licenciado em <strong>CC-BY-SA 4.0</strong> — pode
+          ser usado, adaptado e redistribuído, mantendo atribuição de autoria. Não há cadastro,
+          propaganda nem rastreamento de uso individual.
+        </p>
+        <a
+          href={withBase('/sobre/', base)}
+          class="inline-flex items-center mt-3 text-sm text-accent font-medium hover:underline"
+        >
+          Sobre o projeto e a autoria →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-5 lg:px-12 pb-20">
+    <div class="max-w-2xl">
+      <h2 class="text-2xl font-medium mb-3">Aproveite</h2>
+      <p class="text-text-secondary leading-relaxed">
+        Use este site como referência ao seu lado, na prática diária. Volte sempre que precisar
+        relembrar um conceito, calcular uma medida, conferir uma ferramenta. E, se encontrar erro
+        ou tiver sugestão,
+        <a href={withBase('/sobre/', base)} class="text-accent hover:underline">entre em contato</a>.
+      </p>
     </div>
   </section>
 </BaseLayout>

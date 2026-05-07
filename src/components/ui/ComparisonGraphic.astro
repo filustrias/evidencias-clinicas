@@ -1,0 +1,185 @@
+---
+/**
+ * Comparação binária — duas colunas contrastantes.
+ *
+ * Reutilizável para qualquer dicotomia (background vs foreground, sensibilidade
+ * vs especificidade, RR vs RAR, etc.). Cada coluna recebe um ícone (Lucide ou
+ * qualquer componente Astro), título e lista de bullets. Os bullets aceitam
+ * HTML inline (negrito, ênfase, links) via `set:html`, então pode passar
+ * marcação Markdown convertida.
+ *
+ * Visualmente: coluna esquerda em tom neutro (a categoria de referência ou
+ * "menos relevante para a decisão"), coluna direita em tom de acento (a
+ * categoria principal). Inverter manualmente se a semântica pedir.
+ */
+
+type IconComponent = (_props: Record<string, unknown>) => unknown;
+
+export interface Props {
+  leftIcon: IconComponent;
+  leftTitle: string;
+  leftItems: string[];
+  rightIcon: IconComponent;
+  rightTitle: string;
+  rightItems: string[];
+  /** Texto opcional acima de cada coluna (ex.: "background", "foreground"). */
+  leftEyebrow?: string;
+  rightEyebrow?: string;
+}
+
+const {
+  leftIcon: LeftIcon,
+  leftTitle,
+  leftItems,
+  rightIcon: RightIcon,
+  rightTitle,
+  rightItems,
+  leftEyebrow,
+  rightEyebrow,
+} = Astro.props;
+---
+<div class="not-prose comparison">
+  <div class="comparison-col comparison-col--neutral">
+    <div class="comparison-icon">
+      <LeftIcon size={26} strokeWidth={1.75} aria-hidden="true" />
+    </div>
+    {leftEyebrow && <p class="comparison-eyebrow">{leftEyebrow}</p>}
+    <h3 class="comparison-title">{leftTitle}</h3>
+    <ul class="comparison-list">
+      {leftItems.map((it) => <li set:html={it} />)}
+    </ul>
+  </div>
+
+  <div class="comparison-col comparison-col--accent">
+    <div class="comparison-icon">
+      <RightIcon size={26} strokeWidth={1.75} aria-hidden="true" />
+    </div>
+    {rightEyebrow && <p class="comparison-eyebrow">{rightEyebrow}</p>}
+    <h3 class="comparison-title">{rightTitle}</h3>
+    <ul class="comparison-list">
+      {rightItems.map((it) => <li set:html={it} />)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 2rem 0 2.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .comparison {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  .comparison-col {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-bg-surface);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .comparison-col--accent {
+    border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-border-subtle));
+    background: var(--color-accent-soft-bg);
+  }
+
+  .comparison-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.875rem;
+  }
+
+  .comparison-col--neutral .comparison-icon {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-secondary);
+  }
+
+  .comparison-col--accent .comparison-icon {
+    background: var(--color-bg-canvas);
+    color: var(--color-accent);
+  }
+
+  .comparison-eyebrow {
+    margin: 0 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .comparison-col--accent .comparison-eyebrow {
+    color: var(--color-accent-soft-text);
+  }
+
+  .comparison-title {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.35;
+  }
+
+  .comparison-col--accent .comparison-title {
+    color: var(--color-accent-soft-text);
+  }
+
+  .comparison-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+
+  .comparison-list li {
+    position: relative;
+    padding: 0.375rem 0 0.375rem 1.125rem;
+    line-height: 1.55;
+    color: var(--color-text-primary);
+  }
+
+  .comparison-col--accent .comparison-list li {
+    color: var(--color-accent-soft-text);
+  }
+
+  .comparison-list li::before {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    top: 0.95rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+  }
+
+  .comparison-col--accent .comparison-list li::before {
+    background: var(--color-accent);
+  }
+
+  .comparison-list :global(strong) {
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .comparison-col--accent .comparison-list :global(strong) {
+    color: var(--color-accent-soft-text);
+  }
+
+  .comparison-list :global(em) {
+    font-style: italic;
+  }
+</style>

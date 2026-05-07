@@ -1,14 +1,210 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import CycleDiagram from '@components/ui/CycleDiagram.astro';
+import TriadDiagram from '@components/ui/TriadDiagram.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Aplicar (Apply)"
-  description="Integrar evidência, julgamento clínico e valores do paciente para tomar uma decisão."
+<DocLayout
+  title="Apply (Aplicar) — o quarto A"
+  description="Como integrar a evidência ao paciente real, com seus valores, sua experiência de adoecimento e o contexto onde vive."
   section="cinco-as"
 >
-  <h1 class="text-4xl font-medium mb-3">Aplicar (Apply)</h1>
-  <p class="text-lg text-text-secondary mb-6">Integrar evidência, julgamento clínico e valores do paciente para tomar uma decisão.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
-  </div>
-</PageLayout>
+  <h1>Apply (Aplicar) — o quarto A</h1>
+
+  <p>
+    A evidência científica, por si só, não toma decisões clínicas. Ela oferece conhecimento qualificado, orientações fundamentadas e probabilidades estimadas, mas a decisão final acontece sempre no espaço relacional entre profissional e paciente. Por isso, o quarto A — Apply, aplicar — é considerado uma das etapas mais complexas e delicadas da MBE.
+  </p>
+
+  <p>
+    É também onde a MBE se encontra com a Medicina Centrada na Pessoa. Aqui o número vira conversa. A diretriz vira escolha. A evidência vira cuidado.
+  </p>
+
+  <CycleDiagram activeStep="apply" />
+
+  <h2 id="voltando-ao-consultorio">Voltando ao consultório</h2>
+
+  <p>
+    Dra. Amélia, depois de buscar e avaliar criticamente a evidência, chegou a uma conclusão técnica: para o Sr. António — idoso de 70 anos sem doença cardiovascular prévia — o <strong>balanço benefício-risco da aspirina em prevenção primária é desfavorável</strong>. A meta-análise mostra que o risco de sangramento maior é, em termos absolutos, ligeiramente superior ao benefício de prevenção de eventos cardiovasculares.
+  </p>
+
+  <p>
+    Mas a decisão não é dela sozinha. O Sr. António veio querendo começar a aspirina porque um vizinho disse que "todo idoso devia tomar". Ele tem expectativas, tem medos, tem uma percepção de risco própria. A esposa morreu de AVC há três anos — isso muda a forma como ele lê a palavra "evento cardiovascular". Ele mora longe do centro de saúde, numa região rural — o acesso a um pronto-atendimento em caso de sangramento sério é limitado.
+  </p>
+
+  <p>
+    A ciência diz uma coisa. A vida do Sr. António diz outras coisas que a ciência sozinha não sabe. <strong>Aplicar é trazer as duas para a mesma mesa</strong>.
+  </p>
+
+  <h2 id="triade-sackett">A tríade clássica de Sackett</h2>
+
+  <p>
+    Quando David Sackett definiu a MBE em 1996<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>, ele não falou em evidência sozinha. Falou na <strong>integração de três elementos</strong>:
+  </p>
+
+  <TriadDiagram />
+
+  <ol>
+    <li><strong>Melhor evidência científica disponível</strong> — o que aprendemos no Acquire e Appraise</li>
+    <li><strong>Experiência clínica do profissional</strong> — anos de prática, intuição construída, reconhecimento de padrões, exame físico, escuta</li>
+    <li><strong>Valores e preferências do paciente</strong> — sua biografia, prioridades, medos, esperanças, contexto de vida</li>
+  </ol>
+
+  <p>
+    A intersecção das três é a decisão clínica baseada em evidências de verdade. Faltando qualquer uma, o que sobra é incompleto: evidência sem experiência clínica vira protocolo cego; evidência sem valores do paciente vira imposição; experiência clínica sem evidência vira anedota; valores do paciente sem evidência viram escolha desinformada.
+  </p>
+
+  <p>
+    A esses três, a literatura contemporânea acrescentou frequentemente um <strong>quarto elemento</strong>: a <strong>disponibilidade de recursos no contexto local</strong><sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup>. Mesmo a melhor evidência não se aplica se a intervenção não está disponível, se o medicamento não cabe no orçamento da família, se a equipe ou infraestrutura não permitem executá-la com segurança. Em contextos com recursos variáveis — como muitos serviços em Moçambique e Angola — esse quarto elemento é decisivo.
+  </p>
+
+  <h2 id="tres-passos">Os três passos práticos do Apply</h2>
+
+  <p>Aplicar a evidência é processo, não ato. Três passos estruturam-no:</p>
+
+  <h3 id="passo-1">Passo 1 — Traduzir a evidência em linguagem útil</h3>
+
+  <p>
+    Os dados que vieram do Appraise (RR 0,90, RAR 0,38%, NNT 265, IC95% 0,84–0,97) precisam virar <strong>linguagem que o paciente consegue usar para decidir</strong>. Algumas regras:
+  </p>
+
+  <ul>
+    <li><strong>Prefira números absolutos a relativos.</strong> "Reduz 10% o risco" soa muito mais que "previne 1 evento em cada 265 tratados durante 5 anos" — mas a segunda formulação é a que faz justiça ao tamanho real do efeito.</li>
+    <li><strong>Use frequências naturais em vez de probabilidades.</strong> "De cada 100 pessoas como você, 38 desenvolvem isso em 10 anos" é compreensível; "risco de 38%" é abstrato.</li>
+    <li><strong>Apresente benefício e dano lado a lado.</strong> Se você só fala dos benefícios, não há decisão a tomar — só assentimento.</li>
+    <li><strong>Use referências visuais quando possível.</strong> Pictogramas, ícones de pessoas coloridas, gráficos de barra. Funcionam melhor que números soltos.</li>
+  </ul>
+
+  <p>Para a aspirina do Sr. António, a tradução pode soar:</p>
+
+  <blockquote class="featured-quote">
+    <p>"Senhor António, eu li os estudos sobre isso. De cada 1000 pessoas como o senhor que tomam aspirina por 5 anos, cerca de 4 evitam um infarto ou AVC. Em compensação, cerca de 5 desenvolvem um sangramento sério, do estômago ou no cérebro, que precisa de hospital. Para o senhor, que mora longe e tem dificuldade de chegar rápido a um pronto-socorro, esse risco de sangramento é especialmente importante."</p>
+  </blockquote>
+
+  <p>
+    A calculadora de <a href={withBase('/calculadoras/medidas-de-efeito/', base)}>medidas de efeito</a> ajuda a transformar dados de estudos nesse tipo de linguagem.
+  </p>
+
+  <h3 id="passo-2">Passo 2 — Escutar o paciente</h3>
+
+  <p>
+    Tradução não basta. Antes de propor algo, é preciso <strong>entender quem é a pessoa na sua frente</strong>. Ideias, preocupações e expectativas (no jargão da comunicação clínica, <em>ICE — ideas, concerns, expectations</em>) são o ponto de partida.
+  </p>
+
+  <ul>
+    <li>O que o paciente já sabe (ou pensa saber) sobre o problema?</li>
+    <li>O que mais o preocupa?</li>
+    <li>O que ele esperava da consulta?</li>
+    <li>O que é importante para ele em termos de qualidade de vida?</li>
+    <li>Quais são seus medos sobre o tratamento?</li>
+  </ul>
+
+  <p>
+    Sem essa escuta, a "decisão compartilhada" fica reduzida a um cardápio do qual o paciente escolhe — sem que o profissional saiba o que aquela escolha significa.
+  </p>
+
+  <h3 id="passo-3">Passo 3 — Decidir junto</h3>
+
+  <p>
+    O terceiro passo é o ato de decisão. Aqui, ferramentas estruturadas como o modelo SHARE da AHRQ ajudam a transformar a conversa em processo deliberado:
+  </p>
+
+  <p>
+    → Aprofunde-se em <a href={withBase('/conceitos/decisao-compartilhada/', base)}>tomada de decisão compartilhada</a>
+  </p>
+
+  <p>
+    A decisão pode ser muitas coisas: iniciar uma intervenção, não iniciar, esperar e reavaliar, escalar para especialista, mudar a abordagem. <strong>Não decidir agora também é uma decisão.</strong> O importante é que ela seja consciente, alinhada com a evidência e com os valores do paciente, e que ambos saibam o porquê.
+  </p>
+
+  <h2 id="contexto-local">O contexto local — o quarto elemento</h2>
+
+  <p>
+    Em PALOP e outros contextos com recursos variáveis, o passo de aplicação tem dimensões que estudos europeus ou norte-americanos raramente discutem. Algumas perguntas práticas:
+  </p>
+
+  <ul>
+    <li><strong>A intervenção está disponível neste serviço?</strong> Medicamento padrão da diretriz pode não estar no formulário do hospital provincial.</li>
+    <li><strong>O paciente consegue arcar com o custo?</strong> Tratamento crônico exige adesão de longo prazo. Sem condições financeiras estáveis, a evidência sobre eficácia se torna irrelevante.</li>
+    <li><strong>Há infraestrutura para monitorização?</strong> Anticoagulantes precisam de controle laboratorial; iniciar sem isso é arriscado.</li>
+    <li><strong>A logística é viável?</strong> Paciente que mora a quatro horas do centro de saúde pode não conseguir vir mensalmente para reavaliação.</li>
+    <li><strong>Há alternativas equivalentes adaptadas ao contexto?</strong> Diretrizes da OMS para malária, TB e HIV frequentemente têm versões adaptadas para diferentes níveis de recurso.</li>
+  </ul>
+
+  <p>Essas perguntas não enfraquecem a MBE. Pelo contrário — fazem dela uma prática real, em vez de exercício acadêmico.</p>
+
+  <h2 id="comunicacao-habilidade">Comunicação como habilidade que se treina</h2>
+
+  <p>
+    Há um ponto que vale enfatizar: <strong>comunicar evidência ao paciente é uma habilidade clínica como qualquer outra</strong>. Não vem com o diploma, não vem com a experiência sozinha, não vem da boa intenção. <strong>Treina-se</strong>.
+  </p>
+
+  <p>
+    Os mesmos princípios da <a href={withBase('/conceitos/raciocinio-clinico/', base)}>comunicação clínica</a> — escuta ativa, perguntas abertas, exploração de ideias, preocupações e expectativas, devolução em linguagem acessível — aplicam-se ao quarto A com força redobrada. Modelos como o <strong>Calgary-Cambridge</strong><sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup> estruturam a entrevista clínica como um todo, e o <strong>SHARE Approach</strong> da AHRQ<sup><a id="fnref-4" href="#fn-4" class="footnote-ref">4</a></sup> estrutura especificamente o momento da decisão compartilhada. Ambos exigem prática deliberada para serem incorporados ao repertório.
+  </p>
+
+  <p>
+    Profissionais que dominam comunicação clínica conseguem traduzir a mesma evidência de formas radicalmente diferentes — preservando rigor e ganhando significado. Profissionais que não a dominam tendem a transmitir números corretos de forma que o paciente não consegue usar para decidir. Os dois lados saem da consulta achando que houve "decisão compartilhada"; na prática, houve monólogo qualificado.
+  </p>
+
+  <p>
+    A boa notícia: comunicação clínica responde a treinamento estruturado, com simulação, role-play, feedback estruturado, e prática deliberada. As escolas médicas e de pós-graduação estão progressivamente incluindo isso no currículo. Para profissionais já formados, cursos curtos e oficinas focadas funcionam.
+  </p>
+
+  <h2 id="erros-comuns">Erros comuns no quarto A</h2>
+
+  <ul>
+    <li><strong>Aplicar evidência sem traduzi-la.</strong> Citar RR e p-valor para o paciente é o oposto de comunicação. Tradução em linguagem natural, com frequências absolutas, é parte do trabalho clínico.</li>
+    <li><strong>Confundir decisão compartilhada com pesquisa de opinião.</strong> Perguntar "o senhor quer tomar?" sem antes informar e explorar é abdicação, não compartilhamento.</li>
+    <li><strong>Ignorar o contexto local.</strong> Recomendar uma droga indisponível no formulário do serviço é receitar frustração. Adaptar à realidade não é diluição da MBE — é parte dela.</li>
+    <li><strong>Subestimar a influência de valores.</strong> "O paciente é racional, vai escolher o melhor cientificamente" — não é assim que pessoas decidem. Medo, esperança, experiências passadas pesam mais que números.</li>
+    <li><strong>Não reservar tempo para a conversa.</strong> Decisão compartilhada exige tempo. Em consultas de 7 minutos, ela vira teatro. Reorganizar o serviço para garantir tempo adequado em decisões importantes é parte do APPLY institucional, não só individual.</li>
+    <li><strong>Tratar comunicação como dom, não como habilidade.</strong> Profissionais que recusam treinamento em comunicação clínica frequentemente são os que mais precisam dele.</li>
+  </ul>
+
+  <h2 id="proximo-a">Próximo A: Assess (Monitorar)</h2>
+
+  <p>
+    Tomada a decisão e iniciada (ou não) a conduta, o ciclo dos 5As fecha-se com uma reflexão dupla: o paciente melhorou? E o processo que levou à decisão funcionou? O quinto A transforma cada caso em fonte de aprendizado para o próximo.
+  </p>
+
+  <a class="next-step" href={withBase('/cinco-as/monitorar/', base)}>
+    <span>Continue para Assess (Monitorar)</span>
+  </a>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Tomada de decisão compartilhada</a> — modelo SHARE em detalhe e princípios práticos</li>
+    <li><a href={withBase('/conceitos/raciocinio-clinico/', base)}>Raciocínio clínico</a> — onde a comunicação clínica é apresentada</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — para entender a tradução de RR/RAR/NNT</li>
+    <li><a href={withBase('/calculadoras/medidas-de-efeito/', base)}>Calculadora de medidas de efeito</a> — para calcular valores de comunicação a partir de estudos</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — onde recomendações com força "condicional" tipicamente exigem decisão compartilhada</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Sackett DL, Rosenberg WMC, Gray JAM, Haynes RB, Richardson WS. Evidence based medicine: what it is and what it isn't. <em>BMJ</em> 1996;312(7023):71–2. Disponível em: <a href="https://www.bmj.com/content/312/7023/71" rel="noopener noreferrer" target="_blank">bmj.com/content/312/7023/71</a>.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Haynes RB, Devereaux PJ, Guyatt GH. Clinical expertise in the era of evidence-based medicine and patient choice. <em>Evid Based Med</em> 2002;7(2):36–8.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Kurtz S, Silverman J, Benson J, Draper J. Marrying content and process in clinical method teaching: enhancing the Calgary-Cambridge guides. <em>Acad Med</em> 2003;78(8):802–9.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+      <li id="fn-4">
+        Agency for Healthcare Research and Quality. <em>The SHARE Approach: Essential Steps of Shared Decisionmaking</em>. AHRQ Publication No. 21-0015-1-EF. Disponível em: <a href="https://www.ahrq.gov/health-literacy/professional-training/shared-decision/index.html" rel="noopener noreferrer" target="_blank">ahrq.gov/shared-decision</a>.
+        <a href="#fnref-4" class="footnote-back" aria-label="Voltar ao texto da nota 4">↩</a>
+      </li>
+      <li>
+        Straus SE, Glasziou P, Richardson WS, Haynes RB. <em>Evidence-Based Medicine: How to Practice and Teach EBM</em>. 5ª ed. Edinburgh: Elsevier; 2018. Capítulo 7: Applying the evidence.
+      </li>
+    </ol>
+  </section>
+</DocLayout>

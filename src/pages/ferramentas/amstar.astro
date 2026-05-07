@@ -1,14 +1,240 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="AMSTAR"
-  description="A MeaSurement Tool to Assess systematic Reviews: avaliação metodológica de revisões sistemáticas."
+<DocLayout
+  title="AMSTAR-2 — qualidade metodológica de revisões sistemáticas"
+  description="16 itens, 7 críticos, para distinguir uma revisão sistemática confiável de uma narrativa disfarçada."
   section="ferramentas"
 >
-  <h1 class="text-4xl font-medium mb-3">AMSTAR</h1>
-  <p class="text-lg text-text-secondary mb-6">A MeaSurement Tool to Assess systematic Reviews: avaliação metodológica de revisões sistemáticas.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>AMSTAR-2 — qualidade metodológica de revisões sistemáticas</h1>
+
+  <p>
+    AMSTAR-2 — <em>A MeaSurement Tool to Assess systematic Reviews, version 2</em> — é a ferramenta padrão para <strong>avaliar a qualidade metodológica de revisões sistemáticas</strong>. Em outras palavras: quando você lê uma revisão sistemática, AMSTAR-2 ajuda a decidir se aquela revisão merece a confiança que pede.
+  </p>
+
+  <p>
+    A questão é mais relevante do que parece. Toda revisão sistemática diz seguir método sistemático, mas nem todas seguem, na prática, com o rigor que afirmam. Algumas são, no fundo, <strong>revisões narrativas com aparência sistemática</strong> — selecionando estudos por critérios não explícitos, sem avaliação de risco de viés, sem síntese estruturada. AMSTAR-2 expõe isso.
+  </p>
+
+  <h2 id="quando-usar">Quando usar</h2>
+
+  <p>Use AMSTAR-2 quando estiver:</p>
+
+  <ul>
+    <li>Lendo uma revisão sistemática e quiser saber o quão confiável ela é</li>
+    <li>Comparando múltiplas revisões sistemáticas sobre o mesmo tema (frequente, e elas chegam a conclusões diferentes)</li>
+    <li>Citando uma revisão sistemática para justificar uma conduta clínica</li>
+    <li>Produzindo uma revisão sistemática e querendo verificar se atende aos critérios</li>
+  </ul>
+
+  <p>
+    Não confunda AMSTAR-2 com RoB: <strong>AMSTAR avalia a revisão</strong>, <strong>RoB avalia os ensaios incluídos na revisão</strong>. Idealmente, ambos são usados juntos em revisões Cochrane.
+  </p>
+
+  <h2 id="de-onde-veio">De onde veio</h2>
+
+  <p>
+    A primeira versão (AMSTAR original) foi publicada em 2007<sup><a id="fnref-1" href="#fn-1" class="footnote-ref" aria-describedby="footnote-label">1</a></sup>. Dez anos depois, com a evolução da metodologia de revisões sistemáticas, a versão 2 foi publicada em 2017<sup><a id="fnref-2" href="#fn-2" class="footnote-ref">2</a></sup> — agora cobrindo também revisões de estudos não randomizados, com itens reformulados e classificação de itens críticos.
+  </p>
+
+  <p>A reformulação de 2017 trouxe duas mudanças importantes:</p>
+
+  <ol>
+    <li><strong>Aplicabilidade a estudos não randomizados</strong> (a primeira só cobria ECRs)</li>
+    <li><strong>Classificação de itens em "críticos" e "não críticos"</strong> — mudando a lógica de pontuação</li>
+  </ol>
+
+  <h2 id="dezesseis-itens">Como funciona — 16 itens, 7 críticos</h2>
+
+  <p>
+    AMSTAR-2 tem 16 itens, cada um com perguntas-sinalizadoras. Cada item recebe <strong>sim</strong>, <strong>sim parcial</strong> ou <strong>não</strong>. Os 16 itens cobrem:
+  </p>
+
+  <ol>
+    <li>As perguntas de pesquisa e os critérios de inclusão incluem PICO?</li>
+    <li>O protocolo da revisão foi pré-registrado?</li>
+    <li>A escolha dos desenhos de estudo foi justificada?</li>
+    <li>Foi usada estratégia de busca abrangente?</li>
+    <li>A seleção dos estudos foi feita em duplicata?</li>
+    <li>A extração dos dados foi feita em duplicata?</li>
+    <li>Os autores apresentam lista de estudos excluídos com justificativa?</li>
+    <li>Os autores descrevem em detalhe os estudos incluídos?</li>
+    <li>Foi usada técnica satisfatória para avaliar risco de viés dos estudos individuais?</li>
+    <li>Os autores reportam fontes de financiamento dos estudos individuais?</li>
+    <li>Foram usados métodos estatísticos apropriados na meta-análise?</li>
+    <li>O risco de viés foi considerado na interpretação dos resultados?</li>
+    <li>O risco de viés foi considerado ao discutir os achados?</li>
+    <li>Há discussão satisfatória das heterogeneidades observadas?</li>
+    <li>Houve avaliação adequada do viés de publicação?</li>
+    <li>Há declaração sobre conflitos de interesse?</li>
+  </ol>
+
+  <h3 id="sete-criticos">Os sete itens críticos</h3>
+
+  <p>
+    Os itens marcados pelos autores como <strong>críticos</strong> são aqueles cuja falha compromete substancialmente a confiança na revisão:
+  </p>
+
+  <ul>
+    <li>Item 2 — protocolo pré-registrado</li>
+    <li>Item 4 — estratégia de busca abrangente</li>
+    <li>Item 7 — lista de estudos excluídos</li>
+    <li>Item 9 — risco de viés dos estudos individuais</li>
+    <li>Item 11 — métodos estatísticos da meta-análise</li>
+    <li>Item 13 — risco de viés considerado nos achados</li>
+    <li>Item 15 — viés de publicação avaliado</li>
+  </ul>
+
+  <h3 id="classificacao-final">Classificação final</h3>
+
+  <p>A regra é estrita:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Confiança</th>
+          <th scope="col">Critério</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alta</strong></td>
+          <td>Nenhuma falha em itens críticos; até 1 falha em itens não críticos</td>
+        </tr>
+        <tr>
+          <td><strong>Moderada</strong></td>
+          <td>Nenhuma falha em itens críticos; mais de 1 falha em itens não críticos</td>
+        </tr>
+        <tr>
+          <td><strong>Baixa</strong></td>
+          <td>1 falha em item crítico (com ou sem falhas em não críticos)</td>
+        </tr>
+        <tr>
+          <td><strong>Criticamente baixa</strong></td>
+          <td>Mais de 1 falha em itens críticos</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    Atenção à classificação <strong>criticamente baixa</strong>: AMSTAR-2 sugere que <strong>revisões nessa categoria não devem ser usadas como base para decisão clínica</strong>. É um aviso forte e importante.
+  </p>
+
+  <h2 id="exemplo-aplicado">Exemplo aplicado</h2>
+
+  <p>
+    Tomemos a <strong>revisão Cochrane de Hofmeyr e colaboradores sobre suplementação de cálcio na prevenção de pré-eclâmpsia</strong><sup><a id="fnref-3" href="#fn-3" class="footnote-ref">3</a></sup>, publicada em 2018 e atualizada em 2024.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Item crítico</th>
+          <th scope="col">Avaliação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Protocolo pré-registrado</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — registrado em PROSPERO</td>
+        </tr>
+        <tr>
+          <td>Busca abrangente</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — múltiplas bases (CENTRAL, PubMed, LILACS, CINAHL), referências cruzadas, registros de ensaios</td>
+        </tr>
+        <tr>
+          <td>Lista de estudos excluídos</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — apresentada com justificativas</td>
+        </tr>
+        <tr>
+          <td>Risco de viés dos estudos</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — RoB 2.0 aplicado a cada ECR incluído</td>
+        </tr>
+        <tr>
+          <td>Métodos estatísticos</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — meta-análise com modelo de efeitos randômicos, análise de heterogeneidade, análises de subgrupo</td>
+        </tr>
+        <tr>
+          <td>Risco de viés nos achados</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — discussão explícita de como o risco de viés afeta a confiança nos achados</td>
+        </tr>
+        <tr>
+          <td>Viés de publicação</td>
+          <td><span class="rob-dot rob-dot--good" aria-hidden="true"></span> Sim — funnel plot e discussão</td>
+        </tr>
+        <tr>
+          <td><strong>Classificação</strong></td>
+          <td><strong>Confiança alta</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    Quando uma revisão Cochrane atravessa AMSTAR-2 com confiança alta, e os achados mostram efeito robusto (no caso do cálcio: redução de mais de 50% do risco de pré-eclâmpsia em mulheres com baixa ingestão dietética), a recomendação que dela deriva pode ter qualidade GRADE alta e força forte.
+  </p>
+
+  <p>
+    Esse é o tipo de revisão que sustenta a recomendação da OMS para suplementação rotineira de cálcio em gestantes em populações com baixa ingestão dietética.
+  </p>
+
+  <h2 id="limitacoes">Limitações conhecidas</h2>
+
+  <ol>
+    <li>
+      <strong>Não avalia importância clínica.</strong> AMSTAR-2 mede qualidade metodológica da revisão, não se os achados são clinicamente importantes. Uma revisão com confiança alta pode reportar achados estatisticamente significativos mas clinicamente irrelevantes.
+    </li>
+    <li>
+      <strong>Exige treino.</strong> Aplicação rigorosa de AMSTAR-2 a uma revisão leva 30 a 60 minutos por revisor; idealmente em duplicata. É trabalho que exige treino metodológico.
+    </li>
+    <li>
+      <strong>Item 7 (lista de estudos excluídos) é frequentemente falho.</strong> Mesmo revisões boas às vezes não publicam a lista completa de excluídos. Isso pode rebaixar a classificação injustamente. AMSTAR-2 reconhece o problema mas mantém o item como crítico.
+    </li>
+    <li>
+      <strong>Não substitui o julgamento sobre aplicabilidade.</strong> Uma revisão de qualidade alta sobre tratamento da hipertensão em adultos brancos europeus pode não ser diretamente aplicável a populações africanas. AMSTAR é validade interna; aplicabilidade fica fora do escopo.
+    </li>
+  </ol>
+
+  <h2 id="onde-encontrar">Onde encontrar</h2>
+
+  <ul>
+    <li><strong>Site oficial:</strong> <a href="https://amstar.ca" rel="noopener noreferrer" target="_blank">amstar.ca</a></li>
+    <li><strong>Instrumento (PDF):</strong> disponível para download gratuito no site</li>
+    <li><strong>Versões em outros idiomas:</strong> site mantém traduções voluntárias (nem todas atualizadas)</li>
+    <li><strong>Tutoriais:</strong> vídeos curtos disponíveis no YouTube canal AMSTAR</li>
+  </ul>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/avaliar/', base)}>Appraise (Avaliar)</a> — onde AMSTAR-2 se encaixa no ciclo dos 5As</li>
+    <li><a href={withBase('/ferramentas/', base)}>Outras ferramentas de avaliação crítica</a> — visão geral comparativa</li>
+    <li><a href={withBase('/ferramentas/rob/', base)}>RoB 2.0</a> — para os ensaios incluídos na revisão (uso complementar)</li>
+    <li><a href={withBase('/ferramentas/grade/', base)}>GRADE</a> — para qualidade de evidência e força de recomendação</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — onde revisões sistemáticas se posicionam</li>
+  </ul>
+
+  <section class="footnotes" aria-labelledby="footnote-label">
+    <h2 id="footnote-label">Referências</h2>
+    <ol>
+      <li id="fn-1">
+        Shea BJ, Grimshaw JM, Wells GA, et al. Development of AMSTAR: a measurement tool to assess the methodological quality of systematic reviews. <em>BMC Med Res Methodol</em> 2007;7:10.
+        <a href="#fnref-1" class="footnote-back" aria-label="Voltar ao texto da nota 1">↩</a>
+      </li>
+      <li id="fn-2">
+        Shea BJ, Reeves BC, Wells G, et al. AMSTAR 2: a critical appraisal tool for systematic reviews that include randomised or non-randomised studies of healthcare interventions, or both. <em>BMJ</em> 2017;358:j4008. Disponível em: <a href="https://www.bmj.com/content/358/bmj.j4008" rel="noopener noreferrer" target="_blank">bmj.com/content/358/bmj.j4008</a>.
+        <a href="#fnref-2" class="footnote-back" aria-label="Voltar ao texto da nota 2">↩</a>
+      </li>
+      <li id="fn-3">
+        Hofmeyr GJ, Lawrie TA, Atallah ÁN, Torloni MR. Calcium supplementation during pregnancy for preventing hypertensive disorders and related problems. <em>Cochrane Database of Systematic Reviews</em> 2018;10:CD001059. Atualização disponível em: <a href="https://www.cochranelibrary.com" rel="noopener noreferrer" target="_blank">cochranelibrary.com</a>.
+        <a href="#fnref-3" class="footnote-back" aria-label="Voltar ao texto da nota 3">↩</a>
+      </li>
+    </ol>
+  </section>
+</DocLayout>

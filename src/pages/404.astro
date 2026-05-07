@@ -3,18 +3,69 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { withBase } from '@/data/navigation';
 const base = import.meta.env.BASE_URL;
 ---
-<BaseLayout title="Página não encontrada" description="A página solicitada não existe ou foi movida.">
-  <section class="mx-auto max-w-xl px-5 py-24 text-center">
+<BaseLayout
+  title="Página não encontrada"
+  description="A página que você procura não foi encontrada. Use a busca ou volte ao índice."
+>
+  <section class="mx-auto max-w-2xl px-5 lg:px-12 py-20 lg:py-24">
     <p class="text-sm font-medium text-accent uppercase tracking-wide mb-4">404</p>
-    <h1 class="text-4xl font-medium mb-4">Página não encontrada</h1>
-    <p class="text-text-secondary mb-8">
-      O caminho solicitado não existe ou foi movido. Use a busca no topo ou volte para o início.
+    <h1 class="text-4xl lg:text-5xl font-medium tracking-tight mb-6">
+      Não encontramos esta página
+    </h1>
+    <p class="text-lg text-text-secondary mb-10 leading-relaxed">
+      A URL que você acessou não existe — ou existia e foi removida ou renomeada.
     </p>
-    <a
-      href={withBase('/', base)}
-      class="inline-flex h-11 items-center px-5 rounded-md bg-accent text-white font-medium hover:bg-accent-hover transition-colors"
-    >
-      Voltar ao início
-    </a>
+
+    <h2 class="text-xl font-medium mb-3">O que pode ter acontecido</h2>
+    <ul class="text-text-secondary space-y-2 mb-10 list-disc pl-5">
+      <li>Link antigo, possivelmente de versão anterior do site</li>
+      <li>Endereço digitado com pequeno erro de digitação</li>
+      <li>Página arquivada por estar desatualizada</li>
+    </ul>
+
+    <h2 class="text-xl font-medium mb-3">Para encontrar o que procura</h2>
+    <ul class="text-text-secondary space-y-2 mb-10 list-disc pl-5">
+      <li>
+        Use a <strong>busca</strong> no topo do site (atalho <kbd class="px-1.5 py-0.5 text-xs bg-elevated border border-border-default rounded">/</kbd> no teclado)
+      </li>
+      <li>
+        Volte ao
+        <a href={withBase('/', base)} class="text-accent hover:underline">Início</a>
+      </li>
+      <li>
+        Veja o índice de
+        <a href={withBase('/conceitos/', base)} class="text-accent hover:underline">Conceitos</a>,
+        <a href={withBase('/ferramentas/', base)} class="text-accent hover:underline">Ferramentas</a>,
+        ou
+        <a href={withBase('/calculadoras/', base)} class="text-accent hover:underline">Calculadoras</a>
+      </li>
+      <li>
+        Comece pelos
+        <a href={withBase('/cinco-as/', base)} class="text-accent hover:underline">5As</a>
+        — espinha dorsal do site
+      </li>
+    </ul>
+
+    <h2 class="text-xl font-medium mb-3">Se acha que é erro do site</h2>
+    <p class="text-text-secondary leading-relaxed mb-8">
+      Se chegou aqui por link interno do site, possivelmente é um link quebrado e gostaríamos de
+      saber. Por favor,
+      <a href={withBase('/sobre/', base)} class="text-accent hover:underline">entre em contato</a>.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        href={withBase('/', base)}
+        class="inline-flex h-11 items-center px-5 rounded-md bg-accent text-white font-medium hover:bg-accent-hover transition-colors"
+      >
+        Voltar ao início
+      </a>
+      <a
+        href={withBase('/cinco-as/', base)}
+        class="inline-flex h-11 items-center px-5 rounded-md border border-border-default text-text-primary font-medium hover:bg-elevated transition-colors"
+      >
+        Ir para os 5As →
+      </a>
+    </div>
   </section>
 </BaseLayout>

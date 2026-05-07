@@ -1,14 +1,291 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
+
+const base = import.meta.env.BASE_URL;
 ---
-<PageLayout
-  title="Diagnóstica"
-  description="Aplicar evidência ao raciocínio diagnóstico: probabilidade pré-teste, escolha do teste e interpretação."
+<DocLayout
+  title="Em prática — pergunta diagnóstica"
+  description="Acurácia de testes diagnósticos no contexto real. Caso de rastreamento de câncer de colo do útero em país de baixa renda, comparando três métodos."
   section="em-pratica"
 >
-  <h1 class="text-4xl font-medium mb-3">Diagnóstica</h1>
-  <p class="text-lg text-text-secondary mb-6">Aplicar evidência ao raciocínio diagnóstico: probabilidade pré-teste, escolha do teste e interpretação.</p>
-  <div class="rounded-lg border border-border-subtle bg-surface p-5 text-sm text-text-secondary">
-    Em construção. Conteúdo em breve.
+  <h1>Em prática — pergunta diagnóstica</h1>
+
+  <p>
+    Perguntas diagnósticas são sobre <strong>acurácia de testes</strong> — sensibilidade, especificidade, valores preditivos. Não basta saber que um teste "funciona"; é preciso saber <strong>quão bem funciona</strong>, em qual população, com qual prevalência, e o que fazer com cada tipo de resultado (positivo, negativo, indeterminado).
+  </p>
+
+  <p>
+    Esta página percorre o caso de rastreamento de câncer de colo do útero numa unidade de saúde fictícia em Nampula — comparando ácido acético, citopatológico e teste de HPV-DNA.
+  </p>
+
+  <h2 id="cenario">O cenário</h2>
+
+  <p>
+    Dr. Carlos coordena uma unidade de saúde em Nampula, Moçambique. Atende cerca de 200 mulheres em idade reprodutiva por mês. Câncer de colo do útero é, na sua região, <strong>a principal causa de morte por câncer entre mulheres</strong> — situação semelhante a outras regiões da África subsaariana.
+  </p>
+
+  <p>
+    A unidade já implementa rastreamento por <strong>VIA</strong> (visual inspection with acetic acid — inspeção visual após aplicação de ácido acético a 5%). É o método recomendado pela OMS para contextos de baixa renda: barato, treinável, resultado imediato, permite "screen-and-treat" na mesma consulta.
+  </p>
+
+  <p>
+    Recentemente, Dr. Carlos teve acesso a um equipamento de <strong>teste de HPV-DNA</strong> (GeneXpert) e está pensando em substituir VIA por HPV-DNA. Mas primeiro precisa decidir: substitui? acrescenta? mantém VIA e usa HPV só para casos suspeitos? Decisão importante, com implicações para custo, fluxo, treinamento e desfechos das pacientes.
+  </p>
+
+  <h2 id="ask">Ask — formular a pergunta</h2>
+
+  <p>
+    A inquietação é clara: <em>"Qual o melhor método de rastreamento de câncer de colo na minha realidade?"</em>. Mas esse formato vago não responde nada. Aplicando <a href={withBase('/conceitos/pico/', base)}>PICO</a>:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr>
+          <th scope="row"><strong>P</strong></th>
+          <td>Mulheres de 30 a 49 anos sem sintomas, em país de baixa renda da África subsaariana</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>I</strong></th>
+          <td>Teste de HPV-DNA como rastreamento primário</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>C</strong></th>
+          <td>VIA (ácido acético) e citopatológico (Papanicolau)</td>
+        </tr>
+        <tr>
+          <th scope="row"><strong>O</strong></th>
+          <td>Sensibilidade, especificidade, VPP, VPN para detecção de lesões cervicais de alto grau (CIN2+)</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</PageLayout>
+
+  <p>
+    A versão estruturada vira pergunta investigável. Aplicando <a href={withBase('/conceitos/smart/', base)}>SMART</a>: específica (sim — população definida, intervenção e comparações claras), mensurável (sim — desfechos quantificáveis), respondível (sim — há literatura volumosa), relevante (sim — muda decisão de programa), oportuna (sim — equipamento já disponível).
+  </p>
+
+  <h2 id="acquire">Acquire — buscar evidência</h2>
+
+  <p>
+    Para questão diagnóstica, a busca tem peculiaridades. <strong>Não basta encontrar um estudo isolado</strong> — precisamos de revisão sistemática que sintetize múltiplos estudos diagnósticos, idealmente em populações similares à do caso.
+  </p>
+
+  <p>Fontes consultadas, em ordem:</p>
+
+  <ol>
+    <li><strong>Cochrane Library</strong> — <em>"cervical cancer screening HPV"</em> → revisão de Koliopoulos et al. (2017): "Cytology versus HPV testing for cervical cancer screening in the general population"</li>
+    <li><strong>PubMed Clinical Queries</strong> — filtro "diagnosis", <em>"HPV DNA VIA cervical"</em> → estudos comparativos de Kenya, Tanzânia, Camarões, Ruanda</li>
+    <li><strong>Site da OMS</strong> — diretriz de 2021 sobre rastreamento de câncer de colo</li>
+  </ol>
+
+  <p>→ Ver <a href={withBase('/conceitos/como-buscar/', base)}>Como buscar</a> para a estrutura geral.</p>
+
+  <h2 id="appraise">Appraise — avaliar a evidência</h2>
+
+  <p>
+    Para estudos diagnósticos, a ferramenta padrão é <strong>QUADAS-2</strong> (Quality Assessment of Diagnostic Accuracy Studies). Avalia risco de viés em quatro domínios: seleção de pacientes, teste em avaliação, padrão-ouro, fluxo e tempo.
+  </p>
+
+  <p>
+    Resumo do que a literatura mostra para a comparação dos três métodos, em contextos similares ao de Moçambique:
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Método</th>
+          <th scope="col">Sensibilidade (CIN2+)</th>
+          <th scope="col">Especificidade</th>
+          <th scope="col">Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>VIA (ácido acético)</strong></td>
+          <td>31% – 41%</td>
+          <td>94% – 96%</td>
+          <td>Sensibilidade muito variável conforme treino do operador (literatura cita amplitude de 41% a 92% em estudos individuais)</td>
+        </tr>
+        <tr>
+          <td><strong>Citopatológico (Pap)</strong></td>
+          <td>70% – 90%</td>
+          <td>80% – 95%</td>
+          <td>Depende de qualidade laboratorial e intervalo de leitura</td>
+        </tr>
+        <tr>
+          <td><strong>HPV-DNA (PCR)</strong></td>
+          <td>88% – 90%</td>
+          <td>86% – 88%</td>
+          <td>Performance consistente entre contextos; pode detectar 2× mais lesões CIN2+ que VIA</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Pontos de atenção da avaliação crítica:</strong></p>
+
+  <ul>
+    <li>Heterogeneidade nos estudos — definição de CIN2+, idade das mulheres, status HIV, e marca do teste de HPV variam consideravelmente</li>
+    <li>VIA tem performance dependente do operador. Em mãos experientes (programas com treino estruturado e supervisão) chega a 70%+ de sensibilidade; em mãos inexperientes, pode cair a 30%</li>
+    <li>Estudos em mulheres vivendo com HIV mostram pioria de performance da VIA e melhor performance relativa do HPV-DNA</li>
+    <li>Citopatológico depende de laboratório com volume e qualidade — em contextos sem isso, sensibilidade real cai</li>
+  </ul>
+
+  <p>
+    → <a href={withBase('/conceitos/vieses/', base)}>Vieses</a> específicos de estudos diagnósticos: viés de espectro (espectro de doença não representa o que se vê na clínica), viés de verificação (quem decide quem faz padrão-ouro?), viés de incorporação (teste em avaliação faz parte do padrão-ouro?).
+  </p>
+
+  <h2 id="aplicacao">Aplicando ao paciente real — o que faz sentido em Nampula?</h2>
+
+  <p>Os números acima são médios. Para Dr. Carlos decidir, ele precisa pensar em:</p>
+
+  <p><strong>Características da população atendida:</strong></p>
+
+  <ul>
+    <li>Prevalência de HPV oncogênico nessa faixa etária em Moçambique: ~25-30% (alto)</li>
+    <li>Coinfecção HIV: significativa (HIV altera história natural e performance dos testes)</li>
+    <li>Mulheres frequentemente fazem <strong>uma única visita</strong> (deslocamentos longos; perda de seguimento alta para casos que precisam retorno)</li>
+  </ul>
+
+  <p><strong>Capacidade local:</strong></p>
+
+  <ul>
+    <li>VIA: já implementada, equipe treinada, custo marginal baixo</li>
+    <li>Citopatológico: laboratório regional com tempo de retorno de 4-6 semanas; perda de seguimento alta</li>
+    <li>HPV-DNA (GeneXpert): equipamento disponível, resultado em 1 hora, mas cartuchos custam significativamente mais</li>
+  </ul>
+
+  <p>
+    <strong>Aplicando <a href={withBase('/calculadoras/testes-diagnosticos/', base)}>calculadora de testes diagnósticos</a></strong> com prevalência estimada de CIN2+ em ~5% nessa população:
+  </p>
+
+  <ul>
+    <li><strong>VIA</strong> com sensibilidade 40%, especificidade 95%: VPP ~30%, VPN ~97% → quase <strong>3 em cada 10 positivas terão de fato CIN2+</strong>; e quase <strong>6 em cada 10 com CIN2+ serão classificadas como negativas</strong> (escapam)</li>
+    <li><strong>HPV-DNA</strong> com sensibilidade 90%, especificidade 87%: VPP ~27%, VPN ~99% → mesma proporção de positivos confirmados, <strong>mas apenas 1 em 10 com CIN2+ escapa</strong></li>
+  </ul>
+
+  <p>A diferença está principalmente na <strong>sensibilidade</strong> — HPV-DNA detecta o que VIA perde.</p>
+
+  <h2 id="decisao">Decisão tomada — estratégia híbrida</h2>
+
+  <p>Após análise da evidência e do contexto, Dr. Carlos opta por:</p>
+
+  <ol>
+    <li><strong>HPV-DNA como rastreamento primário</strong> em mulheres de 30-49 anos vivendo com HIV (pelo seu maior risco e pela menor performance da VIA neste subgrupo)</li>
+    <li><strong>VIA continua</strong> como rastreamento primário em HIV-negativas, com encaminhamento direto para tratamento (cryotherapy ou ablação térmica) em caso positivo</li>
+    <li><strong>HPV-DNA como triagem</strong> para casos VIA-positivos cuja lesão não é elegível para tratamento imediato — confirma necessidade de colposcopia</li>
+    <li>Citopatológico <strong>descontinuado</strong> localmente — perda de seguimento alta torna-o inadequado neste fluxo</li>
+  </ol>
+
+  <p>
+    A decisão é <strong>defensável com evidência</strong> e <strong>adaptada ao contexto</strong> — não é simplesmente "fazer o melhor método disponível na literatura". Esta é a essência do quarto A: <a href={withBase('/cinco-as/aplicar/', base)}>Apply</a>.
+  </p>
+
+  <h2 id="decisao-compartilhada">Decisão compartilhada com a paciente</h2>
+
+  <p>Cada mulher rastreada deve receber informação clara antes do teste:</p>
+
+  <ul>
+    <li>O que o resultado positivo e negativo significam realmente (incluindo VPP e VPN naquele contexto)</li>
+    <li>O que será feito em cada caso</li>
+    <li>Que mesmo teste negativo não exclui completamente CIN2+</li>
+    <li>Quanto tempo até o próximo rastreamento</li>
+  </ul>
+
+  <p>
+    Não é "informar para informar" — é <strong>respeitar a autonomia</strong> e gerar adesão real ao programa. → <a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a>.
+  </p>
+
+  <h2 id="assess">Assess — três meses depois</h2>
+
+  <p>Dr. Carlos audita os resultados do trimestre:</p>
+
+  <ul>
+    <li>850 mulheres rastreadas (520 HIV-negativas com VIA; 330 com HPV-DNA por HIV+)</li>
+    <li>42 positivas (5%); 38 receberam tratamento na mesma visita ou em retorno</li>
+    <li>4 perdas de seguimento — todas no fluxo VIA→colposcopia (a paciente positiva teve que voltar; algumas não voltaram)</li>
+  </ul>
+
+  <p>Aprendizados:</p>
+
+  <ul>
+    <li>A perda de seguimento ainda é o ponto fraco — mesmo com fluxo otimizado</li>
+    <li>HPV-DNA em HIV+ funcionou bem; equipe não teve dificuldades técnicas</li>
+    <li>O tempo de consulta com VIA aumentou (treinamento adicional fez diferença na sensibilidade real)</li>
+  </ul>
+
+  <p>
+    Próxima iteração: estudar viabilidade de <strong>HPV-DNA com auto-coleta</strong> para mulheres que faltam ao retorno — estratégia que vem sendo estudada em vários países africanos para aumentar cobertura.
+  </p>
+
+  <p>
+    → <a href={withBase('/cinco-as/monitorar/', base)}>Assess</a>: a auditoria estruturada que transforma cada caso em aprendizado para o próximo.
+  </p>
+
+  <h2 id="o-que-integra">O que esta página integra</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Conceito</th>
+          <th scope="col">Como aparece</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href={withBase('/conceitos/pico/', base)}>PICO</a></td>
+          <td>Estrutura da pergunta diagnóstica</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Sensibilidade, especificidade, VPP, VPN</a></td>
+          <td>Métricas dos três testes</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/calculadoras/testes-diagnosticos/', base)}>Calculadora de testes diagnósticos</a></td>
+          <td>Aplicação ao contexto local</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/vieses/', base)}>Vieses</a></td>
+          <td>Espectro, verificação, incorporação</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a></td>
+          <td>Comunicação com a paciente</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/cinco-as/aplicar/', base)}>Apply</a></td>
+          <td>Adaptação ao contexto</td>
+        </tr>
+        <tr>
+          <td><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a></td>
+          <td>Critérios para programa de rastreio</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="conceitos-relacionados">Conceitos relacionados</h2>
+
+  <ul>
+    <li><a href={withBase('/conceitos/testes-diagnosticos/', base)}>Testes diagnósticos</a> — propriedades dos testes em detalhe</li>
+    <li><a href={withBase('/calculadoras/testes-diagnosticos/', base)}>Calculadora de testes diagnósticos</a> — para estimativas em diferentes contextos</li>
+    <li><a href={withBase('/conceitos/rastreamento/', base)}>Rastreamento</a> — quando rastrear é apropriado</li>
+    <li><a href={withBase('/conceitos/diretrizes-e-forcas-tarefa/', base)}>Diretrizes e forças-tarefa</a> — recomendação OMS para rastreamento de colo</li>
+    <li><a href={withBase('/em-pratica/preventiva/', base)}>Em prática — preventiva</a> — perspectiva populacional do rastreamento</li>
+  </ul>
+
+  <section class="footnotes" aria-label="Referências">
+    <h2 id="referencias">Referências</h2>
+    <ol>
+      <li>Koliopoulos G, Nyaga VN, Santesso N, et al. Cytology versus HPV testing for cervical cancer screening in the general population. <em>Cochrane Database Syst Rev</em> 2017;(8):CD008587.</li>
+      <li>World Health Organization. <em>WHO Guideline for Screening and Treatment of Cervical Pre-cancer Lesions for Cervical Cancer Prevention</em>. 2ª ed. Geneva: WHO; 2021. Disponível em: <a href="https://www.who.int/publications/i/item/9789240030824" rel="noopener noreferrer" target="_blank">who.int/publications/i/item/9789240030824</a>.</li>
+      <li>Adedimeji A, Ajeh R, Pierz A, et al. Performance of careHPV, hybrid capture 2 and visual inspection with acetic acid for detection of high-grade cervical lesion in Tanzania. <em>PLoS One</em> 2019;14(6):e0218180.</li>
+      <li>Bigoni J, Gundar M, Tebeu PM, et al. Cervical cancer screening in sub-Saharan Africa: a randomized trial of VIA versus cytology for triage of HPV-positive women. <em>Int J Cancer</em> 2015;137(1):127–34.</li>
+      <li>Kuhn L, Saidu R, Boa R, et al. Diagnostic accuracy of cervical cancer screening and screening-triage strategies among women living with HIV-1 in Burkina Faso and South Africa. <em>PLoS Med</em> 2021;18(3):e1003528.</li>
+    </ol>
+  </section>
+</DocLayout>

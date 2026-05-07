@@ -1,23 +1,143 @@
 ---
-import PageLayout from '@layouts/PageLayout.astro';
+import DocLayout from '@layouts/DocLayout.astro';
 import ConceptCard from '@components/ui/ConceptCard.astro';
-import { getSectionNav, withBase } from '@/data/navigation';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const items = getSectionNav('em-pratica')?.filter((it) => it.href !== '/em-pratica/') ?? [];
+
+const areas = [
+  {
+    href: '/em-pratica/diagnostica/',
+    title: 'Diagnóstica',
+    description: 'Acurácia de testes — sensibilidade, especificidade, valores preditivos, razões de verossimilhança. Caso: rastreamento de câncer de colo em Nampula (VIA × Pap × HPV-DNA).',
+  },
+  {
+    href: '/em-pratica/terapeutica/',
+    title: 'Terapêutica',
+    description: 'Eficácia e efetividade de intervenções — RR, NNT, IC95%, e a diferença entre interpretação bayesiana e frequencialista. Caso: cetamina vs. etomidato em paciente crítico.',
+  },
+  {
+    href: '/em-pratica/preventiva/',
+    title: 'Preventiva',
+    description: 'Redução de risco em pessoas assintomáticas — vacinas, rastreamentos, profilaxias. Caso: IPTp para malária em gestantes em Chókwè (Moçambique).',
+  },
+  {
+    href: '/em-pratica/prognostica/',
+    title: 'Prognóstica',
+    description: 'Trajetória da doença e fatores que a modificam — coortes, hazard ratio, comunicação de incerteza. Caso: IC + DRC com dapagliflozina (DAPA-HF + DAPA-CKD).',
+  },
+];
 ---
-<PageLayout
-  title="Em prática"
-  description="Aplicação da MBE por tipo de questão clínica: diagnóstica, terapêutica, preventiva e prognóstica."
+<DocLayout
+  title="Em prática — MBE aplicada às quatro grandes perguntas clínicas"
+  description="Como os conceitos da MBE se integram em quatro áreas centrais da prática: diagnóstica, terapêutica, preventiva, prognóstica."
   section="em-pratica"
 >
-  <h1 class="text-4xl font-medium mb-3">Em prática</h1>
-  <p class="text-lg text-text-secondary mb-8">
-    Como aplicar evidência conforme o tipo de pergunta clínica — passos, armadilhas e exemplos.
+  <h1>Em prática — MBE aplicada às quatro grandes perguntas clínicas</h1>
+
+  <p>
+    A MBE não é uma teoria abstrata — é instrumento aplicado a perguntas reais da prática. Cada área clínica gera tipos de perguntas característicos, com desenhos de estudo apropriados, vieses específicos a vigiar, e ferramentas de avaliação adequadas.
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {items.map((it) => (
-      <ConceptCard href={withBase(it.href, base)} title={it.label} />
+
+  <p>
+    Esta seção integra os conceitos do site em <strong>quatro áreas práticas</strong>, cada uma com um caso clínico desenvolvido, do reconhecimento da dúvida até a avaliação do resultado.
+  </p>
+
+  <h2 id="quatro-areas">As quatro áreas</h2>
+
+  <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+    {areas.map((a) => (
+      <ConceptCard
+        href={withBase(a.href, base)}
+        title={a.title}
+        description={a.description}
+      />
     ))}
   </div>
-</PageLayout>
+
+  <h2 id="comum-todas">O que é comum a todas as áreas</h2>
+
+  <p>Cada caso percorre os mesmos cinco passos:</p>
+
+  <ol>
+    <li><strong>Ask</strong> — formular pergunta clínica estruturada (PICO + SMART)</li>
+    <li><strong>Acquire</strong> — buscar evidência de qualidade, com fontes apropriadas</li>
+    <li><strong>Appraise</strong> — avaliar criticamente o que foi encontrado, com ferramenta adequada (RoB para ECR, AMSTAR-2 para revisão sistemática, QUADAS-2 para teste diagnóstico)</li>
+    <li><strong>Apply</strong> — aplicar ao paciente real, considerando preferências, contexto e recursos</li>
+    <li><strong>Assess</strong> — refletir sobre o processo e o resultado</li>
+  </ol>
+
+  <p>
+    Os 5As são iguais em todas as áreas. <strong>O que muda são os tipos de estudo, as ferramentas, os vieses dominantes e a forma de interpretar números.</strong> Por isso vale dedicar uma página inteira a cada área.
+  </p>
+
+  <h2 id="especifico">O que é específico a cada área</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Área</th>
+          <th scope="col">Desenho típico</th>
+          <th scope="col">Ferramenta</th>
+          <th scope="col">Métrica chave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Diagnóstica</strong></td>
+          <td>Estudo de acurácia (teste vs. padrão-ouro)</td>
+          <td>QUADAS-2</td>
+          <td>Sensibilidade, especificidade, RV+, RV−</td>
+        </tr>
+        <tr>
+          <td><strong>Terapêutica</strong></td>
+          <td>ECR ou meta-análise de ECRs</td>
+          <td>RoB 2.0, AMSTAR-2</td>
+          <td>RAR, NNT, NNH, IC95%</td>
+        </tr>
+        <tr>
+          <td><strong>Preventiva</strong></td>
+          <td>ECR ou estudo de coorte; recomendação de força-tarefa</td>
+          <td>RoB 2.0, GRADE</td>
+          <td>NNT (em escala populacional), eventos evitados, danos</td>
+        </tr>
+        <tr>
+          <td><strong>Prognóstica</strong></td>
+          <td>Estudo de coorte prospectivo</td>
+          <td>QUIPS (Quality In Prognosis Studies)</td>
+          <td>Sobrevida, hazard ratio, fatores prognósticos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="como-usar">Como usar esta seção</h2>
+
+  <p>Cada página apresenta:</p>
+
+  <ul>
+    <li><strong>Cenário clínico</strong> com paciente concreto</li>
+    <li><strong>Pergunta estruturada</strong> em PICO</li>
+    <li><strong>Estratégia de busca</strong> apropriada</li>
+    <li><strong>Avaliação crítica</strong> da evidência encontrada</li>
+    <li><strong>Aplicação ao paciente</strong>, com considerações de contexto e preferência</li>
+    <li><strong>Reflexão final</strong> sobre processo e resultado</li>
+  </ul>
+
+  <p>
+    Os casos são fictícios, mas baseados em situações reais e em evidência real. Os números são confiáveis. As decisões refletem boa prática.
+  </p>
+
+  <h2 id="conceitos-sustentam">Conceitos que sustentam todas as áreas</h2>
+
+  <p>Antes de avançar para qualquer página específica, vale ter à mão:</p>
+
+  <ul>
+    <li><a href={withBase('/cinco-as/', base)}>Visão geral dos 5As</a> — o ciclo aplicado em todas as áreas</li>
+    <li><a href={withBase('/conceitos/pico/', base)}>PICO</a> — estrutura da pergunta</li>
+    <li><a href={withBase('/conceitos/piramide-evidencias/', base)}>Pirâmide de evidências</a> — desenhos por força de evidência</li>
+    <li><a href={withBase('/conceitos/medidas-de-efeito/', base)}>Medidas de efeito</a> — RR, RAR, NNT, IC95%</li>
+    <li><a href={withBase('/conceitos/decisao-compartilhada/', base)}>Decisão compartilhada</a> — como traduzir evidência em conversa</li>
+  </ul>
+</DocLayout>

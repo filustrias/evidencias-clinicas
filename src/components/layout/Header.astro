@@ -53,9 +53,10 @@ function isActive(href: string): boolean {
 
           {item.children && (
             <div
-              class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-0 top-[calc(100%+4px)] z-50 min-w-[220px] rounded-lg border border-border-default bg-canvas p-1 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)] transition-opacity"
+              class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-0 top-full pt-1 z-50 min-w-[220px] transition-opacity"
               role="menu"
             >
+              <div class="rounded-lg border border-border-default bg-canvas p-1 shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
               {item.children.map((child) => (
                 <a
                   href={withBase(child.href, base)}
@@ -70,6 +71,7 @@ function isActive(href: string): boolean {
                   {child.label}
                 </a>
               ))}
+              </div>
             </div>
           )}
         </div>
