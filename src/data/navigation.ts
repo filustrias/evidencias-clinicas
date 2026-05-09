@@ -80,6 +80,7 @@ export const primaryNav: NavItem[] = [
     ],
   },
   { label: 'Glossário', href: '/glossario/' },
+  { label: 'Sobre', href: '/sobre/' },
 ];
 
 /**

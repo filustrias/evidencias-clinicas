@@ -1,8 +1,9 @@
 ---
 import DocLayout from '@layouts/DocLayout.astro';
+import { withBase } from '@/data/navigation';
 
 const base = import.meta.env.BASE_URL;
-const authorPhoto = `${base}${'images/sobre/adelson-jantsch.jpg'.replace(/^\//, '')}`;
+const authorPhoto = withBase('/images/sobre/adelson-jantsch.jpg', base);
 ---
 <DocLayout
   title="Sobre"
