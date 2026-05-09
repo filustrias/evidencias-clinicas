@@ -31,11 +31,11 @@
 <section class="em-calc" aria-labelledby="em-calc-title">
   <header class="em-calc__header">
     <h2 id="em-calc-title">Calculadora interativa</h2>
-    <p>Insira as quatro células da tabela 2×2 do estudo. As medidas calculam-se em tempo real.</p>
+    <p>Explore os cenários dos estudos ou insira valores nas quatro células da tabela 2×2 e veja o que acontece com os resultados (RR, RAR, NNT, NNH).</p>
   </header>
 
   <div class="em-calc__presets" role="toolbar" aria-label="Cenários de exemplo">
-    <span class="em-calc__preset-label">Cenários:</span>
+    <span class="em-calc__preset-label">Explore cenários:</span>
     <span class="em-calc__preset-pair">
       <button type="button" class="em-calc__preset" data-preset="aspree">Aspirina (ASPREE)</button>
       <button type="button" class="em-calc__preset-info" data-preset-info="aspree" aria-label="Sobre o estudo ASPREE" aria-expanded="false" aria-controls="em-calc__info">
@@ -66,7 +66,7 @@
         </svg>
       </button>
     </span>
-    <button type="button" class="em-calc__preset em-calc__preset--ghost" data-preset="reset">Reiniciar</button>
+    <button type="button" class="em-calc__preset em-calc__preset--ghost" data-preset="reset">Insira seus dados</button>
   </div>
 
   <div id="em-calc__info" class="em-calc__info-panel" hidden>
@@ -144,6 +144,7 @@
 
   <div class="em-calc__grid">
     <div class="em-calc__inputs">
+      <p class="em-calc__study-title" id="em-study-title">Insira seus dados</p>
       <p class="em-calc__cap">Tabela 2×2 do estudo:</p>
       <table class="em-calc__table" aria-label="Inputs da tabela 2 por 2">
         <thead>
@@ -156,13 +157,13 @@
         <tbody>
           <tr>
             <th scope="row">Intervenção</th>
-            <td><input type="number" id="em-a" min="0" value="25" aria-label="Intervenção, evento ocorreu" /></td>
-            <td><input type="number" id="em-b" min="0" value="475" aria-label="Intervenção, sem evento" /></td>
+            <td><input type="number" id="em-a" min="0" placeholder="—" aria-label="Intervenção, evento ocorreu" /></td>
+            <td><input type="number" id="em-b" min="0" placeholder="—" aria-label="Intervenção, sem evento" /></td>
           </tr>
           <tr>
             <th scope="row">Controle</th>
-            <td><input type="number" id="em-c" min="0" value="50" aria-label="Controle, evento ocorreu" /></td>
-            <td><input type="number" id="em-d" min="0" value="450" aria-label="Controle, sem evento" /></td>
+            <td><input type="number" id="em-c" min="0" placeholder="—" aria-label="Controle, evento ocorreu" /></td>
+            <td><input type="number" id="em-d" min="0" placeholder="—" aria-label="Controle, sem evento" /></td>
           </tr>
         </tbody>
       </table>
@@ -211,11 +212,16 @@
         <span class="em-calc__output-note" id="em-nnt-note">Tratar 20 pacientes para evitar 1 desfecho</span>
       </div>
 
-      <div class="em-calc__output">
-        <span class="em-calc__output-label">NNH (se intervenção causa o desfecho)</span>
+      <div class="em-calc__output em-calc__output--harm" style="display: none;">
+        <span class="em-calc__output-label">NNH (intervenção causa o desfecho)</span>
         <span class="em-calc__output-value" id="em-nnh">—</span>
         <span class="em-calc__output-ci" id="em-nnh-ci"></span>
         <span class="em-calc__output-note" id="em-nnh-note">Aparece quando intervenção aumenta o risco</span>
+      </div>
+
+      <div class="em-calc__output em-calc__output--warning" style="display: none;">
+        <span class="em-calc__output-label">Nem NNT nem NNH podem ser calculados</span>
+        <p class="em-calc__warning-text" id="em-warning-text"></p>
       </div>
 
       <div class="em-calc__insight" role="status" aria-live="polite">
@@ -304,6 +310,14 @@
     .em-calc__grid {
       grid-template-columns: 1fr 1fr;
     }
+  }
+
+  .em-calc__study-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    font-weight: 600;
   }
 
   .em-calc__cap {
@@ -412,6 +426,45 @@
 
   .em-calc__output--highlight .em-calc__output-label {
     color: var(--color-accent-soft-text);
+  }
+
+  .em-calc__output--harm {
+    background: var(--color-danger-bg);
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+  }
+
+  .em-calc__output--harm .em-calc__output-value {
+    color: var(--color-danger);
+  }
+
+  .em-calc__output--harm .em-calc__output-label {
+    color: var(--color-danger-text);
+  }
+
+  .em-calc__output--warning {
+    background: var(--color-warning-bg);
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+  }
+
+  .em-calc__output--warning .em-calc__output-label {
+    color: var(--color-warning-text);
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 600;
+  }
+
+  .em-calc__warning-text {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-warning-text);
   }
 
   .em-calc__output--undefined .em-calc__output-value {
@@ -621,8 +674,6 @@
     dapa:    { a: 386,  b: 1987, c: 502,  d: 1869 },
     // Hofmeyr Cochrane: cálcio em prevenção de pré-eclâmpsia (alta dose)
     calcio:  { a: 156,  b: 6840, c: 309,  d: 6687 },
-    // Caso didático: 25/500 vs 50/500 — RR 0,5, NNT 20
-    reset:   { a: 25,   b: 475,  c: 50,   d: 450 },
   };
 
   function calculate(a: number, b: number, c: number, d: number) {
@@ -745,16 +796,9 @@
       return 'Os riscos absolutos são iguais entre os grupos. Sem efeito.';
     }
 
-    // Caso não-significativo (IC do RAR cruza zero)
-    if (!r.significant) {
-      const rrr = Math.round(r.rrr * 100);
-      const rarPp = (r.rar * 100).toFixed(1).replace('.', ',');
-      if (r.intervenceProtects) {
-        return `A estimativa pontual sugere redução de ${rrr}% no risco relativo (RAR ${rarPp} pp). Mas o IC 95% do RAR cruza zero — o resultado não é estatisticamente significativo. Por isso, NNT é matematicamente indefinido aqui: o intervalo se estenderia de NNT a NNH, sem interpretação clínica útil. Pode haver efeito real pequeno, pode haver ausência de efeito ou até dano dentro dos limites de incerteza.`;
-      }
-      const aar = (Math.abs(r.rar) * 100).toFixed(1).replace('.', ',');
-      return `A estimativa pontual sugere aumento de risco de ${aar} pp absolutos. Mas o IC 95% do RAR cruza zero — o resultado não é estatisticamente significativo. NNH é indefinido aqui.`;
-    }
+    // Caso não-significativo (IC do RAR cruza zero):
+    // a caixa amarela acima já comunica isso — evitamos repetir abaixo.
+    if (!r.significant) return '';
 
     // Caso significativo, intervenção protege
     if (r.intervenceProtects) {
@@ -767,7 +811,7 @@
       if (r.nnt && r.nnt > 100) {
         return `Redução de ${rrr}% no risco relativo é estatisticamente significativa, mas a magnitude absoluta é pequena: RAR ${rarPp} pp, NNT ${nntInt}${ciText}. Avalie se justifica a exposição ao tratamento — especialmente se houver risco de dano (NNH).`;
       }
-      return `Redução de ${rrr}% no risco relativo (RAR ${rarPp} pp). NNT de ${nntInt}${ciText} indica efeito clinicamente significativo. Para conversa com paciente: para cada ${nntInt} pacientes tratados, 1 evita o desfecho.`;
+      return `Redução de ${rrr}% no risco absoluto (RAR ${rarPp} pp). NNT de ${nntInt}${ciText} indica que para cada ${nntInt} pacientes tratados, 1 paciente deixará de sofrer o desfecho em questão.`;
     }
 
     // Caso significativo, intervenção causa dano
@@ -776,7 +820,7 @@
     const ciText = (r.nnhLow && r.nnhHigh)
       ? ` (IC 95%: ${Math.round(r.nnhLow)} a ${Math.round(r.nnhHigh)})`
       : '';
-    return `A intervenção aumenta o risco em ${aar} pp absolutos. NNH de ${nnhInt}${ciText} indica que a cada ${nnhInt} pacientes expostos, 1 desenvolve o desfecho adicional.`;
+    return `A intervenção aumenta o risco absoluto em ${aar} pp absolutos. NNH de ${nnhInt}${ciText} indica que a cada ${nnhInt} pacientes expostos à intervenção, 1 paciente adicional terá o desfecho em questão.`;
   }
 
   function setText(id: string, value: string) {
@@ -821,6 +865,14 @@
     if (!r) {
       ['em-ra-int','em-ra-con','em-rr','em-or','em-rar','em-rrr','em-nnt','em-nnh'].forEach(id => setText(id, '—'));
       ['em-rr-ci','em-or-ci','em-rar-ci','em-nnt-ci','em-nnh-ci','em-nnt-note','em-nnh-note'].forEach(id => setText(id, ''));
+      const nntBox = document.querySelector('.em-calc__output--highlight') as HTMLElement | null;
+      const nnhBox = document.querySelector('.em-calc__output--harm') as HTMLElement | null;
+      const warningBox = document.querySelector('.em-calc__output--warning') as HTMLElement | null;
+      if (nntBox) nntBox.style.display = '';
+      if (nnhBox) nnhBox.style.display = 'none';
+      if (warningBox) warningBox.style.display = 'none';
+      const insightBox = document.querySelector('.em-calc__insight') as HTMLElement | null;
+      if (insightBox) insightBox.style.display = '';
       setText('em-insight', 'Insira valores válidos nas quatro células da tabela.');
       return;
     }
@@ -845,74 +897,93 @@
 
     setText('em-rrr', formatPct(r.rrr, 1));
 
-    // NNT: só exibe número quando o resultado é estatisticamente significativo
-    // E a intervenção está reduzindo o risco. Caso contrário, marca como
-    // "não calculável" — escolha pedagógica para evitar números enganosos.
+    // NNT vs NNH vs aviso: só um dos três aparece de cada vez.
+    // RR < 1 (intervenção protege) e significativo → NNT em verde
+    // RR > 1 (intervenção causa dano) e significativo → NNH em vermelho
+    // IC do RAR cruza zero → caixa amarela de aviso, com o ponto estimado
     const nntBox = document.querySelector('.em-calc__output--highlight') as HTMLElement | null;
-    if (r.nnt !== null && r.intervenceProtects) {
-      setText('em-nnt', String(Math.round(r.nnt)));
-      setText('em-nnt-ci', (r.nntLow && r.nntHigh)
-        ? `IC 95%: ${Math.round(r.nntLow)} – ${Math.round(r.nntHigh)}`
-        : '');
-      setText('em-nnt-note', `Tratar ${Math.round(r.nnt)} pacientes para evitar 1 desfecho`);
-      setUndefinedClass('em-nnt', false);
-      if (nntBox) nntBox.style.display = '';
-    } else if (r.intervenceHarms) {
-      setText('em-nnt', '—');
-      setText('em-nnt-ci', '');
-      setText('em-nnt-note', 'A intervenção parece causar o desfecho — veja NNH');
-      setUndefinedClass('em-nnt', true);
-      if (nntBox) nntBox.style.display = '';
-    } else {
-      // Não-significativo
-      setText('em-nnt', 'não calculável');
-      setText('em-nnt-ci', '');
-      setText('em-nnt-note', 'NNT só faz sentido quando o IC do RAR não cruza zero');
-      setUndefinedClass('em-nnt', true);
-      if (nntBox) nntBox.style.display = '';
-    }
+    const nnhBox = document.querySelector('.em-calc__output--harm') as HTMLElement | null;
+    const warningBox = document.querySelector('.em-calc__output--warning') as HTMLElement | null;
 
-    // NNH: análoga ao NNT, mas para dano
-    if (r.nnh !== null && r.intervenceHarms) {
-      setText('em-nnh', String(Math.round(r.nnh)));
+    if (!r.significant) {
+      if (nntBox) nntBox.style.display = 'none';
+      if (nnhBox) nnhBox.style.display = 'none';
+      if (warningBox) warningBox.style.display = '';
+
+      const rarPp = (Math.abs(r.rar) * 100).toFixed(1).replace('.', ',');
+      const direction = r.rar < 0 ? 'aumento' : 'redução';
+      setText(
+        'em-warning-text',
+        `A estimativa pontual sugere ${direction} de risco de ${rarPp} pp, mas o IC 95% do RAR cruza o 1 (resultado não é estatisticamente significativo). Portanto, não podemos dizer que existe diferença entre intervenção e controle.`
+      );
+    } else if (r.intervenceHarms) {
+      if (nntBox) nntBox.style.display = 'none';
+      if (nnhBox) nnhBox.style.display = '';
+      if (warningBox) warningBox.style.display = 'none';
+
+      setText('em-nnh', String(Math.round(r.nnh!)));
       setText('em-nnh-ci', (r.nnhLow && r.nnhHigh)
         ? `IC 95%: ${Math.round(r.nnhLow)} – ${Math.round(r.nnhHigh)}`
         : '');
-      setText('em-nnh-note', `${Math.round(r.nnh)} pacientes expostos para 1 desfecho adicional`);
+      setText('em-nnh-note', `${Math.round(r.nnh!)} pacientes expostos para 1 desfecho adicional`);
       setUndefinedClass('em-nnh', false);
-    } else if (r.intervenceProtects && r.significant) {
-      setText('em-nnh', '—');
-      setText('em-nnh-ci', '');
-      setText('em-nnh-note', 'A intervenção protege — veja NNT');
-      setUndefinedClass('em-nnh', true);
-    } else if (!r.significant) {
-      setText('em-nnh', 'não calculável');
-      setText('em-nnh-ci', '');
-      setText('em-nnh-note', 'NNH só faz sentido quando o IC do RAR não cruza zero');
-      setUndefinedClass('em-nnh', true);
     } else {
-      setText('em-nnh', '—');
-      setText('em-nnh-ci', '');
-      setText('em-nnh-note', 'Aparece quando intervenção aumenta o risco');
-      setUndefinedClass('em-nnh', true);
+      // significativo + intervenção protege (ou rar === 0, edge raríssimo)
+      if (nntBox) nntBox.style.display = '';
+      if (nnhBox) nnhBox.style.display = 'none';
+      if (warningBox) warningBox.style.display = 'none';
+
+      if (r.nnt !== null && r.intervenceProtects) {
+        setText('em-nnt', String(Math.round(r.nnt)));
+        setText('em-nnt-ci', (r.nntLow && r.nntHigh)
+          ? `IC 95%: ${Math.round(r.nntLow)} – ${Math.round(r.nntHigh)}`
+          : '');
+        setText('em-nnt-note', `Tratar ${Math.round(r.nnt)} pacientes para evitar 1 desfecho`);
+        setUndefinedClass('em-nnt', false);
+      } else {
+        setText('em-nnt', 'não calculável');
+        setText('em-nnt-ci', '');
+        setText('em-nnt-note', 'NNT só faz sentido quando o IC do RAR não cruza zero');
+        setUndefinedClass('em-nnt', true);
+      }
     }
 
-    setText('em-insight', generateInsight(r));
+    const insightText = generateInsight(r);
+    const insightBox = document.querySelector('.em-calc__insight') as HTMLElement | null;
+    if (insightBox) insightBox.style.display = insightText ? '' : 'none';
+    setText('em-insight', insightText);
   }
 
   ['em-a', 'em-b', 'em-c', 'em-d'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', update);
   });
 
+  const TITLES: Record<string, string> = {
+    aspree: 'Aspirina em prevenção primária de evento cardiovascular em idosos.',
+    dapa: 'Dapagliflozina para prevenção de hospitalização ou morte cardiovascular em pacientes com insuficiência cardíaca com fração de ejeção reduzida.',
+    calcio: 'Suplementação de cálcio para prevenção de doença hipertensiva específica da gestação.',
+    reset: 'Insira seus dados',
+  };
+
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.dataset.preset;
-      if (!key || !(key in PRESETS)) return;
-      const preset = PRESETS[key];
-      setValue('em-a', preset.a);
-      setValue('em-b', preset.b);
-      setValue('em-c', preset.c);
-      setValue('em-d', preset.d);
+      if (!key) return;
+      if (key === 'reset') {
+        ['em-a', 'em-b', 'em-c', 'em-d'].forEach(id => {
+          const el = document.getElementById(id) as HTMLInputElement | null;
+          if (el) el.value = '';
+        });
+      } else if (key in PRESETS) {
+        const preset = PRESETS[key];
+        setValue('em-a', preset.a);
+        setValue('em-b', preset.b);
+        setValue('em-c', preset.c);
+        setValue('em-d', preset.d);
+      } else {
+        return;
+      }
+      setText('em-study-title', TITLES[key] ?? 'Insira seus dados');
       update();
       // Trocar de cenário fecha automaticamente o popover de informações
       // do estudo anterior — evita dissonância entre o conteúdo aberto e o
