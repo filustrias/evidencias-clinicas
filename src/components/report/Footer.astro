@@ -1,0 +1,13 @@
+---
+// src/components/report/Footer.astro
+
+type Props = { data: any };
+const { data } = Astro.props;
+---
+
+<footer class="fte-report__footer">
+  <span>{data.study_meta.join(' · ')}</span>
+  <a href={data.citation.url} target="_blank" rel="noopener">
+    Artigo original em {data.citation.journal} ↗
+  </a>
+</footer>

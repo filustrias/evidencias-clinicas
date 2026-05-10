@@ -1,0 +1,48 @@
+---
+// src/components/report/Header.astro
+//
+// Cabeçalho compartilhado: aparece acima das abas, sempre visível.
+
+import type { CollectionEntry } from 'astro:content';
+
+type Props = { data: CollectionEntry<'reports'>['data'] };
+const { data } = Astro.props;
+
+const totalFmt = data.randomization.total.toLocaleString('pt-BR');
+const armIFmt = data.randomization.arm_intervention.toLocaleString('pt-BR');
+const armCFmt = data.randomization.arm_comparator.toLocaleString('pt-BR');
+
+const studyTypeLabel: Record<string, string> = {
+  ensaio_clinico_randomizado: 'Ensaio Clínico Randomizado',
+  revisao_sistematica: 'Revisão Sistemática',
+  metanalise: 'Metanálise',
+  estudo_observacional: 'Estudo Observacional',
+};
+
+const reportIdFmt = String(data.report_id).padStart(3, '0');
+const armILabel = data.pico.intervention.main.split(/\s+(por|via)\s+/i)[0];
+const armCLabel = data.pico.comparator.main.split(/\s+(por|via)\s+/i)[0];
+---
+
+<div class="fte-report__topbar">
+  <span>evidências clínicas · Report {reportIdFmt}</span>
+  <span>{studyTypeLabel[data.study_type]} · {data.specialty}</span>
+</div>
+
+<h1>{data.title}</h1>
+
+<p class="fte-report__citation">
+  <span class="fte-report__study-tag">{data.study_acronym}</span>
+  {data.citation.authors} <em>{data.citation.journal}</em> {data.citation.year}{
+    data.citation.volume ? `;${data.citation.volume}` : ''
+  }{data.citation.pages ? `:${data.citation.pages}` : '.'}
+  {data.citation.doi && <> DOI: {data.citation.doi}</>}
+</p>
+
+<p class="fte-report__randomization">
+  <span class="mono">{totalFmt}</span> pacientes randomizados {data.randomization.ratio} —
+  <span class="mono">{armIFmt}</span> {armILabel.toLowerCase()} ·
+  <span class="mono">{armCFmt}</span> {armCLabel.toLowerCase()}.{
+    data.randomization.follow_up && <> {data.randomization.follow_up}.</>
+  }
+</p>

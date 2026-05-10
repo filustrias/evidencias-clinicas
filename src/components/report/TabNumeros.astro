@@ -1,0 +1,16 @@
+---
+// src/components/report/TabNumeros.astro
+//
+// Aba 1: apresenta cada desfecho com tabela 2×2 + métricas + caixa NN.
+// Termina com a mensagem clínica.
+
+import OutcomeNumeros from './OutcomeNumeros.astro';
+import { mdToHtml } from '@/lib/markdown';
+
+type Props = { data: any };
+const { data } = Astro.props;
+---
+
+{data.outcomes.map((outcome: any) => <OutcomeNumeros outcome={outcome} />)}
+
+<div class="fte-report__interpretation" set:html={mdToHtml(data.clinical_message)} />

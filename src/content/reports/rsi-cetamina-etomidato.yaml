@@ -1,0 +1,108 @@
+# src/content/reports/rsi-cetamina-etomidato.yaml
+#
+# Report 001 — Ensaio RSI: Cetamina vs Etomidato para intubação traqueal.
+
+report_id: 1
+study_acronym: RSI
+study_type: ensaio_clinico_randomizado
+specialty: Emergência e Terapia Intensiva
+
+title: "Cetamina vs. etomidato como indutor anestésico para intubação traqueal de adultos criticamente enfermos"
+
+citation:
+  authors: "Casey JD, Seitz KP, Driver BE, et al."
+  journal: "N Engl J Med"
+  year: 2026
+  volume: 394
+  pages: "1608–20"
+  doi: "10.1056/NEJMoa2511420"
+  url: "https://www.nejm.org/doi/10.1056/NEJMoa2511420"
+
+randomization:
+  total: 2365
+  ratio: "1:1"
+  arm_intervention: 1176
+  arm_comparator: 1189
+
+pico:
+  population:
+    main: "Adultos ≥18 anos, criticamente enfermos, intubação de emergência em departamento de emergência ou unidade de terapia intensiva"
+    detail: "Excluídos: trauma primário, gestantes"
+  intervention:
+    main: "Cetamina por via intravenosa"
+    detail: "1,0 a 2,0 mg/kg (peso real)"
+  comparator:
+    main: "Etomidato por via intravenosa"
+    detail: "0,2 a 0,3 mg/kg (peso real)"
+  outcomes:
+    primary: "Mortalidade hospitalar em 28 dias"
+    secondary: "Colapso cardiovascular peri-intubação"
+
+outcomes:
+  - id: mortalidade
+    label: "Desfecho primário · Morte hospitalar em 28 dias"
+    direction: neutro
+    table_2x2:
+      intervention:
+        label: "Cetamina"
+        events: 330
+        no_event: 843
+      comparator:
+        label: "Etomidato"
+        events: 345
+        no_event: 841
+      event_label: "Morte"
+      no_event_label: "Sobrev."
+    statistics_reported:
+      risk_difference: -0.8
+      risk_difference_ci: [-4.5, 2.9]
+      p_value: 0.65
+
+  - id: colapso_cv
+    label: "Desfecho secundário · Colapso cardiovascular peri-intubação"
+    direction: desfavoravel
+    table_2x2:
+      intervention:
+        label: "Cetamina"
+        events: 260
+        no_event: 916
+      comparator:
+        label: "Etomidato"
+        events: 202
+        no_event: 987
+      event_label: "Colapso"
+    statistics_reported:
+      risk_difference: 5.1
+      risk_difference_ci: [1.9, 8.3]
+    subgroups_title: "Modificação de efeito · subgrupos pré-especificados"
+    subgroups:
+      - name: "Sepse ou choque séptico"
+        n: 1101
+        risk_difference: 9.7
+        risk_difference_ci: [4.6, 14.9]
+      - name: "APACHE II ≥ 20"
+        note: "escore de gravidade"
+        risk_difference: 10.7
+        risk_difference_ci: [5.5, 16.0]
+
+clinical_message: |
+  Cetamina e etomidato têm **mortalidade equivalente** em 28 dias.
+  Cetamina, porém, induz <span class="bad">mais colapso cardiovascular</span>
+  durante a intubação (1 colapso extra a cada 20 pacientes). O sinal de dano
+  é <span class="bad">amplificado em pacientes mais graves</span> — em sepse
+  e APACHE II ≥ 20, o número cai para 1 colapso extra a cada 10 pacientes —
+  justamente o perfil em que se costuma preferir cetamina pela suposta
+  estabilidade hemodinâmica.
+
+bottom_line:
+  - "Cetamina **não reduz mortalidade** em 28 dias."
+  - "Cetamina causa **mais colapso cardiovascular** peri-intubação — 1 colapso extra a cada 20 pacientes intubados."
+  - "O dano é **amplificado em pacientes mais graves** (sepse e APACHE II ≥ 20: 1 colapso extra a cada 10 pacientes)."
+  - "A premissa de \"cetamina = mais estável hemodinamicamente\" **não se sustenta**."
+
+study_meta:
+  - "Ensaio Clínico Randomizado pragmático"
+  - "14 sítios nos EUA"
+  - "2022–2025"
+  - "Aberto (sem cegamento)"
+  - "Aderência ao protocolo > 99%"

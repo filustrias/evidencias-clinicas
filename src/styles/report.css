@@ -1,0 +1,918 @@
+/* ====================================================================
+   src/styles/report.css
+   ====================================================================
+   Estilos dos Reports de Evidências.
+
+   ESTRATÉGIA DE INTEGRAÇÃO COM O DESIGN SYSTEM:
+
+   Variáveis estruturais (--fte-report-bg, --ink, --line, fontes) são
+   sobrescritas dentro do escopo .fte-report no global.css, apontando
+   para os tokens do design system do site (--color-bg-canvas,
+   --color-text-primary, etc.). Isso faz com que os reports acompanhem
+   automaticamente o tema claro/escuro do site.
+
+   PALETA SEMÂNTICA (não negociável, do pacote original):
+   - Verde (--fte-report-good)    → benefício (NNT mensurável favorável)
+   - Vermelho (--fte-report-bad)  → dano (NNH mensurável desfavorável)
+   - Cinza (--fte-report-muted)   → neutro / sem diferença
+   - Azul (--fte-report-highlight) → destaque editorial em texto e UI
+
+   ==================================================================== */
+
+:root {
+  /* Fundos (defaults dark — sobrescritos por .fte-report no global.css) */
+  --fte-report-bg: #0E0E10;
+  --fte-report-bg-2: #16161A;
+  --fte-report-bg-3: #1F1F25;
+  --fte-report-line: #2A2A33;
+
+  /* Texto */
+  --fte-report-ink: #F2F2F5;
+  --fte-report-muted: #8A8A95;
+
+  /* Semântica */
+  --fte-report-good: #3ECDB1;
+  --fte-report-bad: #FF6B6B;
+  --fte-report-bad-soft: rgba(255, 107, 107, 0.12);
+  --fte-report-extra: #F4A72E;
+  --fte-report-highlight: #5BA8E8;
+  --fte-report-gray-fig: #3D3D46;
+
+  /* Tipografia — sobrescrita no global.css para usar as fontes do site */
+  --fte-report-font-sans: 'Inter', system-ui, sans-serif;
+  --fte-report-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ==============================
+   CONTAINER
+   ============================== */
+.fte-report {
+  font-family: var(--fte-report-font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--fte-report-ink);
+  background: var(--fte-report-bg);
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.fte-report *,
+.fte-report *::before,
+.fte-report *::after {
+  box-sizing: border-box;
+}
+
+.fte-report .mono { font-family: var(--fte-report-font-mono); }
+
+/* ==============================
+   CABEÇALHO
+   ============================== */
+.fte-report__topbar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--fte-report-line);
+}
+
+.fte-report h1 {
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3.2vw, 1.85rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.7rem;
+  max-width: 720px;
+}
+
+.fte-report__citation {
+  font-size: 0.83rem;
+  color: var(--fte-report-muted);
+  margin-bottom: 1.5rem;
+}
+
+.fte-report__study-tag {
+  display: inline-block;
+  background: var(--fte-report-bg-3);
+  color: var(--fte-report-ink);
+  padding: 0.1rem 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  font-family: var(--fte-report-font-mono);
+}
+
+.fte-report__randomization {
+  font-size: 0.83rem;
+  color: var(--fte-report-muted);
+  margin-bottom: 2rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--fte-report-line);
+}
+
+.fte-report__randomization .mono { color: var(--fte-report-ink); }
+
+/* ==============================
+   PICO
+   ============================== */
+.fte-report__pico {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--fte-report-line);
+  border: 1px solid var(--fte-report-line);
+  margin-bottom: 2rem;
+}
+
+.fte-report__pico-cell {
+  background: var(--fte-report-bg-2);
+  padding: 0.9rem 1rem;
+}
+
+.fte-report__pico-letter {
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--fte-report-highlight);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.fte-report__pico-text {
+  font-size: 0.83rem;
+  line-height: 1.4;
+  color: var(--fte-report-ink);
+}
+
+.fte-report__pico-text small {
+  display: block;
+  color: var(--fte-report-muted);
+  font-size: 0.72rem;
+  margin-top: 0.25rem;
+}
+
+/* ==============================
+   TABS
+   ============================== */
+.fte-report__tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--fte-report-line);
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.fte-report__tab {
+  background: transparent;
+  color: var(--fte-report-muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.85rem 1.4rem;
+  font-family: var(--fte-report-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  margin-bottom: -1px;
+}
+
+.fte-report__tab:hover { color: var(--fte-report-ink); }
+
+.fte-report__tab[aria-selected="true"] {
+  color: var(--fte-report-highlight);
+  border-bottom-color: var(--fte-report-highlight);
+}
+
+.fte-report__tab-num {
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.7rem;
+  color: var(--fte-report-muted);
+  margin-right: 0.4rem;
+}
+
+.fte-report__tab[aria-selected="true"] .fte-report__tab-num {
+  color: var(--fte-report-highlight);
+}
+
+.fte-report__panel { display: none; }
+.fte-report__panel[data-active="true"] { display: block; animation: fte-fade-in 0.2s ease; }
+
+@keyframes fte-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==============================
+   SECTION TITLE / OUTCOME
+   ============================== */
+.fte-report__section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 1.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--fte-report-line);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fte-report__panel > .fte-report__section-title:first-child { margin-top: 0; }
+
+.fte-report__section-title h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+.fte-report__outcome-tag {
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+.fte-report__outcome-tag--bad {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--fte-report-bad);
+}
+
+.fte-report__outcome-tag--good {
+  background: rgba(62, 205, 177, 0.15);
+  color: var(--fte-report-good);
+}
+
+.fte-report__outcome-tag--neutral {
+  background: var(--fte-report-bg-3);
+  color: var(--fte-report-muted);
+}
+
+/* ==============================
+   ANALYSIS (2×2 + métricas)
+   ============================== */
+.fte-report__analysis {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.fte-report__twobytwo {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 0.85rem 0.95rem;
+}
+
+.fte-report__twobytwo-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin-bottom: 0.55rem;
+  font-weight: 600;
+}
+
+.fte-report__twobytwo table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fte-report__twobytwo th,
+.fte-report__twobytwo td {
+  padding: 0.5rem 0.4rem;
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.88rem;
+  text-align: center;
+  border: 1px solid var(--fte-report-line);
+}
+
+.fte-report__twobytwo th {
+  color: var(--fte-report-muted);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--fte-report-bg-3);
+}
+
+.fte-report__twobytwo td.row-label {
+  text-align: left;
+  color: var(--fte-report-muted);
+  font-family: var(--fte-report-font-sans);
+  font-size: 0.8rem;
+  background: var(--fte-report-bg-3);
+  font-weight: 500;
+}
+
+.fte-report__twobytwo td.event { color: var(--fte-report-ink); font-weight: 600; }
+
+.fte-report__twobytwo .pct {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--fte-report-muted);
+  margin-top: 0.15rem;
+  font-weight: 400;
+}
+
+.fte-report__metrics {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.fte-report__metrics--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.fte-report__metrics--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.fte-report__metrics--cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+.fte-report__metric {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 0.65rem 0.8rem;
+}
+
+.fte-report__metric--bad {
+  background: var(--fte-report-bad-soft);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.fte-report__metric--bad .fte-report__metric-label,
+.fte-report__metric--bad .fte-report__metric-value,
+.fte-report__metric--bad .fte-report__metric-ci {
+  color: var(--fte-report-bad);
+}
+
+.fte-report__metric-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 1.7em;
+}
+
+.fte-report__metric-value {
+  font-family: var(--fte-report-font-mono);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.fte-report__metric-value--text {
+  font-family: var(--fte-report-font-sans);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--fte-report-muted);
+}
+
+.fte-report__metric-ci {
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.65rem;
+  color: var(--fte-report-muted);
+}
+
+.fte-report__neutral-row {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  color: var(--fte-report-ink);
+  margin-top: 0.5rem;
+}
+
+.fte-report__neutral-row .mono { color: var(--fte-report-muted); }
+
+/* ==============================
+   NNH / NNT BOX
+   ============================== */
+.fte-report__nn-box {
+  border: 1px solid;
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.fte-report__nn-box--bad {
+  background: var(--fte-report-bad-soft);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.fte-report__nn-box--good {
+  background: rgba(62, 205, 177, 0.08);
+  border-color: rgba(62, 205, 177, 0.3);
+}
+
+.fte-report__nn-box .nn-num {
+  font-family: var(--fte-report-font-mono);
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.fte-report__nn-box--bad .nn-num { color: var(--fte-report-bad); }
+.fte-report__nn-box--good .nn-num { color: var(--fte-report-good); }
+
+.fte-report__nn-box .nn-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+
+.fte-report__nn-box--bad .nn-label { color: var(--fte-report-bad); }
+.fte-report__nn-box--good .nn-label { color: var(--fte-report-good); }
+
+.fte-report__nn-box .nn-text {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--fte-report-ink);
+}
+
+.fte-report__nn-box .nn-text .mono {
+  font-size: 0.78rem;
+  color: var(--fte-report-muted);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* ==============================
+   SUBGRUPOS (texto)
+   ============================== */
+.fte-report__subgroup {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 0.95rem 1.1rem;
+  margin-top: 0.85rem;
+}
+
+.fte-report__subgroup-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+}
+
+.fte-report__subgroup-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--fte-report-line);
+}
+
+.fte-report__subgroup-row:last-child { border-bottom: none; }
+
+.fte-report__subgroup-row .name {
+  color: var(--fte-report-ink);
+  font-weight: 500;
+}
+
+.fte-report__subgroup-row .name small {
+  color: var(--fte-report-muted);
+  font-weight: 400;
+  font-size: 0.78rem;
+  margin-left: 0.25rem;
+}
+
+.fte-report__subgroup-row .ari,
+.fte-report__subgroup-row .nnh {
+  font-family: var(--fte-report-font-mono);
+  color: var(--fte-report-bad);
+  font-size: 0.8rem;
+}
+
+.fte-report__subgroup-row .nnh { font-weight: 600; }
+
+/* ==============================
+   INTERPRETAÇÃO
+   ============================== */
+.fte-report__interpretation {
+  font-size: 0.88rem;
+  color: var(--fte-report-ink);
+  background: var(--fte-report-bg-2);
+  border-left: 2px solid var(--fte-report-highlight);
+  padding: 0.85rem 1.1rem;
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
+
+.fte-report__interpretation strong {
+  color: var(--fte-report-highlight);
+  font-weight: 500;
+}
+
+.fte-report__interpretation .bad {
+  color: var(--fte-report-bad);
+  font-weight: 500;
+}
+
+.fte-report__interpretation .good {
+  color: var(--fte-report-good);
+  font-weight: 500;
+}
+
+/* ==============================
+   ABA GRÁFICOS — barras e forest
+   ============================== */
+.fte-report__bar-chart {
+  display: grid;
+  grid-template-columns: 110px 1fr 100px;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.fte-report__bar-chart .label { font-size: 0.85rem; color: var(--fte-report-ink); }
+
+.fte-report__bar-track {
+  background: var(--fte-report-bg-3);
+  height: 24px;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.fte-report__bar-fill { height: 100%; }
+.fte-report__bar-fill--bad { background: var(--fte-report-bad); }
+.fte-report__bar-fill--bad-soft { background: var(--fte-report-bad); opacity: 0.45; }
+.fte-report__bar-fill--good { background: var(--fte-report-good); }
+.fte-report__bar-fill--good-soft { background: var(--fte-report-good); opacity: 0.45; }
+.fte-report__bar-fill--neutral { background: var(--fte-report-muted); opacity: 0.6; }
+
+.fte-report__bar-value {
+  text-align: right;
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.85rem;
+  color: var(--fte-report-ink);
+}
+
+.fte-report__bar-value small {
+  color: var(--fte-report-muted);
+  font-size: 0.7rem;
+  display: block;
+  margin-top: 0.1rem;
+}
+
+.fte-report__bar-axis {
+  display: grid;
+  grid-template-columns: 110px 1fr 100px;
+  gap: 1rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.65rem;
+  color: var(--fte-report-muted);
+}
+
+.fte-report__bar-axis .ticks {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--fte-report-line);
+  padding-top: 0.2rem;
+}
+
+.fte-report__forest {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 1.1rem;
+  margin: 1rem 0;
+}
+
+.fte-report__forest-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin-bottom: 0.85rem;
+  font-weight: 600;
+}
+
+.fte-report__forest svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==============================
+   ABA INFOGRÁFICO
+   ============================== */
+.fte-report__bottom-line {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.fte-report__bottom-line h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin: 0 0 0.6rem;
+  font-weight: 600;
+}
+
+.fte-report__bottom-line ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fte-report__bottom-line li {
+  position: relative;
+  padding-left: 1.2rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--fte-report-ink);
+}
+
+.fte-report__bottom-line li:last-child { margin-bottom: 0; }
+
+.fte-report__bottom-line li::before {
+  content: "■";
+  position: absolute;
+  left: 0;
+  color: var(--fte-report-bad);
+  font-size: 0.6rem;
+  top: 0.2rem;
+}
+
+.fte-report__bottom-line strong {
+  color: var(--fte-report-highlight);
+  font-weight: 500;
+}
+
+.fte-report__scenario-band {
+  background: var(--fte-report-bg-3);
+  border-left: 3px solid var(--fte-report-bad);
+  padding: 0.75rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.fte-report__scenario-band h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fte-report-ink);
+  margin: 0 0 0.15rem;
+}
+
+.fte-report__scenario-band p {
+  font-size: 0.83rem;
+  color: var(--fte-report-muted);
+  margin: 0;
+}
+
+.fte-report__compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.fte-report__arm {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 1rem 1.1rem;
+}
+
+.fte-report__arm h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fte-report-ink);
+  margin: 0 0 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fte-report__arm-sub {
+  font-size: 0.73rem;
+  color: var(--fte-report-muted);
+  margin-bottom: 0.85rem;
+}
+
+.fte-report__pictogram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.fte-report__arm-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.fte-report__arm-stat .big {
+  font-family: var(--fte-report-font-mono);
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--fte-report-bad);
+  line-height: 1;
+}
+
+.fte-report__arm-stat .desc {
+  font-size: 0.8rem;
+  color: var(--fte-report-ink);
+  line-height: 1.3;
+}
+
+.fte-report__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--fte-report-line);
+  font-size: 0.72rem;
+  color: var(--fte-report-muted);
+}
+
+.fte-report__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.fte-report__legend-dot {
+  width: 9px;
+  height: 13px;
+  border-radius: 2px;
+}
+
+/* Picto-subgroup */
+.fte-report__picto-subgroup {
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 0.95rem 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.fte-report__picto-subgroup h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin: 0 0 0.85rem;
+  font-weight: 600;
+}
+
+.fte-report__picto-sub-row {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 1.1rem;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--fte-report-line);
+}
+
+.fte-report__picto-sub-row:last-child { border-bottom: none; }
+
+.fte-report__picto-sub-row .name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--fte-report-ink);
+}
+
+.fte-report__picto-sub-row .name small {
+  display: block;
+  color: var(--fte-report-muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+  margin-top: 0.1rem;
+}
+
+.fte-report__picto-sub-row .nnh-mini {
+  font-family: var(--fte-report-font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--fte-report-bad);
+  text-align: right;
+  line-height: 1.1;
+}
+
+.fte-report__picto-sub-row .nnh-mini small {
+  display: block;
+  color: var(--fte-report-muted);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+/* Mort-block (no infográfico, para desfechos sem diferença) */
+.fte-report__mort-block {
+  margin-top: 1.5rem;
+  background: var(--fte-report-bg-2);
+  border: 1px solid var(--fte-report-line);
+  padding: 1rem 1.1rem;
+}
+
+.fte-report__mort-block h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fte-report-muted);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.fte-report__mort-headline {
+  font-size: 0.95rem;
+  color: var(--fte-report-ink);
+  margin-bottom: 1rem;
+}
+
+.fte-report__mort-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.fte-report__mort-arm h4 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--fte-report-ink);
+  margin: 0 0 0.5rem;
+}
+
+.fte-report__mort-arm .stat-line {
+  font-family: var(--fte-report-font-mono);
+  font-size: 0.8rem;
+  color: var(--fte-report-muted);
+  margin-top: 0.4rem;
+}
+
+.fte-report__mort-foot {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--fte-report-line);
+  font-size: 0.78rem;
+  color: var(--fte-report-muted);
+}
+
+.fte-report__mort-foot .mono { color: var(--fte-report-ink); }
+
+/* ==============================
+   FOOTER
+   ============================== */
+.fte-report__footer {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fte-report-line);
+  font-size: 0.72rem;
+  color: var(--fte-report-muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.fte-report__footer a {
+  color: var(--fte-report-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--fte-report-line);
+}
+
+.fte-report__footer a:hover {
+  border-bottom-color: var(--fte-report-highlight);
+  color: var(--fte-report-highlight);
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media (max-width: 720px) {
+  .fte-report { padding: 2rem 1rem 4rem; }
+  .fte-report__pico { grid-template-columns: 1fr 1fr; }
+  .fte-report__analysis,
+  .fte-report__compare-grid,
+  .fte-report__mort-grid { grid-template-columns: 1fr; }
+  .fte-report__picto-sub-row { grid-template-columns: 1fr; gap: 0.4rem; }
+  .fte-report__picto-sub-row .nnh-mini { text-align: left; }
+  .fte-report__metrics--cols-5 { grid-template-columns: repeat(2, 1fr); }
+  .fte-report__bar-chart,
+  .fte-report__bar-axis { grid-template-columns: 80px 1fr 80px; gap: 0.5rem; }
+  .fte-report__tab { padding: 0.7rem 1rem; font-size: 0.8rem; }
+}

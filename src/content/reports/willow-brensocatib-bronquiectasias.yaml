@@ -1,0 +1,103 @@
+report_id: 3
+
+study_acronym: WILLOW
+study_type: ensaio_clinico_randomizado
+specialty: Pneumologia
+
+title: "Brensocatib em bronquiectasias não-fibrocísticas — WILLOW (fase 2)"
+
+citation:
+  authors: "Chalmers JD, Haworth CS, Metersky ML, Loebinger MR, Blasi F, Sibila O, O'Donnell AE, Sullivan EJ, Mange KC, Fernandez C, Zou J, Daley CL"
+  journal: "N Engl J Med"
+  year: 2020
+  volume: 383
+  pages: "2127-2137"
+  doi: "10.1056/NEJMoa2021713"
+  url: "https://www.nejm.org/doi/full/10.1056/NEJMoa2021713"
+
+randomization:
+  total: 256
+  ratio: "1:1:1"
+  arm_intervention: 82
+  arm_comparator: 87
+  follow_up: "24 semanas de tratamento"
+
+pico:
+  population:
+    main: "Adultos com bronquiectasias não-fibrocísticas confirmadas por tomografia, com pelo menos 2 exacerbações no ano anterior"
+    detail: "Idade ≥ 18 anos; produção crônica de escarro; bronquiectasia documentada em HRCT. Excluídos: fibrose cística e doença ativa por micobactéria não tuberculosa em tratamento"
+  intervention:
+    main: "Brensocatib 10 mg via oral, 1x ao dia, por 24 semanas"
+    detail: "Inibidor oral, seletivo, reversível e competitivo da DPP-1 (cathepsin C); reduz a ativação de proteases serínicas de neutrófilos (incluindo elastase neutrofílica)"
+  comparator:
+    main: "Placebo via oral"
+  outcomes:
+    primary: "Tempo até a primeira exacerbação pulmonar nas 24 semanas de tratamento"
+    secondary: "Taxa de exacerbações pulmonares; alteração na atividade da elastase neutrofílica no escarro; segurança"
+
+outcomes:
+  - id: tempo_primeira_exacerbacao
+    label: "Desfecho primário · Tempo até a primeira exacerbação pulmonar (24 semanas)"
+    direction: favoravel
+    table_2x2:
+      intervention:
+        label: "Brensocatib 10 mg"
+        events: 26
+        no_event: 56
+      comparator:
+        label: "Placebo"
+        events: 42
+        no_event: 45
+      event_label: "≥ 1 exacerbação"
+      no_event_label: "Sem exacerbação"
+    statistics_reported:
+      hazard_ratio: 0.58
+      hazard_ratio_ci: [0.35, 0.95]
+      p_value: 0.03
+    subgroups_title: "Subgrupos (HR de brensocatib 10 mg + 25 mg pooled vs placebo, análise post hoc)"
+    subgroups:
+      - name: "Doença leve (BSI ≤ 4)"
+        n: 53
+        hazard_ratio: 0.28
+        hazard_ratio_ci: [0.08, 0.96]
+      - name: "Doença moderada (BSI 5–8)"
+        n: 89
+        hazard_ratio: 0.75
+        hazard_ratio_ci: [0.35, 1.60]
+      - name: "Doença grave (BSI ≥ 9)"
+        n: 114
+        hazard_ratio: 0.61
+        hazard_ratio_ci: [0.35, 1.04]
+      - name: "2 exacerbações no ano prévio"
+        n: 171
+        hazard_ratio: 0.56
+        hazard_ratio_ci: [0.34, 0.90]
+      - name: "≥ 3 exacerbações no ano prévio"
+        n: 84
+        hazard_ratio: 0.71
+        hazard_ratio_ci: [0.32, 1.59]
+      - name: "Sem uso crônico de macrolídeo"
+        n: 212
+        hazard_ratio: 0.60
+        hazard_ratio_ci: [0.38, 0.94]
+      - name: "Com uso crônico de macrolídeo"
+        n: 44
+        hazard_ratio: 0.60
+        hazard_ratio_ci: [0.25, 1.45]
+
+clinical_message: |
+  Brensocatib, inibidor oral da DPP-1 (alvo da ativação de proteases serínicas neutrofílicas), **reduz exacerbações pulmonares** em bronquiectasias não-fibrocísticas com histórico de pelo menos 2 exacerbações no ano prévio. Em 24 semanas, a proporção com ao menos 1 exacerbação caiu de 48% (placebo) para 32% — <span class="good">1 exacerbação evitada a cada 6 pacientes tratados</span>. O sinal foi consistente em subgrupos por gravidade, frequência de exacerbações prévias e uso crônico de macrolídeo. Sendo fase 2 com 256 pacientes, é prova de conceito; o fase 3 ASPEN (>1.600 pacientes) confirmou os resultados, sustentando a inibição da DPP-1 como **primeiro alvo anti-inflamatório viável** em uma doença sem terapia modificadora aprovada.
+
+bottom_line:
+  - 'Brensocatib **reduz o risco de exacerbação** em bronquiectasias não-fibrocísticas com histórico de exacerbações: 48% → 32% em 24 semanas (<span class="good">1 exacerbação evitada a cada 6 pacientes tratados</span>).'
+  - "**Mecanismo inédito**: inibição oral da DPP-1 bloqueia a ativação de proteases serínicas neutrofílicas (elastase, catepsina G, proteinase 3) ainda na medula óssea."
+  - "Benefício **consistente em todos os subgrupos** analisados — gravidade (BSI), exacerbações prévias, uso crônico de macrolídeo e infecção por *Pseudomonas aeruginosa*."
+  - "Fase 2 (n=256), prova de conceito; o fase 3 ASPEN (>1.600 pacientes) **confirmou os achados** e embasou a submissão ao FDA."
+
+study_meta:
+  - "Ensaio Clínico Randomizado fase 2"
+  - "116 sítios em 14 países"
+  - "Recrutamento iniciado em jul/2017 (NCT03218917); publicação em set/2020"
+  - "Duplo-cego, placebo-controlado"
+  - "Patrocinado por Insmed Incorporated (desenvolvedora do brensocatib)"
+  - "Estudo de 3 braços (1:1:1, n=256); este report compara brensocatib 10 mg vs placebo (n=169)"

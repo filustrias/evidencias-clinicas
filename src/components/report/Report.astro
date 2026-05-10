@@ -1,0 +1,156 @@
+---
+// src/components/report/Report.astro
+//
+// Componente raiz do Report de Evidências.
+// Recebe um item de Content Collection (entry) e renderiza:
+//   - Cabeçalho compartilhado (topbar + título + citação + randomização + PICO)
+//   - 3 abas (Números, Gráficos, Infográfico)
+//   - Footer com metadados
+
+import type { CollectionEntry } from 'astro:content';
+import Header from './Header.astro';
+import PICO from './PICO.astro';
+import Tabs from './Tabs.astro';
+import TabNumeros from './TabNumeros.astro';
+import TabGraficos from './TabGraficos.astro';
+import TabInfografico from './TabInfografico.astro';
+import Footer from './Footer.astro';
+
+import '@styles/report.css';
+
+type Props = { entry: CollectionEntry<'reports'> };
+const { entry } = Astro.props;
+const data = entry.data;
+---
+
+<article class="fte-report">
+  <Header data={data} />
+  <PICO pico={data.pico} />
+
+  <Tabs />
+
+  <section class="fte-report__panel" id="panel-numeros" data-active="true" role="tabpanel" aria-labelledby="tab-numeros">
+    <TabNumeros data={data} />
+  </section>
+
+  <section class="fte-report__panel" id="panel-graficos" role="tabpanel" aria-labelledby="tab-graficos">
+    <TabGraficos data={data} />
+  </section>
+
+  <section class="fte-report__panel" id="panel-infografico" role="tabpanel" aria-labelledby="tab-infografico">
+    <TabInfografico data={data} />
+  </section>
+
+  <Footer data={data} />
+</article>
+
+<script>
+  // Tabs e pictogramas são interatividades simples — não justificam framework.
+  document.querySelectorAll<HTMLButtonElement>('.fte-report__tab').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      if (!target) return;
+
+      document.querySelectorAll<HTMLButtonElement>('.fte-report__tab').forEach((b) => {
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll<HTMLElement>('.fte-report__panel').forEach((p) => {
+        p.dataset.active = 'false';
+      });
+
+      btn.setAttribute('aria-selected', 'true');
+      const panel = document.getElementById(`panel-${target}`);
+      if (panel) panel.dataset.active = 'true';
+    });
+  });
+
+  // Pictograma generator
+  type Distribution = { count: number; color: string }[];
+
+  function buildPictogram(
+    elementId: string,
+    distribution: Distribution,
+    options: { cols?: number; rows?: number; cellW?: number; cellH?: number } = {}
+  ) {
+    const cols = options.cols ?? 25;
+    const rows = options.rows ?? 4;
+    const cellW = options.cellW ?? 17;
+    const cellH = options.cellH ?? 25;
+    const total = cols * rows;
+
+    const cs = getComputedStyle(document.documentElement);
+    const fallback = cs.getPropertyValue('--fte-report-gray-fig').trim();
+
+    const colors: string[] = [];
+    distribution.forEach((d) => {
+      for (let i = 0; i < d.count; i++) colors.push(d.color);
+    });
+    while (colors.length < total) colors.push(fallback);
+
+    const width = cols * cellW;
+    const height = rows * cellH;
+
+    let svg = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid meet">`;
+    svg += `<defs><symbol id="p-${elementId}" viewBox="0 0 14 20">
+      <circle cx="7" cy="4" r="3"/>
+      <rect x="2" y="8" width="10" height="11" rx="2"/>
+    </symbol></defs>`;
+
+    let idx = 0;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * cellW;
+        const y = r * cellH;
+        svg += `<use href="#p-${elementId}" x="${x}" y="${y}" width="14" height="20" fill="${colors[idx]}"/>`;
+        idx++;
+      }
+    }
+    svg += `</svg>`;
+
+    const el = document.getElementById(elementId);
+    if (el) el.innerHTML = svg;
+  }
+
+  // Lê data-pictogram-* dos elementos preparados pelo TabInfografico
+  // e renderiza pictogramas usando as cores do tema.
+  function renderAllPictograms() {
+    const cs = getComputedStyle(document.documentElement);
+    const palette: Record<string, string> = {
+      bad: cs.getPropertyValue('--fte-report-bad').trim(),
+      good: cs.getPropertyValue('--fte-report-good').trim(),
+      extra: cs.getPropertyValue('--fte-report-extra').trim(),
+      gray: cs.getPropertyValue('--fte-report-gray-fig').trim(),
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-pictogram]').forEach((el) => {
+      const config = el.dataset.pictogramConfig;
+      if (!config) return;
+
+      try {
+        const parsed = JSON.parse(config) as {
+          distribution: { count: number; color: keyof typeof palette }[];
+          cols?: number;
+          rows?: number;
+          cellW?: number;
+          cellH?: number;
+        };
+
+        const distribution = parsed.distribution.map((d) => ({
+          count: d.count,
+          color: palette[d.color] ?? palette.gray,
+        }));
+
+        buildPictogram(el.id, distribution, {
+          cols: parsed.cols,
+          rows: parsed.rows,
+          cellW: parsed.cellW,
+          cellH: parsed.cellH,
+        });
+      } catch (err) {
+        console.error('Pictogram render failed:', err);
+      }
+    });
+  }
+
+  renderAllPictograms();
+</script>

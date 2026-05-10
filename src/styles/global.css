@@ -297,3 +297,25 @@ code, pre, .mono, [data-mono] {
 :where(h1, h2, h3, h4, h5, h6)[id] {
   scroll-margin-top: 80px;
 }
+
+/* ----------------------------------------------------------------------
+   Reports de Evidências — mapeamento de tokens
+   --------------------------------------------------------------------
+   O CSS dos reports (src/styles/report.css) usa variáveis --fte-report-*.
+   Aqui, no escopo .fte-report (especificidade > :root), apontamos os
+   tokens estruturais (fundos, texto, bordas, fontes) para os tokens do
+   site, fazendo os reports acompanharem o tema claro/escuro.
+
+   As cores semânticas (good/bad/highlight/extra/gray-fig) NÃO são
+   sobrescritas — mantêm a calibração clínica original do pacote.
+---------------------------------------------------------------------- */
+.fte-report {
+  --fte-report-bg: var(--color-bg-canvas);
+  --fte-report-bg-2: var(--color-bg-surface);
+  --fte-report-bg-3: var(--color-bg-elevated);
+  --fte-report-line: var(--color-border-subtle);
+  --fte-report-ink: var(--color-text-primary);
+  --fte-report-muted: var(--color-text-muted);
+  --fte-report-font-sans: var(--font-sans);
+  --fte-report-font-mono: var(--font-mono);
+}

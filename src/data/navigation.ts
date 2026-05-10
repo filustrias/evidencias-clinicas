@@ -79,6 +79,7 @@ export const primaryNav: NavItem[] = [
       { label: 'Prognóstica', href: '/em-pratica/prognostica/' },
     ],
   },
+  { label: 'Reports', href: '/reports/' },
   { label: 'Glossário', href: '/glossario/' },
   { label: 'Sobre', href: '/sobre/' },
 ];

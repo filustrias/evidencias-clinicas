@@ -1,0 +1,44 @@
+---
+// src/components/report/PICO.astro
+
+type Props = {
+  pico: {
+    population: { main: string; detail?: string };
+    intervention: { main: string; detail?: string };
+    comparator: { main: string; detail?: string };
+    outcomes: { primary: string; secondary?: string };
+  };
+};
+const { pico } = Astro.props;
+---
+
+<div class="fte-report__pico">
+  <div class="fte-report__pico-cell">
+    <div class="fte-report__pico-letter">P · População</div>
+    <div class="fte-report__pico-text">
+      {pico.population.main}
+      {pico.population.detail && <small>{pico.population.detail}</small>}
+    </div>
+  </div>
+  <div class="fte-report__pico-cell">
+    <div class="fte-report__pico-letter">I · Intervenção</div>
+    <div class="fte-report__pico-text">
+      {pico.intervention.main}
+      {pico.intervention.detail && <small>{pico.intervention.detail}</small>}
+    </div>
+  </div>
+  <div class="fte-report__pico-cell">
+    <div class="fte-report__pico-letter">C · Comparador</div>
+    <div class="fte-report__pico-text">
+      {pico.comparator.main}
+      {pico.comparator.detail && <small>{pico.comparator.detail}</small>}
+    </div>
+  </div>
+  <div class="fte-report__pico-cell">
+    <div class="fte-report__pico-letter">O · Desfechos</div>
+    <div class="fte-report__pico-text">
+      {pico.outcomes.primary} (primário)
+      {pico.outcomes.secondary && <small>{pico.outcomes.secondary} (secundário)</small>}
+    </div>
+  </div>
+</div>

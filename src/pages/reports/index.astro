@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+const reports = (await getCollection('reports')).sort(
+  (a, b) => a.data.report_id - b.data.report_id,
+);
+
+const studyTypeLabel: Record<string, string> = {
+  ensaio_clinico_randomizado: 'Ensaio Clínico Randomizado',
+  revisao_sistematica: 'Revisão Sistemática',
+  metanalise: 'Metanálise',
+  estudo_observacional: 'Estudo Observacional',
+};
+
+const base = import.meta.env.BASE_URL;
+const reportHref = (slug: string) => {
+  const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
+  return `${normalizedBase}/reports/${slug}/`;
+};
+---
+
+<BaseLayout
+  title="Reports"
+  description="Análise crítica estruturada de artigos médicos: PICO, números, gráficos e infográfico em uma única página."
+  section="reports"
+>
+  <div class="mx-auto max-w-[1280px] px-5 lg:px-12 py-12">
+    <header class="mb-10">
+      <h1 class="text-3xl font-semibold tracking-tight text-text-primary mb-3">Reports de Evidências</h1>
+      <p class="text-text-secondary leading-relaxed max-w-2xl">
+        Cada report apresenta uma síntese do estudo, PICO, Números, Gráficos e Infográficos relevantes para a decisão clínica.
+      </p>
+    </header>
+
+    <ul class="grid gap-3">
+      {
+        reports.map((entry) => (
+          <li>
+            <a
+              href={reportHref(entry.id)}
+              class="block rounded-lg border border-border-subtle bg-surface px-5 py-4 transition-colors hover:border-accent hover:bg-elevated"
+            >
+              <div class="flex items-baseline justify-between gap-3 flex-wrap mb-1">
+                <span class="font-mono text-xs text-text-muted">
+                  Report {String(entry.data.report_id).padStart(3, '0')} · {entry.data.study_acronym}
+                </span>
+                <span class="text-xs text-text-muted">{entry.data.specialty}</span>
+              </div>
+              <h2 class="text-base font-medium text-text-primary leading-snug mb-1">
+                {entry.data.title}
+              </h2>
+              <p class="text-xs text-text-muted">
+                {studyTypeLabel[entry.data.study_type]} · {entry.data.citation.journal} {entry.data.citation.year}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

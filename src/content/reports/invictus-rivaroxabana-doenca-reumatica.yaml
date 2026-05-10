@@ -1,0 +1,130 @@
+# src/content/reports/invictus-rivaroxabana-doenca-reumatica.yaml
+#
+# Report 002 — Ensaio INVICTUS: Rivaroxabana vs antagonista da vitamina K.
+
+report_id: 2
+study_acronym: INVICTUS
+study_type: ensaio_clinico_randomizado
+specialty: Cardiologia
+
+title: "Rivaroxabana versus antagonista da vitamina K em fibrilação atrial associada à doença cardíaca reumática"
+
+citation:
+  authors: "Connolly SJ, Karthikeyan G, Ntsekhe M, et al."
+  journal: "N Engl J Med"
+  year: 2022
+  volume: 387
+  pages: "978–88"
+  doi: "10.1056/NEJMoa2209051"
+  url: "https://www.nejm.org/doi/10.1056/NEJMoa2209051"
+
+randomization:
+  total: 4531
+  ratio: "1:1"
+  arm_intervention: 2275
+  arm_comparator: 2256
+  follow_up: "Seguimento médio de 3,1 anos em 138 sítios da África, Ásia e América Latina"
+
+pico:
+  population:
+    main: "Adultos ≥18 anos com fibrilação atrial e doença cardíaca reumática confirmada por ecocardiograma"
+    detail: "Pelo menos um critério adicional: escore CHA₂DS₂-VASc ≥ 2, estenose mitral ≤ 2 cm², trombo ou contraste espontâneo no átrio esquerdo"
+  intervention:
+    main: "Rivaroxabana por via oral"
+    detail: "20 mg/dia (15 mg/dia se clearance de creatinina < 50 mL/min)"
+  comparator:
+    main: "Antagonista da vitamina K"
+    detail: "Varfarina ou acenocumarol, dose ajustada para INR entre 2,0 e 3,0"
+  outcomes:
+    primary: "Composto de AVC, embolia sistêmica, infarto do miocárdio ou morte vascular"
+    secondary: "Sangramento maior"
+
+outcomes:
+  - id: composto_primario
+    label: "Desfecho primário · AVC, embolia, infarto ou morte vascular"
+    direction: desfavoravel
+    table_2x2:
+      intervention:
+        label: "Rivaroxabana"
+        events: 560
+        no_event: 1715
+      comparator:
+        label: "Antag. vit. K"
+        events: 446
+        no_event: 1810
+      event_label: "Evento"
+    statistics_reported:
+      risk_relative: 1.25
+      risk_relative_ci: [1.10, 1.41]
+      hazard_ratio: 1.25
+      hazard_ratio_ci: [1.10, 1.41]
+      risk_difference: 4.8
+      relative_risk_change: 24.5
+      p_value: "< 0,001"
+    subgroups_title: "Componentes do desfecho composto"
+    subgroups:
+      - name: "Mortalidade total"
+        events_intervention: 552
+        events_comparator: 442
+        hazard_ratio: 1.23
+        hazard_ratio_ci: [1.09, 1.40]
+        risk_difference: 4.7
+      - name: "Morte cardíaca súbita"
+        events_intervention: 141
+        events_comparator: 94
+        hazard_ratio: 1.51
+        hazard_ratio_ci: [1.16, 1.96]
+        risk_difference: 2.0
+      - name: "Morte por falência mecânica/bomba"
+        events_intervention: 237
+        events_comparator: 174
+        hazard_ratio: 1.35
+        hazard_ratio_ci: [1.11, 1.64]
+        risk_difference: 2.7
+      - name: "AVC isquêmico"
+        events_intervention: 74
+        events_comparator: 48
+        hazard_ratio: 1.53
+        hazard_ratio_ci: [1.06, 2.20]
+        risk_difference: 1.2
+
+  - id: sangramento_maior
+    label: "Desfecho de segurança · Sangramento maior"
+    direction: neutro
+    table_2x2:
+      intervention:
+        label: "Rivaroxabana"
+        events: 40
+        no_event: 2225
+      comparator:
+        label: "Antag. vit. K"
+        events: 56
+        no_event: 2195
+      event_label: "Sangramento"
+    statistics_reported:
+      hazard_ratio: 0.76
+      hazard_ratio_ci: [0.51, 1.15]
+      risk_difference: -0.7
+      p_value: 0.18
+    note: "Houve, porém, redução de sangramento fatal (HR 0,29) e hemorragia intracraniana (HR 0,63) com rivaroxabana."
+
+clinical_message: |
+  Em fibrilação atrial associada à doença cardíaca reumática, a rivaroxabana
+  é **inferior à varfarina**: aumenta mortalidade total, morte vascular e AVC
+  isquêmico, <span class="bad">sem reduzir sangramento maior</span>. Achado
+  contraintuitivo — diferente do que ocorre na fibrilação atrial não-valvar.
+  As diretrizes que recomendam antagonista da vitamina K nesse cenário saem
+  reforçadas, ainda que o controle de INR seja logisticamente desafiador em
+  países de baixa e média renda, onde a doença reumática é mais prevalente.
+
+bottom_line:
+  - "Em fibrilação atrial reumática, a rivaroxabana **aumenta a mortalidade** em comparação com o antagonista da vitamina K."
+  - "O dano é **contraintuitivo** — em fibrilação atrial não-valvar, anticoagulantes diretos como rivaroxabana são pelo menos tão eficazes quanto a varfarina."
+  - "A rivaroxabana **não reduziu sangramento maior** nesta população — perdeu sua vantagem clássica de segurança."
+  - "Diretrizes que recomendam antagonista da vitamina K em doença reumática **saem reforçadas**, apesar do controle de INR ser logisticamente desafiador."
+
+study_meta:
+  - "Ensaio Clínico Randomizado"
+  - "138 sítios na África, Ásia e América Latina"
+  - "2016–2022"
+  - "Aberto com avaliação cega de desfechos"

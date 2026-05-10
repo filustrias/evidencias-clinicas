@@ -1,0 +1,311 @@
+---
+// src/components/report/TabInfografico.astro
+//
+// Aba 3: storytelling visual com pictogramas de 100 pacientes.
+
+import { calcEpi, fmtSigned } from '@/lib/epi';
+import { mdToHtml } from '@/lib/markdown';
+
+type Props = { data: any };
+const { data } = Astro.props;
+
+// Para a aba Infográfico, o desfecho destacado é o primeiro
+// que NÃO seja "neutro" (i.e., favorável ou desfavorável).
+// Se todos forem neutros, usa o primeiro.
+const featuredOutcome =
+  data.outcomes.find((o: any) => o.direction !== 'neutro') ?? data.outcomes[0];
+
+const otherOutcomes = data.outcomes.filter((o: any) => o.id !== featuredOutcome.id);
+
+// Cálculos para o desfecho destacado
+const t = featuredOutcome.table_2x2;
+const epi = t ? calcEpi(t) : null;
+const rd = featuredOutcome.statistics_reported?.risk_difference ?? epi?.riskDifference ?? 0;
+const rdCI = featuredOutcome.statistics_reported?.risk_difference_ci;
+const rr = featuredOutcome.statistics_reported?.risk_relative ?? epi?.riskRelative;
+const rrCI = featuredOutcome.statistics_reported?.risk_relative_ci;
+const hr = featuredOutcome.statistics_reported?.hazard_ratio;
+const hrCI = featuredOutcome.statistics_reported?.hazard_ratio_ci;
+
+// Para 100 pacientes — proporção de eventos
+const pctI = t ? Math.round((t.intervention.events / (t.intervention.events + t.intervention.no_event)) * 100) : 0;
+const pctC = t ? Math.round((t.comparator.events / (t.comparator.events + t.comparator.no_event)) * 100) : 0;
+
+// Distribuição para pictogramas:
+// - Braço comparador: pctC eventos esperados (vermelho), resto cinza
+// - Braço intervenção: pctC eventos "esperados" (vermelho) + diferença (laranja) + resto cinza
+const expectedEvents = pctC;
+const extraEvents = Math.max(0, pctI - pctC);
+const lessEvents = Math.max(0, pctC - pctI);
+
+// NN (sem cruzamento de zero do IC)
+const ciCrossesZero = rdCI && rdCI[0] < 0 && rdCI[1] > 0;
+const nnh = !ciCrossesZero && rd > 0 ? Math.ceil(100 / rd) : null;
+const nnt = !ciCrossesZero && rd < 0 ? Math.ceil(100 / Math.abs(rd)) : null;
+
+// IC do NN
+function ciOfNN(ciDiff?: [number, number]): string | null {
+  if (!ciDiff) return null;
+  if (ciDiff[0] < 0 && ciDiff[1] > 0) return null;
+  const limits = [Math.abs(ciDiff[0]), Math.abs(ciDiff[1])].sort((a, b) => a - b);
+  const lo = Math.ceil(100 / limits[1]);
+  const hi = Math.ceil(100 / limits[0]);
+  return `${lo} – ${hi}`;
+}
+const nnCI = ciOfNN(rdCI);
+
+// Cor: extra/less
+const isFavorable = featuredOutcome.direction === 'favoravel';
+
+// Distribuições para os pictogramas
+const distI = isFavorable
+  ? [
+      { count: pctI, color: 'bad' as const },
+      { count: lessEvents, color: 'gray' as const },          // "evitados"
+      { count: 100 - pctI - lessEvents, color: 'gray' as const },
+    ]
+  : [
+      { count: expectedEvents, color: 'bad' as const },
+      { count: extraEvents, color: 'extra' as const },
+      { count: 100 - expectedEvents - extraEvents, color: 'gray' as const },
+    ];
+
+const distC = [
+  { count: pctC, color: 'bad' as const },
+  { count: 100 - pctC, color: 'gray' as const },
+];
+
+// Texto do scenario band (singular/plural)
+const eventLabel = featuredOutcome.table_2x2?.event_label ?? 'evento';
+---
+
+<div class="fte-report__bottom-line">
+  <h3>O que este estudo mostra</h3>
+  <ul>
+    {data.bottom_line.map((line: string) => (
+      <li set:html={mdToHtml(line)} />
+    ))}
+  </ul>
+</div>
+
+{
+  featuredOutcome.table_2x2 && (
+    <>
+      <div class="fte-report__scenario-band">
+        <h3>Se 100 pacientes forem tratados com cada opção…</h3>
+        <p>Desfecho: {featuredOutcome.label.split('·').pop()?.trim() ?? featuredOutcome.label}</p>
+      </div>
+
+      <div class="fte-report__compare-grid">
+        <div class="fte-report__arm">
+          <h4>{t.intervention.label}</h4>
+          <div class="fte-report__arm-sub">100 pacientes tratados</div>
+          <div
+            class="fte-report__pictogram"
+            id={`picto-${featuredOutcome.id}-i`}
+            data-pictogram
+            data-pictogram-config={JSON.stringify({ distribution: distI })}
+          ></div>
+          <div class="fte-report__arm-stat">
+            <span class="big">{pctI}</span>
+            <span class="desc">terão {eventLabel.toLowerCase()}</span>
+          </div>
+          <div class="fte-report__legend">
+            <div class="fte-report__legend-item">
+              <div class="fte-report__legend-dot" style="background: var(--fte-report-bad);"></div>
+              {expectedEvents} esperados
+            </div>
+            {extraEvents > 0 && (
+              <div class="fte-report__legend-item">
+                <div class="fte-report__legend-dot" style="background: var(--fte-report-extra);"></div>
+                +{extraEvents} atribuíveis
+              </div>
+            )}
+            <div class="fte-report__legend-item">
+              <div class="fte-report__legend-dot" style="background: var(--fte-report-gray-fig);"></div>
+              {100 - pctI} sem evento
+            </div>
+          </div>
+        </div>
+
+        <div class="fte-report__arm">
+          <h4>{t.comparator.label}</h4>
+          <div class="fte-report__arm-sub">100 pacientes tratados</div>
+          <div
+            class="fte-report__pictogram"
+            id={`picto-${featuredOutcome.id}-c`}
+            data-pictogram
+            data-pictogram-config={JSON.stringify({ distribution: distC })}
+          ></div>
+          <div class="fte-report__arm-stat">
+            <span class="big">{pctC}</span>
+            <span class="desc">terão {eventLabel.toLowerCase()}</span>
+          </div>
+          <div class="fte-report__legend">
+            <div class="fte-report__legend-item">
+              <div class="fte-report__legend-dot" style="background: var(--fte-report-bad);"></div>
+              {pctC} eventos
+            </div>
+            <div class="fte-report__legend-item">
+              <div class="fte-report__legend-dot" style="background: var(--fte-report-gray-fig);"></div>
+              {100 - pctC} sem evento
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {nnh && (
+        <div class="fte-report__nn-box fte-report__nn-box--bad">
+          <div>
+            <div class="nn-label">Número Necessário<br />para Causar Dano</div>
+            <div class="nn-num">{nnh}</div>
+          </div>
+          <div class="nn-text">
+            Cada <strong>{nnh} pacientes</strong> tratados com {t.intervention.label.toLowerCase()} em vez de {t.comparator.label.toLowerCase()} gera <strong>1 {eventLabel.toLowerCase()} extra</strong>.
+            <span class="mono">
+              {rr !== undefined && `Risco Relativo ${rr.toFixed(2).replace('.', ',')}${rrCI ? ` (${rrCI[0]} – ${rrCI[1]})`.replace(/\./g, ',') : ''}`}
+              {hr !== undefined && `Hazard Ratio ${hr.toFixed(2).replace('.', ',')}${hrCI ? ` (${hrCI[0]} – ${hrCI[1]})`.replace(/\./g, ',') : ''}`}
+              {' · '}
+              Diferença Absoluta {fmtSigned(rd, 1, ' pp')}
+              {nnCI && ` · IC 95%: ${nnCI}`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {nnt && (
+        <div class="fte-report__nn-box fte-report__nn-box--good">
+          <div>
+            <div class="nn-label">Número Necessário<br />para Tratar</div>
+            <div class="nn-num">{nnt}</div>
+          </div>
+          <div class="nn-text">
+            Cada <strong>{nnt} pacientes</strong> tratados com {t.intervention.label.toLowerCase()} em vez de {t.comparator.label.toLowerCase()} <strong>evita 1 {eventLabel.toLowerCase()}</strong>.
+            {nnCI && <span class="mono">IC 95%: {nnCI}</span>}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+{
+  /* Subgrupos do desfecho destacado, se houver */
+  featuredOutcome.subgroups && featuredOutcome.subgroups.length > 0 && (
+    <div class="fte-report__picto-subgroup">
+      <h3>{featuredOutcome.subgroups_title ?? 'O efeito por subgrupo'}</h3>
+      {featuredOutcome.subgroups.map((sg: any, idx: number) => {
+        const sgRd = sg.risk_difference;
+        if (sgRd === undefined) return null;
+        const sgPctC = pctC; // baseline = mesma do braço comparador geral
+        const sgExtra = sgRd > 0 ? Math.round(sgRd) : 0;
+        const sgLess = sgRd < 0 ? Math.round(Math.abs(sgRd)) : 0;
+        const sgNN = Math.ceil(100 / Math.abs(sgRd));
+        const sgDist = sgRd > 0
+          ? [
+              { count: sgPctC, color: 'bad' as const },
+              { count: sgExtra, color: 'extra' as const },
+              { count: 100 - sgPctC - sgExtra, color: 'gray' as const },
+            ]
+          : [
+              { count: sgPctC + sgRd, color: 'bad' as const }, // sgRd negativo
+              { count: 100 - (sgPctC + sgRd), color: 'gray' as const },
+            ];
+
+        return (
+          <div class="fte-report__picto-sub-row">
+            <div class="name">
+              {sg.name}
+              {sg.note && <small>{sg.note}</small>}
+              {sg.n && <small>n = {sg.n.toLocaleString('pt-BR')}</small>}
+            </div>
+            <div
+              id={`picto-sub-${featuredOutcome.id}-${idx}`}
+              data-pictogram
+              data-pictogram-config={JSON.stringify({
+                distribution: sgDist,
+                cols: 25,
+                rows: 4,
+                cellW: 13,
+                cellH: 19,
+              })}
+            ></div>
+            <div class="nnh-mini">
+              {sgRd > 0 ? `1 a cada ${sgNN}` : `1 a menos a cada ${sgNN}`}
+              <small>{fmtSigned(sgRd, 1)} pp</small>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )
+}
+
+{
+  /* Outros desfechos (geralmente neutros) — mostra como bloco menor */
+  otherOutcomes.map((o: any) => {
+    if (!o.table_2x2) return null;
+    const ot = o.table_2x2;
+    const otI = (ot.intervention.events / (ot.intervention.events + ot.intervention.no_event)) * 100;
+    const otC = (ot.comparator.events / (ot.comparator.events + ot.comparator.no_event)) * 100;
+    const otRd = o.statistics_reported?.risk_difference;
+    const otRdCI = o.statistics_reported?.risk_difference_ci;
+    const otP = o.statistics_reported?.p_value;
+
+    return (
+      <div class="fte-report__mort-block">
+        <h3>{o.label.split('·').pop()?.trim()} · sem diferença</h3>
+        <p class="fte-report__mort-headline">
+          Não houve diferença significativa entre os grupos.
+        </p>
+
+        <div class="fte-report__mort-grid">
+          <div class="fte-report__mort-arm">
+            <h4>{ot.intervention.label}</h4>
+            <div
+              id={`picto-other-${o.id}-i`}
+              data-pictogram
+              data-pictogram-config={JSON.stringify({
+                distribution: [
+                  { count: Math.round(otI), color: 'bad' },
+                  { count: 100 - Math.round(otI), color: 'gray' },
+                ],
+                cols: 25,
+                rows: 4,
+                cellW: 14,
+                cellH: 21,
+              })}
+            ></div>
+            <div class="stat-line">{Math.round(otI)} eventos em 100 pacientes</div>
+          </div>
+          <div class="fte-report__mort-arm">
+            <h4>{ot.comparator.label}</h4>
+            <div
+              id={`picto-other-${o.id}-c`}
+              data-pictogram
+              data-pictogram-config={JSON.stringify({
+                distribution: [
+                  { count: Math.round(otC), color: 'bad' },
+                  { count: 100 - Math.round(otC), color: 'gray' },
+                ],
+                cols: 25,
+                rows: 4,
+                cellW: 14,
+                cellH: 21,
+              })}
+            ></div>
+            <div class="stat-line">{Math.round(otC)} eventos em 100 pacientes</div>
+          </div>
+        </div>
+
+        {otRd !== undefined && (
+          <div class="fte-report__mort-foot">
+            Diferença absoluta <span class="mono">{fmtSigned(otRd, 1, ' pp')}</span>
+            {otRdCI && ` (IC 95%: ${fmtSigned(otRdCI[0], 1)} a ${fmtSigned(otRdCI[1], 1)})`}
+            {otP !== undefined && <>; <span class="mono">P = {otP}</span></>}.
+          </div>
+        )}
+      </div>
+    );
+  })
+}

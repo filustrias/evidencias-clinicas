@@ -1,0 +1,322 @@
+---
+// src/components/report/TabGraficos.astro
+//
+// Aba 2: visualizações.
+//   - Barras horizontais comparando proporções de cada desfecho
+//   - Forest plot consolidado (uma linha por desfecho/subgrupo)
+//
+// O forest plot é renderizado como SVG inline, computado em tempo de build.
+
+import {
+  calcRiskDifferenceCI,
+  FOREST_STATISTIC_INFO,
+  fmtNumber,
+  fmtSigned,
+  pickForestStatistic,
+} from '@/lib/epi';
+import { mdToHtml } from '@/lib/markdown';
+
+type Props = { data: any };
+const { data } = Astro.props;
+
+const tagClass = (dir: string) => ({
+  favoravel: 'fte-report__outcome-tag--good',
+  desfavoravel: 'fte-report__outcome-tag--bad',
+  neutro: 'fte-report__outcome-tag--neutral',
+}[dir] || 'fte-report__outcome-tag--neutral');
+
+const tagText = (dir: string) => ({
+  favoravel: 'BENEFÍCIO',
+  desfavoravel: 'PIOR COM INTERVENÇÃO',
+  neutro: 'SEM DIFERENÇA',
+}[dir] || '');
+
+// ----------------------------------------------------------------------
+// Forest plot
+// ----------------------------------------------------------------------
+// A escolha da estatística e da escala segue pickForestStatistic em
+// src/lib/epi.ts (HR > RR > OR > RD > calcRD pela 2×2). Linhas sem o
+// valor escolhido são puladas — não há conversão silenciosa entre
+// estatísticas no mesmo gráfico.
+
+type ForestRow = {
+  label: string;
+  value: number;
+  valueCI?: [number, number];
+  direction: string;
+  isSubgroup: boolean;
+};
+
+const forestStat = pickForestStatistic(data.outcomes);
+const statInfo = FOREST_STATISTIC_INFO[forestStat];
+
+function readStat(source: any): { value?: number; ci?: [number, number] } {
+  if (forestStat === 'calc_risk_difference') return {};
+  return {
+    value: source?.[forestStat],
+    ci: source?.[statInfo.ciKey] as [number, number] | undefined,
+  };
+}
+
+function buildRows(outcomes: any[]): ForestRow[] {
+  const rows: ForestRow[] = [];
+  outcomes.forEach((o) => {
+    let value: number | undefined;
+    let ci: [number, number] | undefined;
+    if (forestStat === 'calc_risk_difference' && o.table_2x2) {
+      const c = calcRiskDifferenceCI(o.table_2x2);
+      value = c.rd;
+      ci = c.ci;
+    } else {
+      const r = readStat(o.statistics_reported);
+      value = r.value;
+      ci = r.ci;
+    }
+    if (value !== undefined) {
+      rows.push({
+        label: o.label.split('·').pop()?.trim() ?? o.label,
+        value,
+        valueCI: ci,
+        direction: o.direction,
+        isSubgroup: false,
+      });
+    }
+    o.subgroups?.forEach((sg: any) => {
+      if (forestStat === 'calc_risk_difference') return; // subgrupos não têm 2×2
+      const r = readStat(sg);
+      if (r.value === undefined) return;
+      rows.push({
+        label: sg.name,
+        value: r.value,
+        valueCI: r.ci,
+        direction: o.direction,
+        isSubgroup: true,
+      });
+    });
+  });
+  return rows;
+}
+
+function computeRange(
+  rows: ForestRow[],
+  scale: 'linear' | 'log',
+): { minX: number; maxX: number; ticks: number[] } {
+  const all: number[] = [];
+  rows.forEach((r) => {
+    all.push(r.value);
+    if (r.valueCI) all.push(...r.valueCI);
+  });
+  if (rows.length === 0) {
+    return scale === 'log'
+      ? { minX: 0.5, maxX: 2, ticks: [0.5, 1, 2] }
+      : { minX: -10, maxX: 10, ticks: [-10, -5, 0, 5, 10] };
+  }
+  if (scale === 'log') {
+    const min = Math.min(...all);
+    const max = Math.max(...all);
+    const niceCandidates = [0.05, 0.1, 0.2, 0.25, 0.33, 0.5, 0.67, 1, 1.5, 2, 3, 4, 5, 10, 20];
+    const minX = [...niceCandidates].reverse().find((c) => c <= min * 0.95) ?? 0.05;
+    const maxX = niceCandidates.find((c) => c >= max * 1.05) ?? 20;
+    const tickPool = [0.1, 0.25, 0.5, 1, 2, 4, 10];
+    const ticks = tickPool.filter((t) => t >= minX && t <= maxX);
+    if (!ticks.includes(1)) ticks.push(1); // garante o neutro
+    ticks.sort((a, b) => a - b);
+    return { minX, maxX, ticks };
+  }
+  const min = Math.min(...all);
+  const max = Math.max(...all);
+  const padded = Math.max(Math.abs(min), Math.abs(max), 5);
+  const minX = -Math.ceil(padded / 5) * 5;
+  const maxX = Math.ceil(padded / 5) * 5;
+  const tickStep = (maxX - minX) / 4;
+  const ticks: number[] = [];
+  for (let v = minX; v <= maxX + 0.001; v += tickStep) {
+    ticks.push(Math.round(v * 10) / 10);
+  }
+  return { minX, maxX, ticks };
+}
+
+const forestRows = buildRows(data.outcomes);
+const forestWidth = 700;
+const rowGap = 52;
+const rowsTop = 55;
+const forestHeight = forestRows.length * rowGap + rowsTop + 30;
+
+const { minX: forestMinX, maxX: forestMaxX, ticks } = computeRange(forestRows, statInfo.scale);
+
+const xToPx = (x: number): number => {
+  if (statInfo.scale === 'log') {
+    const lMin = Math.log(forestMinX);
+    const lMax = Math.log(forestMaxX);
+    return 100 + ((Math.log(x) - lMin) / (lMax - lMin)) * (forestWidth - 160);
+  }
+  return 100 + ((x - forestMinX) / (forestMaxX - forestMinX)) * (forestWidth - 160);
+};
+const neutralX = xToPx(statInfo.neutralValue);
+
+// Formatação dos valores na coluna direita do forest
+function fmtForestValue(value: number, ci: [number, number] | undefined): string {
+  if (statInfo.scale === 'log') {
+    const v = fmtNumber(value, 2);
+    return ci ? `${v} (${fmtNumber(ci[0], 2)} – ${fmtNumber(ci[1], 2)})` : v;
+  }
+  const v = fmtSigned(value, 1);
+  return ci ? `${v} (${fmtSigned(ci[0], 1)} a ${fmtSigned(ci[1], 1)})` : v;
+}
+
+function fmtTick(v: number): string {
+  if (statInfo.scale === 'log') return fmtNumber(v, v < 1 ? 2 : v < 10 ? 1 : 0).replace(/,0+$/, '');
+  return v > 0 ? `+${v}` : `${v}`;
+}
+
+const forestTitle = (() => {
+  if (statInfo.scale === 'log') return `${statInfo.label} e IC 95% (escala log)`;
+  if (forestStat === 'calc_risk_difference')
+    return 'Diferença absoluta de risco em pontos percentuais e IC 95% (calculada pela 2×2)';
+  return 'Diferença absoluta de risco em pontos percentuais e IC 95%';
+})();
+---
+
+{
+  data.outcomes.map((outcome: any) => {
+    if (!outcome.table_2x2) return null;
+    const t = outcome.table_2x2;
+    const totalI = t.intervention.events + t.intervention.no_event;
+    const totalC = t.comparator.events + t.comparator.no_event;
+    const pctI = (t.intervention.events / totalI) * 100;
+    const pctC = (t.comparator.events / totalC) * 100;
+    const maxPct = Math.max(pctI, pctC) * 1.6;
+    const fillClass = outcome.direction === 'desfavoravel' ? 'fte-report__bar-fill--bad' :
+                      outcome.direction === 'favoravel' ? 'fte-report__bar-fill--good' :
+                      'fte-report__bar-fill--neutral';
+    const fillClassSoft = outcome.direction === 'desfavoravel' ? 'fte-report__bar-fill--bad-soft' :
+                          outcome.direction === 'favoravel' ? 'fte-report__bar-fill--good-soft' :
+                          'fte-report__bar-fill--neutral';
+
+    return (
+      <>
+        <div class="fte-report__section-title">
+          <h2>{outcome.label}</h2>
+          <span class={`fte-report__outcome-tag ${tagClass(outcome.direction)} mono`}>{tagText(outcome.direction)}</span>
+        </div>
+
+        <div class="fte-report__bar-chart">
+          <div class="label">{t.intervention.label}</div>
+          <div class="fte-report__bar-track">
+            <div class={`fte-report__bar-fill ${fillClass}`} style={`width: ${(pctI / maxPct) * 100}%;`}></div>
+          </div>
+          <div class="fte-report__bar-value">
+            {fmtNumber(pctI, 1)}%
+            <small>{t.intervention.events.toLocaleString('pt-BR')}/{totalI.toLocaleString('pt-BR')}</small>
+          </div>
+        </div>
+        <div class="fte-report__bar-chart">
+          <div class="label">{t.comparator.label}</div>
+          <div class="fte-report__bar-track">
+            <div class={`fte-report__bar-fill ${fillClassSoft}`} style={`width: ${(pctC / maxPct) * 100}%;`}></div>
+          </div>
+          <div class="fte-report__bar-value">
+            {fmtNumber(pctC, 1)}%
+            <small>{t.comparator.events.toLocaleString('pt-BR')}/{totalC.toLocaleString('pt-BR')}</small>
+          </div>
+        </div>
+        <div class="fte-report__bar-axis">
+          <div></div>
+          <div class="ticks">
+            <span>0%</span>
+            <span>{fmtNumber(maxPct / 2, 0)}%</span>
+            <span>{fmtNumber(maxPct, 0)}%</span>
+          </div>
+          <div></div>
+        </div>
+      </>
+    );
+  })
+}
+
+{
+  forestRows.length > 0 && (
+    <div class="fte-report__forest">
+      <div class="fte-report__forest-title">{forestTitle}</div>
+      <svg
+        viewBox={`0 0 ${forestWidth} ${forestHeight}`}
+        xmlns="http://www.w3.org/2000/svg"
+        style="font-family: var(--fte-report-font-mono); font-size: 11px;"
+      >
+        {/* eixo */}
+        <line
+          x1="100"
+          y1={forestHeight - 30}
+          x2={forestWidth - 60}
+          y2={forestHeight - 30}
+          stroke="var(--fte-report-line)"
+          stroke-width="1"
+        />
+        {/* ticks */}
+        {ticks.map((t) => (
+          <g fill="var(--fte-report-muted)">
+            <line
+              x1={xToPx(t)}
+              y1={forestHeight - 32}
+              x2={xToPx(t)}
+              y2={forestHeight - 28}
+              stroke="var(--fte-report-muted)"
+            />
+            <text x={xToPx(t)} y={forestHeight - 14} text-anchor="middle">
+              {fmtTick(t)}
+            </text>
+          </g>
+        ))}
+        {/* linha do neutro */}
+        <line
+          x1={neutralX}
+          y1="20"
+          x2={neutralX}
+          y2={forestHeight - 35}
+          stroke="var(--fte-report-ink)"
+          stroke-dasharray="3 3"
+          stroke-width="1"
+        />
+        {/* labels orientação */}
+        <text x={neutralX - 60} y="14" fill="var(--fte-report-muted)" font-size="10" text-anchor="end">
+          ← favorece intervenção
+        </text>
+        <text x={neutralX + 60} y="14" fill="var(--fte-report-muted)" font-size="10" text-anchor="start">
+          favorece comparador →
+        </text>
+
+        {/* rows: label numa linha em cima, barra+CI+valor logo abaixo */}
+        {forestRows.map((r, idx) => {
+          const y = rowsTop + idx * rowGap;
+          const labelY = y - 16;
+          const ciStart = r.valueCI ? xToPx(r.valueCI[0]) : xToPx(r.value);
+          const ciEnd = r.valueCI ? xToPx(r.valueCI[1]) : xToPx(r.value);
+          const point = xToPx(r.value);
+          const color =
+            r.direction === 'desfavoravel'
+              ? 'var(--fte-report-bad)'
+              : r.direction === 'favoravel'
+              ? 'var(--fte-report-good)'
+              : 'var(--fte-report-muted)';
+
+          return (
+            <>
+              <text x="10" y={labelY} fill="var(--fte-report-ink)" font-weight={r.isSubgroup ? '400' : '500'}>
+                {r.isSubgroup ? `↳ ${r.label}` : r.label}
+              </text>
+              <line x1={ciStart} y1={y} x2={ciEnd} y2={y} stroke={color} stroke-width="2.5" />
+              <line x1={ciStart} y1={y - 5} x2={ciStart} y2={y + 5} stroke={color} stroke-width="2.5" />
+              <line x1={ciEnd} y1={y - 5} x2={ciEnd} y2={y + 5} stroke={color} stroke-width="2.5" />
+              <rect x={point - 4} y={y - 8} width="8" height="16" fill={color} />
+              <text x={forestWidth - 10} y={y + 4} fill="var(--fte-report-muted)" text-anchor="end">
+                {fmtForestValue(r.value, r.valueCI)}
+              </text>
+            </>
+          );
+        })}
+      </svg>
+    </div>
+  )
+}
+
+<div class="fte-report__interpretation" set:html={mdToHtml(data.clinical_message)} />

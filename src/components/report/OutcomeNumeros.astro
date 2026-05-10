@@ -1,0 +1,259 @@
+---
+// src/components/report/OutcomeNumeros.astro
+//
+// Renderiza um único desfecho (outcome) na aba Números:
+//   - Section title com tag de direção
+//   - Tabela 2×2
+//   - Cards de métricas
+//   - Caixa NNH ou NNT em destaque (quando aplicável)
+//   - Subgrupos (se houver)
+
+import { calcEpi, fmtNumber, fmtSigned, fmtCI, fmtPctSimple } from '@/lib/epi';
+
+type Outcome = {
+  id: string;
+  label: string;
+  direction: 'favoravel' | 'desfavoravel' | 'neutro';
+  table_2x2?: any;
+  statistics_reported?: any;
+  subgroups?: any[];
+  subgroups_title?: string;
+  note?: string;
+};
+
+type Props = { outcome: Outcome };
+const { outcome } = Astro.props;
+
+// Calcula epi a partir da 2×2 (se existir). Stats reportadas pelo artigo
+// têm prioridade — usamos calc só para preencher lacunas.
+const epi = outcome.table_2x2 ? calcEpi(outcome.table_2x2) : null;
+const stats = outcome.statistics_reported ?? {};
+
+// Direção determina cor das tags
+const tagClass = {
+  favoravel: 'fte-report__outcome-tag--good',
+  desfavoravel: 'fte-report__outcome-tag--bad',
+  neutro: 'fte-report__outcome-tag--neutral',
+}[outcome.direction];
+
+const tagText = {
+  favoravel: 'BENEFÍCIO',
+  desfavoravel: 'PIOR COM INTERVENÇÃO',
+  neutro: 'SEM DIFERENÇA',
+}[outcome.direction];
+
+// Resolve valores: stats reportadas > calculadas
+const rr = stats.risk_relative ?? epi?.riskRelative;
+const rrCI = stats.risk_relative_ci;
+const or = stats.odds_ratio ?? epi?.oddsRatio;
+const orCI = stats.odds_ratio_ci;
+const hr = stats.hazard_ratio;
+const hrCI = stats.hazard_ratio_ci;
+const rd = stats.risk_difference ?? epi?.riskDifference;
+const rdCI = stats.risk_difference_ci;
+const relChange = stats.relative_risk_change ?? epi?.relativeRiskChange;
+const pValue = stats.p_value;
+
+// NNT/NNH só fazem sentido se a diferença é estatisticamente plausível
+// (IC não cruza zero). Se temos IC e ele cruza zero -> não calculável.
+const ciCrossesZero = rdCI && rdCI[0] < 0 && rdCI[1] > 0;
+const nnt = !ciCrossesZero && rd !== undefined && rd < 0 ? Math.ceil(100 / Math.abs(rd)) : null;
+const nnh = !ciCrossesZero && rd !== undefined && rd > 0 ? Math.ceil(100 / Math.abs(rd)) : null;
+
+// IC do NN (aproximação a partir do IC da diferença absoluta)
+function ciOfNN(diffAbs: number, ciDiff?: [number, number]): string | null {
+  if (!ciDiff) return null;
+  // Se IC cruza zero, não tem sentido
+  if (ciDiff[0] < 0 && ciDiff[1] > 0) return null;
+  const limits = [Math.abs(ciDiff[0]), Math.abs(ciDiff[1])].sort((a, b) => a - b);
+  const lo = Math.ceil(100 / limits[1]);
+  const hi = Math.ceil(100 / limits[0]);
+  return `${lo} – ${hi}`;
+}
+
+const nnCI = (nnt || nnh) && rdCI ? ciOfNN(Math.abs(rd!), rdCI) : null;
+
+// Decide quantas colunas no grid de métricas
+const metricsCount = [rr, or, hr, rd, relChange].filter((x) => x !== undefined).length;
+const colsClass = metricsCount <= 3 ? 'fte-report__metrics--cols-3' : 'fte-report__metrics--cols-2';
+
+// Tabela 2×2
+const t = outcome.table_2x2;
+const totalI = t ? t.intervention.events + t.intervention.no_event : 0;
+const totalC = t ? t.comparator.events + t.comparator.no_event : 0;
+const pctI = t ? (t.intervention.events / totalI) * 100 : 0;
+const pctC = t ? (t.comparator.events / totalC) * 100 : 0;
+---
+
+<div class="fte-report__section-title">
+  <h2>{outcome.label}</h2>
+  <span class={`fte-report__outcome-tag ${tagClass} mono`}>{tagText}</span>
+</div>
+
+{
+  outcome.table_2x2 && (
+    <div class="fte-report__analysis">
+      <div class="fte-report__twobytwo">
+        <div class="fte-report__twobytwo-title">Tabela 2×2</div>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>{t.event_label}</th>
+              <th>{t.no_event_label}</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-label">{t.intervention.label}</td>
+              <td class="event">
+                {t.intervention.events.toLocaleString('pt-BR')}
+                <span class="pct">{fmtPctSimple(pctI)}</span>
+              </td>
+              <td>{t.intervention.no_event.toLocaleString('pt-BR')}</td>
+              <td>{totalI.toLocaleString('pt-BR')}</td>
+            </tr>
+            <tr>
+              <td class="row-label">{t.comparator.label}</td>
+              <td class="event">
+                {t.comparator.events.toLocaleString('pt-BR')}
+                <span class="pct">{fmtPctSimple(pctC)}</span>
+              </td>
+              <td>{t.comparator.no_event.toLocaleString('pt-BR')}</td>
+              <td>{totalC.toLocaleString('pt-BR')}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class={`fte-report__metrics ${colsClass}`}>
+        {rr !== undefined && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">Risco Relativo</div>
+            <div class="fte-report__metric-value">{fmtNumber(rr)}</div>
+            <div class="fte-report__metric-ci">{rrCI ? `IC 95%: ${fmtCI(rrCI)}` : ' '}</div>
+          </div>
+        )}
+        {or !== undefined && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">Razão de Chances</div>
+            <div class="fte-report__metric-value">{fmtNumber(or)}</div>
+            <div class="fte-report__metric-ci">{orCI ? `IC 95%: ${fmtCI(orCI)}` : ' '}</div>
+          </div>
+        )}
+        {hr !== undefined && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">Hazard Ratio</div>
+            <div class="fte-report__metric-value">{fmtNumber(hr)}</div>
+            <div class="fte-report__metric-ci">{hrCI ? `IC 95%: ${fmtCI(hrCI)}` : ' '}</div>
+          </div>
+        )}
+        {rd !== undefined && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">Diferença Absoluta de Risco</div>
+            <div class="fte-report__metric-value">{fmtSigned(rd, 1, ' pp')}</div>
+            <div class="fte-report__metric-ci">{rdCI ? `IC 95%: ${fmtSigned(rdCI[0], 1)} a ${fmtSigned(rdCI[1], 1)}` : ' '}</div>
+          </div>
+        )}
+        {relChange !== undefined && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">{relChange < 0 ? 'Redução' : 'Aumento'} Relativo de Risco</div>
+            <div class="fte-report__metric-value">{fmtSigned(relChange, 1, '%').replace(/^[+−]/, '')}</div>
+            <div class="fte-report__metric-ci">{pValue !== undefined ? `P = ${pValue}` : ' '}</div>
+          </div>
+        )}
+        {!nnt && !nnh && outcome.direction === 'neutro' && (
+          <div class="fte-report__metric">
+            <div class="fte-report__metric-label">Número Necessário para Tratar</div>
+            <div class="fte-report__metric-value fte-report__metric-value--text">não calculável</div>
+            <div class="fte-report__metric-ci">{pValue !== undefined ? `P = ${pValue}` : 'IC cruza zero'}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+{
+  outcome.direction === 'neutro' && (
+    <div class="fte-report__neutral-row">
+      A diferença não atinge significância estatística. O Número Necessário para Tratar não é calculável quando o IC 95% da diferença absoluta de risco cruza o zero.
+    </div>
+  )
+}
+
+{
+  nnh && (
+    <div class="fte-report__nn-box fte-report__nn-box--bad">
+      <div>
+        <div class="nn-label">Número Necessário<br />para Causar Dano</div>
+        <div class="nn-num">{nnh}</div>
+      </div>
+      <div class="nn-text">
+        A cada <strong>{nnh} pacientes</strong> tratados com {outcome.table_2x2.intervention.label.toLowerCase()} em vez de {outcome.table_2x2.comparator.label.toLowerCase()}, <strong>1 a mais</strong> sofrerá o desfecho.
+        {nnCI && <span class="mono">IC 95%: {nnCI}</span>}
+      </div>
+    </div>
+  )
+}
+
+{
+  nnt && (
+    <div class="fte-report__nn-box fte-report__nn-box--good">
+      <div>
+        <div class="nn-label">Número Necessário<br />para Tratar</div>
+        <div class="nn-num">{nnt}</div>
+      </div>
+      <div class="nn-text">
+        A cada <strong>{nnt} pacientes</strong> tratados com {outcome.table_2x2.intervention.label.toLowerCase()} em vez de {outcome.table_2x2.comparator.label.toLowerCase()}, <strong>1 a menos</strong> sofrerá o desfecho.
+        {nnCI && <span class="mono">IC 95%: {nnCI}</span>}
+      </div>
+    </div>
+  )
+}
+
+{
+  outcome.subgroups && outcome.subgroups.length > 0 && (
+    <div class="fte-report__subgroup">
+      <div class="fte-report__subgroup-title">
+        {outcome.subgroups_title ?? 'Modificação de efeito · subgrupos pré-especificados'}
+      </div>
+      {outcome.subgroups.map((sg: any) => (
+        <div class="fte-report__subgroup-row">
+          <div class="name">
+            {sg.name}
+            {sg.n && ` (n = ${sg.n.toLocaleString('pt-BR')})`}
+            {sg.note && <small>· {sg.note}</small>}
+          </div>
+          <div>
+            {sg.risk_difference !== undefined && (
+              <span class="ari">
+                Diferença Absoluta de Risco {fmtSigned(sg.risk_difference, 1, ' pp')}
+                {sg.risk_difference_ci && ` (${fmtSigned(sg.risk_difference_ci[0], 1)} a ${fmtSigned(sg.risk_difference_ci[1], 1)})`}
+              </span>
+            )}
+            {sg.hazard_ratio !== undefined && (
+              <span class="ari">
+                Hazard Ratio {fmtNumber(sg.hazard_ratio)}
+                {sg.hazard_ratio_ci && ` (${fmtCI(sg.hazard_ratio_ci)})`}
+              </span>
+            )}
+            {sg.risk_difference !== undefined && sg.risk_difference > 0 && (
+              <>
+                {' · '}
+                <span class="nnh">1 dano extra a cada {Math.ceil(100 / Math.abs(sg.risk_difference))}</span>
+              </>
+            )}
+            {sg.risk_difference !== undefined && sg.risk_difference < 0 && (
+              <>
+                {' · '}
+                <span class="nnh">1 a menos a cada {Math.ceil(100 / Math.abs(sg.risk_difference))}</span>
+              </>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
