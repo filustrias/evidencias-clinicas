@@ -19,7 +19,7 @@ const {
   section,
 } = Astro.props;
 
-const fullTitle = title === 'Início' || title === '' ? 'evidências clínicas' : `${title} — evidências clínicas`;
+const fullTitle = title === 'Início' || title === '' ? 'Find the evidence' : `${title} — Find the evidence`;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <!doctype html>
@@ -62,7 +62,7 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toStri
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="evidências clínicas" />
+    <meta property="og:site_name" content="Find the evidence" />
 
     {/* Theme color seguindo o esquema do tema */}
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
